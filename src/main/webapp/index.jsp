@@ -176,15 +176,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">文件：<div @click="file_select()" class="layui-btn layui-btn-xs">选择图片</div></div>
 						</div>
 						<!-- 内容组件属性 -->
-						<div v-if="fields[3]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">选项</div>
+						<div v-if="fields[3]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">内容</div>
 						<div v-if="fields[3]" style="width:100%;overflow:hidden;">
+							<div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div></div><div class="layui-btn layui-btn-xs layui-btn-normal">选择apk</div></div>
+							<div style="display:flex;margin-top:5px;flex-wrap:wrap;">
+								<div class="content_img" @contextmenu="leftmenu(index)" @click="leftmenu(index)" style="width:40px;height:40px;margin:5px 0px 0px 5px;" v-for="(img , index) in ((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item]) == undefined || typeof((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item])) == 'undefined') ? [] : (TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item].imgs : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item].imgs)"><img :src="img" style="width:40px;height:40px;cursor:pointer;display:block;" title="修改"></div>
+							</div>
+							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="addImg()" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">添加图片</button></div>
+						</div>
+						<!-- 导航栏组件属性 -->
+						<div v-if="fields[4]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">导航</div>
+						<div v-if="fields[4]" style="width:100%;overflow:hidden;">
 							<div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div></div><div class="layui-btn layui-btn-xs layui-btn-normal">选择apk</div></div>
 							<div style="display:flex;margin-top:5px;">
 								<div class="content_img" @contextmenu="leftmenu(index)" @click="leftmenu(index)" style="width:40px;height:40px;margin:5px 0px 0px 5px;" v-for="(img , index) in ((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item]) == undefined || typeof((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item])) == 'undefined') ? [] : (TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item].imgs : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item].imgs)"><img :src="img" style="width:40px;height:40px;cursor:pointer;display:block;" title="修改"></div>
 							</div>
 							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="addImg()" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">添加图片</button></div>
 						</div>
-						<!-- 导航栏组件属性 -->
 					</div>
 				</div>
 			</div>
@@ -261,7 +269,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							0:true, //背景设置
 							1:false , //文字编辑
 							2:false , //图片选择
-							3:false  //内容组件中图,apk选择
+							3:false ,  //内容组件中图,apk选择
+							4:false , //导航栏属性编辑
 						} , //属性编辑器
 						apks:[
 							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
@@ -449,13 +458,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  					this.TVscreenInfo.showControl[5][i] = false ;
 			  				}
 			  			}
-			  			console.log("what")
 			  			if(this.TVscreenInfo.panel.MAIN.data[n] == undefined || typeof(this.TVscreenInfo.panel.MAIN.data[n]) == "undefined" || this.TVscreenInfo.panel.MAIN.data[n].length == 0){
 			  				this.TVscreenInfo.panel.MAIN.content = false ;
 			  			}else{
 			  				this.TVscreenInfo.panel.MAIN.content = true ;
 			  			}
 			  			this.TVscreenInfo.showControl[5][this.TVscreenInfo.panel.MAIN.data[n].data.id] = true ;
+			  		} ,
+			  		"editeEl.type":function(n , o){
+			  			//将当前所点击的组件属性栏打开
+			  			var m = {"VUEPMD":1} ;
+						for(var i in this.fields){
+							if(i*1 == 0){
+								this.fields[i] = true ;
+							}else{
+								this.fields[i] = false ;
+							}
+						}
+						if(n != "MAIN"){
+							this.fields[m[n]] = true ;
+						}else{
+							if(typeof(this.editeEl["bar_item"]) != "undefined" && this.editeEl["bar_item"] != undefined){
+								this.fields[4] = true ;
+							}else{
+								this.fields[3] = true ;
+							}
+						}
 			  		} ,
     				deep: true
 			  } ,
@@ -690,8 +718,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										}else{
 											this.TVscreenInfo.showControl[list[i].getAttribute("pid")][this.current.id] = true ;
 											this.TVscreenInfo.panel["MAIN"]["id"] = this.current.id ;
-											this.TVscreenInfo.panel.MAIN.content = false ;
+											this.TVscreenInfo.panel.MAIN.content = true ;
 											this.TVscreenInfo.panel.MAIN.bar = true ;
+											var self = this ;
+											window.setTimeout(function(){
+												self.TVscreenInfo.panel.MAIN.item = 0 ;
+											} , 20)
 										}
 										return ;
 									}else if(this.TVscreenInfo.panel[this.current.type]["id"] != undefined || typeof(this.TVscreenInfo.panel[this.current.type]["id"]) != "undefined"){
