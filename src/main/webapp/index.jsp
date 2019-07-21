@@ -143,7 +143,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<c:forEach items="${components }" var="i">
 									<c:forEach items="${i.positions }" var="j">
 										<c:if test="${j.name==item.id }">
-											<<c:out value="${i.name }"></c:out> v-if="TVscreenInfo.showControl['${item.id }']['${i.id }']" :data="'${item.type }'=='CONTENT' || '${item.type }'=='BAR' ? TVscreenInfo.panel['MAIN'] : TVscreenInfo.panel['${item.type }']" ref=${ i.name }""  v-on:click.stop="alert('123')" :now="this.editeEl" :fields="fields"></<c:out value="${i.name }"></c:out>>
+											<<c:out value="${i.name }"></c:out> v-if="TVscreenInfo.showControl['${item.id }']['${i.id }']" :data="'${item.type }'=='CONTENT' || '${item.type }'=='BAR' ? TVscreenInfo.panel['MAIN'] : TVscreenInfo.panel['${item.type }']" ref="${ i.name }"  v-on:click.stop="alert('123')" :now="this.editeEl" :fields="fields"></<c:out value="${i.name }"></c:out>>
 										</c:if>
 									</c:forEach>
 								</c:forEach>
@@ -182,16 +182,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<div style="display:flex;margin-top:5px;flex-wrap:wrap;">
 								<div class="content_img" @contextmenu="leftmenu(index)" @click="leftmenu(index)" style="width:40px;height:40px;margin:5px 0px 0px 5px;" v-for="(img , index) in ((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item]) == undefined || typeof((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item])) == 'undefined') ? [] : (TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item].imgs : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item].imgs)"><img :src="img" style="width:40px;height:40px;cursor:pointer;display:block;" title="修改"></div>
 							</div>
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="addImg()" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">添加图片</button></div>
+							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="addImg('content')" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">添加图片</button></div>
 						</div>
 						<!-- 导航栏组件属性 -->
-						<div v-if="fields[4]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">导航</div>
+						<div v-if="fields[4]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;display:flex;"><div style="width:70%;">菜单</div><div class="layui-btn layui-btn-xs layui-btn-primary" style="width:50px;" @click="addBarItem()">添加</div></div>
 						<div v-if="fields[4]" style="width:100%;overflow:hidden;">
-							<div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div></div><div class="layui-btn layui-btn-xs layui-btn-normal">选择apk</div></div>
-							<div style="display:flex;margin-top:5px;">
-								<div class="content_img" @contextmenu="leftmenu(index)" @click="leftmenu(index)" style="width:40px;height:40px;margin:5px 0px 0px 5px;" v-for="(img , index) in ((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item]) == undefined || typeof((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item])) == 'undefined') ? [] : (TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item].imgs : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item].imgs)"><img :src="img" style="width:40px;height:40px;cursor:pointer;display:block;" title="修改"></div>
-							</div>
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="addImg()" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">添加图片</button></div>
+							<div v-for="(item,index) in TVscreenInfo.panel.MAIN.data" style="display:flex;width:90%;padding-left:5px;flex-wrap:wrap;font-size:12px;line-height:25px;height:25px;color:gray;border:1px solid #91dbff;box-shadow:1px 1px 115px #e3e3e3;margin-top:3px;position:relative;" ><input v-model="item.name" style="width:70%;height:100%;border:0px;"><img src="./img/close.png" style="display:block;float:right;width:20px;height:20px;position:absolute;right:0px;cursor:pointer;" @click="removeBar(index)"></div>
+						</div>
+						<div v-if="fields[4]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">图标</div>
+						<div v-if="fields[4]" style="width:100%;overflow:hidden;">
+							<div v-if="$refs['v-bar_icon'].typeid == 'bar_icon'" style="display:flex;width:100%;padding-left:5px;flex-wrap:wrap;margin:5px;"><img style="width:40px;height:40px;" @click="addImg('bar_change')" v-if="TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img != undefined && typeof(TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img) != 'undefined' && TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img != ''" :src="TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img"><div style="width:40px;height:40px;line-height:40px;text-align:center;font-size:12px;color:white;background:gray;" v-if="TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img == undefined || typeof(TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img) == 'undefined' || TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img == ''"  @click="addImg('bar_change')">添加</div></div>
 						</div>
 					</div>
 				</div>
@@ -458,8 +458,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  					this.TVscreenInfo.showControl[5][i] = false ;
 			  				}
 			  			}
-			  			if(this.TVscreenInfo.panel.MAIN.data[n] == undefined || typeof(this.TVscreenInfo.panel.MAIN.data[n]) == "undefined" || this.TVscreenInfo.panel.MAIN.data[n].length == 0){
+			  			if(this.TVscreenInfo.panel.MAIN.data[n].data == undefined || typeof(this.TVscreenInfo.panel.MAIN.data[n].data) == "undefined" || this.TVscreenInfo.panel.MAIN.data[n].data.length == 0){
 			  				this.TVscreenInfo.panel.MAIN.content = false ;
+			  				return ;
 			  			}else{
 			  				this.TVscreenInfo.panel.MAIN.content = true ;
 			  			}
@@ -480,7 +481,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}else{
 							if(typeof(this.editeEl["bar_item"]) != "undefined" && this.editeEl["bar_item"] != undefined){
 								this.fields[4] = true ;
-							}else{
+							}else if(this.editeEl["content_item"] != "undefined" && this.editeEl["content_item"] != undefined){
 								this.fields[3] = true ;
 							}
 						}
@@ -494,7 +495,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							this.flag = true ;
 						}
 					} ,
-					addImg:function(){
+					removeBar:function(index){
+						if(this.TVscreenInfo.panel.MAIN.data != undefined && typeof(this.TVscreenInfo.panel.MAIN.data) != "undefined"){
+							if(this.TVscreenInfo.panel.MAIN.data.length < 2){
+								layer.msg('导航栏菜单个数不能低于1个', {icon: 5});
+								return ;
+							}
+							this.TVscreenInfo.panel.MAIN.data.splice(index , 1);
+						}
+					} ,
+					addBarItem:function(){
+						if(this.TVscreenInfo.panel.MAIN.data != undefined && typeof(this.TVscreenInfo.panel.MAIN.data) != "undefined"){
+							var data = {} ;
+							data.id = this.TVscreenInfo.panel.MAIN.data.length ;
+							data.name = "" ;
+							data.img = "" ;
+							data.selectedImg = "" ;
+							data.selectedColor = "" ;
+							data.data = [] ;
+							this.TVscreenInfo.panel.MAIN.data.push(data);
+						}
+					} ,
+					addImg:function(msg){
 						var file = document.createElement("input") ;
 						file.type = "file" 
 						var self = this ;
@@ -513,11 +535,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							var base64 = "";
 							r.onload = function(e) {
 								base64 = e.target.result;
-								if(self.TVscreenInfo.panel.MAIN.bar){
-			 						self.TVscreenInfo.panel.MAIN.data[self.TVscreenInfo.panel.MAIN.item].data.info[self.editeEl["content_item"]].imgs.push(base64) ;
-			 					}else{
-			 						self.TVscreenInfo.panel.MAIN.data[0].data.info[self.editeEl["content_item"]].imgs.push(base64) ;
-			 					}
+								if(msg == "content"){
+									if(self.TVscreenInfo.panel.MAIN.bar){
+				 						self.TVscreenInfo.panel.MAIN.data[self.TVscreenInfo.panel.MAIN.item].data.info[self.editeEl["content_item"]].imgs.push(base64) ;
+				 					}else{
+				 						self.TVscreenInfo.panel.MAIN.data[0].data.info[self.editeEl["content_item"]].imgs.push(base64) ;
+				 					}
+								}else if(msg == "bar_add"){
+									if(self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img == "" || self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img == undefined || typeof(self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img) == "undefined"){
+										self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img = base64 ;
+									}else{
+										self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].selectedImg = base64 ;
+									}
+								}else if(msg == "bar_change"){
+									self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img = base64 ;
+								}
 							}
 						}
 						file.click() ; 
