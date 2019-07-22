@@ -736,8 +736,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											}); 
 										}else{
 											this.TVscreenInfo.showControl[list[i].getAttribute("pid")][this.current.id] = true ;
-											this.TVscreenInfo.panel.MAIN.content = true ;
-											this.TVscreenInfo.panel.MAIN.bar = false ;
+											if(this.TVscreenInfo.panel.MAIN.bar){
+												this.TVscreenInfo.panel.MAIN.content = true ;
+											}else{
+												this.TVscreenInfo.panel.MAIN.content = true ;
+												this.TVscreenInfo.panel.MAIN.bar = false ;
+											}
 										}
 										return ;
 									}else if(this.current.type == "BAR"){
