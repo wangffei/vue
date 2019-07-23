@@ -1,9 +1,7 @@
 package com.action;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
@@ -11,12 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.hutool.core.codec.Base64;
+
 import com.vo.ApiClass;
 
 /**
  * 文件上传
  * @author wangfei
- *
+ * 图片上传时间太长的解决方案（进行md5对比，相同的图片不上传）
  */
 @Controller
 public class Upload {
@@ -60,42 +60,43 @@ public class Upload {
 			return api ;
 		}
 		//当选择语言为中文的时候
-		if("CN".equals(language)){
-			if(code == null || code.equals("")){
+		if(code == null || code.equals("")){
+			api.setCode(500);
+			api.setMsg("界面数据异常");
+			api.setData("");
+			return api ;
+		}else{
+			//Map<String, Object> map = JSONObject.parseObject(code, Map.class) ;
+			//将所有图片计算md5并存数据库
+			//写文件
+			File dir = new File(System.getProperty("ROOT_PATH")+"screen/"+id+"/"+language) ;
+			if(!dir.exists()){
+				dir.mkdirs() ;
+			}
+			File file = new File(System.getProperty("ROOT_PATH")+"screen/"+id+"/"+language+"/screen.json") ;
+			OutputStreamWriter writer = null ;
+			try {
+				writer = new OutputStreamWriter(new FileOutputStream(file) , "utf-8") ;
+				writer.write("fun_id_"+id+"('"+code+"')");
+			} catch (IOException e) {
 				api.setCode(500);
-				api.setMsg("界面数据异常");
+				api.setMsg("存储失败");
 				api.setData("");
 				return api ;
-			}else{
-				//Map<String, Object> map = JSONObject.parseObject(code, Map.class) ;
-				//写文件
-				File dir = new File(System.getProperty("ROOT_PATH")+"screen/"+id) ;
-				if(!dir.exists()){
-					dir.mkdirs() ;
-				}
-				File file = new File(System.getProperty("ROOT_PATH")+"screen/"+id+"/screen.json") ;
-				OutputStreamWriter writer = null ;
-				try {
-					writer = new OutputStreamWriter(new FileOutputStream(file) , "utf-8") ;
-					writer.write("fun_id_"+id+"('"+code+"')");
-					System.out.println("laile");
-				} catch (IOException e) {
-					api.setCode(500);
-					api.setMsg("存储失败");
-					api.setData("");
-					return api ;
-				} finally{
-					if(writer != null){
-						try {
-							writer.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+			} finally{
+				if(writer != null){
+					try {
+						writer.close();
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
 				}
 			}
+			api.setCode(200);
+			api.setMsg("上传成功");
+			api.setData("");
+			return api ;
 		}
-		return null ;
 	}
 	
 }

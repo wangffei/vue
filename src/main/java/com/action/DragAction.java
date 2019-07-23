@@ -22,12 +22,17 @@ public class DragAction {
 	
 	//此方法用于访问重定向（因页面要实现渲染部分数据库内容，所以必须通过此接口才能访问编辑页面）
 	@RequestMapping("/screen")
-	private String jumpToJSP(HttpServletRequest request){
+	private String jumpToJSP(HttpServletRequest request , String id , String language){
+		if(id == null || language == null){
+			return "error.html" ;
+		}
 		//查出所有组件
 		request.setAttribute("components", service.getAllComponents());
 		//查出所有组件所在位置
 		//System.out.println(service.getPositions().get(0).getType());
-		request.setAttribute("list", service.getPositions());  ;
+		request.setAttribute("list", service.getPositions());  
+		request.setAttribute("id", id);
+		request.setAttribute("language", language);
 		return "forward:index.jsp" ;
 	}
 	
