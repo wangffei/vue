@@ -35,10 +35,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			display:flex;
 			flex-direction: column;
 		}
-		#vue-drag-content .center .main_TV_save{
-			width:100%;
-			height:20%;
-		}
 		#vue-drag-content .panel{
 			height:100%;
 			display:flex;
@@ -120,7 +116,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div id="app" :style="{cursor:cursor}">
 		<!-- 加上防拖拽事件 -->
 		<div id="vue-drag-content" @mousemove="item_click_move($event)" @mouseup="item_click_up()" ondragstart="window.event.returnValue=false;return false;" oncontextmenu="window.event.returnValue=false;return false;" onselectstart="event.returnValue=false;return false;">
-		  <div class="left panel" :style="{width:this.left+'px'}">
+		  <div :style="{width:this.left+'px' , display:debug ? 'none' : 'flex'}">
 				<div class="vue-panel-content">
 					<div v-for="item in this.componentItems">
 						<div class="vue-panel-top">{{item.name}}</div>
@@ -132,10 +128,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 				</div>
 			</div>
-			<div @mousedown="item_click_down($event , 1)" class="select-item-left select-item"></div>
+			<div :style="{display:debug ? 'none' : 'flex'}" @mousedown="item_click_down($event , 1)" class="select-item-left select-item"></div>
 			<div class="center panel" style="border-radius:10px;">
 				<div class="vue-panel-content" style="border-radius:10px;">
-					<div class="main_TV_panel" @click="panelClick($event)" @mouseup="insert($event)" @mousemove="panelMove($event)" style="width:100%;height:80%;border-radius:10px;overflow:hidden;position:relative;top:0px;">
+					<div class="main_TV_panel" @click="panelClick($event)" @mouseup="insert($event)" @mousemove="panelMove($event)" style="width:100%;border-radius:10px;overflow:hidden;position:relative;top:0px;" :style="{height:debug ? '100%' : '80%'}">
 						<img style="width:100%;height:100%;z-index:1;position:absolute;top:0px;display:block;" :src="TVscreenInfo.panel.BG.img" />
 						<div v-if="!TVscreenInfo.panel.BG.flag" @click="bg_change()" style="background:gray;width:80%;height:60%;border:dotted;z-index:10;position:absolute;text-align:center;font-size:18px;color:white;cursor:pointer;" :style="{top:TVscreenInfo.height/2-TVscreenInfo.height*0.6/2+'px',left:TVscreenInfo.width/2-TVscreenInfo.width*0.8/2+'px',lineHeight:TVscreenInfo.height*0.6+'px'}">点击选择电视机背景图</div>
 						<c:forEach items="${list }" var="item">
@@ -150,25 +146,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</div>
 						</c:forEach>
 					</div>
-					<div class="main_TV_save">
+					<div class="main_TV_save" style="display:flex;" :style="{height:debug ? '0px' : '20%',display:debug ? 'none' : 'flex'}">
+						<div style="width:50%;align-items:center;justify-content:center;display:flex;">
+							<div class="layui-btn layui-btn-normal" style="width:160px;height:40px;text-align:center;font-size:16px;line-height:40px;" @click="save()">保存</div>
+						</div>
+						<div style="width:50%;align-items:center;justify-content:center;display:flex;">
+							<div class="layui-btn layui-btn-normal" @click="fullScreen()" style="width:160px;height:40px;text-align:center;font-size:16px;line-height:40px;">预览</div>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div @mousedown="item_click_down($event , 2)" class="select-item-right select-item"></div>
-			<div class="right panel" :style="{width:this.right+'px'}">
+			<div :style="{display:debug ? 'none' : 'flex'}" @mousedown="item_click_down($event , 2)" class="select-item-right select-item"></div>
+			<div class="right panel" :style="{width:this.right+'px' , display:debug ? 'none' : 'flex'}">
 				<div class="vue-panel-content">
 					<div class="vue-size">
 						<!-- 电视机背景设置 -->
 						<div v-if="fields[0]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">背景</div>
-						<div v-if="fields[0]" style="width:100%;height:50px;overflow:hidden;">
+						<div v-if="fields[0]" style="width:100%;height:100px;overflow:hidden;">
 							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">背景：<div @click="bg_change()" class="layui-btn layui-btn-xs">选择图片</div></div>
+							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">颜色：<input readonly="readonly" type="text" style="height:25px;width:60px;cursor:pointer;border-top:8px solid black;border-bottom:8px solid black;" @click="colorSelet($event)" /></div>
 						</div>
 						<!-- 文字属性设置 -->
 						<div v-if="fields[1]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">文字</div>
 						<div v-if="fields[1]" style="width:100%;height:160px;overflow:hidden;">
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">大小：<input type="text" v-model="size" style="height:25px;width:60px;" /></div>
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">内容：<input v-model="text" type="text" style="height:25px;width:60px;" /></div>
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">颜色：<input readonly="readonly" type="text" style="height:25px;width:60px;cursor:pointer;border-top:8px solid black;border-bottom:8px solid black;" @click="colorSelet($event)" /></div>
+							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">
+								大小：<select name="city" lay-verify="" v-model="size" style="width:60px;height:25px;">
+								  <option value="l">大</option>
+								  <option value="m">中</option>
+								  <option value="s">小</option>
+								</select>  
+							</div>
+							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">内容：<textarea v-model="text" name="" required lay-verify="required" placeholder="请输入" class="layui-textarea" style="width:60%;"></textarea></div>
 						</div>
 						<!-- 文件属性 -->
 						<div v-if="fields[2]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">图片</div>
@@ -201,12 +209,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
   </body>
 	<script src="./js/vue.min.js"></script>
-	<script>
+ 	<script>
 		/**
 		 * 预定义部分全局的变量
 		 */
 		var global = {
 			"temp":false ,
+			"id":1 ,  //当前电视id
+			"language":"CN"  //当前编辑语种
 		} 
 		var bgImg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAH0CAYAAACHEBA3AAAE3UlEQVR42u3UMREAAAgDsRqoN/yrQQdchhj44dN2AC6ICIBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFGJYIgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgUYlgiAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBRiWEIBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhAYYlAmBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBhiUCYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQGGJQJgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhAYYlBGBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWMBvC9p8boFKPUhmAAAAAElFTkSuQmCC" ;
 		//bgImg = "https://t12.baidu.com/it/u=2897648120,2717953286&fm=76" ;
@@ -258,6 +268,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    return {
 						left:180,
 						right:180,
+						debug:false ,
 						flag:false , //表示鼠标是否点中拖动栏
 						item:0 ,
 						file:"" , //选择的文件
@@ -375,6 +386,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							isLogo:false , //是否设置logo
 							torBarPosition:0 , // 导航栏位置 0表示未设置，1表示顶部 ， 2表示侧边 ， 3表示底部
 							panel:{
+								"color":"black" ,  //全局的颜色
 								"BG":{     //电视机背景
 									"img":bgImg ,
 									"flag":false 
@@ -395,7 +407,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									"id":undefined,
 									title:"" ,
 									size:"13" ,
-									color:"black"
+									color:this.color
 								} ,
 								"VUECLOCK":{
 									"id":undefined 
@@ -495,10 +507,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							this.flag = true ;
 						}
 					} ,
+					save:function(){
+						$.ajax({
+							url:"pageUpload" ,
+							type:"POST" ,
+							data:{language:global.language , id:global.id , code:JSON.stringify(this.TVscreenInfo)}
+						})
+					} ,
+					fullScreen:function(){
+						this.debug = true ;
+						layer.msg('按ESC按钮退出', {icon: 5});
+					} , //全屏
 					removeBar:function(index){
 						if(this.TVscreenInfo.panel.MAIN.data != undefined && typeof(this.TVscreenInfo.panel.MAIN.data) != "undefined"){
-							if(this.TVscreenInfo.panel.MAIN.data.length < 2){
-								layer.msg('导航栏菜单个数不能低于1个', {icon: 5});
+							if(this.TVscreenInfo.panel.MAIN.data.length < 4){
+								layer.msg('导航栏菜单个数不能低于3个', {icon: 5});
 								return ;
 							}
 							this.TVscreenInfo.panel.MAIN.data.splice(index , 1);
@@ -816,5 +839,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				vue.TVscreenInfo.width = document.querySelector(".main_TV_panel").offsetWidth ;
 				vue.TVscreenInfo.height = document.querySelector(".main_TV_panel").offsetHeight ;
 			}
+			
+			window.onkeyup = function(e){
+				if(e.keyCode == 27){ //退出预览
+					vue.$data.debug = false ;
+				}
+			}
+			
+			function fun_id_1(code){
+				var data = JSON.parse(code) ;
+				console.log(data)
+				vue.$data.TVscreenInfo = data ;
+			}
 	</script>
+	<script src="./screen/1/screen.json" ></script>
 </html>

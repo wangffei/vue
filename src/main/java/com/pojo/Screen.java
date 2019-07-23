@@ -18,7 +18,15 @@ public class Screen {
 	private Integer sid ;
 	//跑马灯组件
 	private Integer pid ;
+	//文件路径
+	private String file ;
 	
+	public String getFile() {
+		return file;
+	}
+	public void setFile(String file) {
+		this.file = file;
+	}
 	public Integer getId() {
 		return id;
 	}
