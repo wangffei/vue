@@ -9,8 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.hutool.core.codec.Base64;
-
 import com.vo.ApiClass;
 
 /**
@@ -77,7 +75,7 @@ public class Upload {
 			OutputStreamWriter writer = null ;
 			try {
 				writer = new OutputStreamWriter(new FileOutputStream(file) , "utf-8") ;
-				writer.write("fun_id_"+id+"('"+code+"')");
+				writer.write("fun_id"+"('"+code+"')");
 			} catch (IOException e) {
 				api.setCode(500);
 				api.setMsg("存储失败");

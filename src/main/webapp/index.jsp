@@ -139,7 +139,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<c:forEach items="${components }" var="i">
 									<c:forEach items="${i.positions }" var="j">
 										<c:if test="${j.name==item.id }">
-											<<c:out value="${i.name }"></c:out> v-if="TVscreenInfo.showControl['${item.id }']['${i.id }']" :data="'${item.type }'=='CONTENT' || '${item.type }'=='BAR' ? TVscreenInfo.panel['MAIN'] : TVscreenInfo.panel['${item.type }']" ref="${ i.name }"  v-on:click.stop="alert('123')" :now="this.editeEl" :fields="fields"></<c:out value="${i.name }"></c:out>>
+											<<c:out value="${i.name }"></c:out> v-if="TVscreenInfo.showControl['${item.id }']['${i.id }']" :data="TVscreenInfo.panel" ref="${ i.name }"  v-on:click.stop="alert('123')" :now="this.editeEl" :fields="fields"></<c:out value="${i.name }"></c:out>>
 										</c:if>
 									</c:forEach>
 								</c:forEach>
@@ -164,7 +164,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div v-if="fields[0]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">背景</div>
 						<div v-if="fields[0]" style="width:100%;height:100px;overflow:hidden;">
 							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">背景：<div @click="bg_change()" class="layui-btn layui-btn-xs">选择图片</div></div>
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">颜色：<input readonly="readonly" type="text" style="height:25px;width:60px;cursor:pointer;border-top:8px solid black;border-bottom:8px solid black;" @click="colorSelet($event)" /></div>
+							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">颜色：<input readonly="readonly" type="text" style="height:25px;width:25px;cursor:pointer;" @click="colorSelet($event)" :style="{background:(editeEl['type'] == 'MAIN' && editeEl['content_item'] != undefined && typeof(editeEl['content_item']) != 'undefined') ? TVscreenInfo.panel.border : TVscreenInfo.panel.color}" /></div>
 						</div>
 						<!-- 文字属性设置 -->
 						<div v-if="fields[1]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">文字</div>
@@ -186,7 +186,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<!-- 内容组件属性 -->
 						<div v-if="fields[3]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">内容</div>
 						<div v-if="fields[3]" style="width:100%;overflow:hidden;">
-							<div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div>
+							<div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl["content_item"]].apkName.length >= 4 ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl["content_item"]].apkName.substr(0 , 4) : TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div>
 							<div style="display:flex;margin-top:5px;flex-wrap:wrap;">
 								<div class="content_img" @contextmenu="leftmenu(index)" @click="leftmenu(index)" style="width:40px;height:40px;margin:5px 0px 0px 5px;" v-for="(img , index) in ((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item]) == undefined || typeof((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item])) == 'undefined') ? [] : (TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item].imgs : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item].imgs)"><img :src="img" style="width:40px;height:40px;cursor:pointer;display:block;" title="修改"></div>
 							</div>
@@ -302,6 +302,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							torBarPosition:0 , // 导航栏位置 0表示未设置，1表示顶部 ， 2表示侧边 ， 3表示底部
 							panel:{
 								"color":"black" ,  //全局的颜色
+								"border":"red" ,
 								"BG":{     //电视机背景
 									"img":bgImg ,
 									"flag":false 
@@ -359,7 +360,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  		} ,
 			  		size:function(n , o){
 			  			if(this.editeEl.type == "VUEPMD"){
-			  				this.TVscreenInfo.panel.VUEPMD.size = n ;
+			  				var s = 12 ;
+			  				if(n == "s"){
+			  					s = 12 ;
+			  				}else if(n == "m"){
+			  					s = 18 ;
+			  				}else if(n == "l"){
+			  					s = 25 ;
+			  				}
+			  				this.TVscreenInfo.panel.VUEPMD.size = s ;
 			  			}
 			  		} ,
 			  		color:function(n , o){
@@ -800,6 +809,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						self.TVscreenInfo.height = document.querySelector(".main_TV_panel").offsetHeight ;
 					}
 				},
+				//当组件发生更新时
 				updated:function(){
 					this.TVscreenInfo.width = document.querySelector(".main_TV_panel").offsetWidth ;
 					this.TVscreenInfo.height = document.querySelector(".main_TV_panel").offsetHeight ;
@@ -808,11 +818,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					vue = this ;
 				}
 			});
+			//屏幕大小发生改变时
 			window.onresize = function(){
 				vue.TVscreenInfo.width = document.querySelector(".main_TV_panel").offsetWidth ;
 				vue.TVscreenInfo.height = document.querySelector(".main_TV_panel").offsetHeight ;
 			}
 			
+			//监听esc按键，实现退出预览功能
 			window.onkeyup = function(e){
 				if(e.keyCode == 27){ //退出预览
 					vue.$data.debug = false ;
@@ -820,7 +832,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 			
 			//采用jsonp的形式请求用户数据
-			function fun_id_1(code){
+			function fun_id(code){
 				var data = JSON.parse(code) ;
 				vue.$data.TVscreenInfo = data ;
 			}
@@ -841,6 +853,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apkName = vue.$data.apks[index].apkName ;
 				vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apk = vue.$data.apks[index].packageUrl ;
 			}
+			
+			$("#cxcolor td").click(function(){
+				if(vue.$data.editeEl["type"] == "MAIN" && vue.$data.editeEl["content_item"] != undefined && typeof(vue.$data.editeEl["content_item"]) != "undefined"){
+					vue.$data.TVscreenInfo.panel.border = this.title ;
+				}else{
+					vue.$data.TVscreenInfo.panel.color = this.title ;
+				}
+				$("#cxcolor").css("display" , "none") ;
+			})
 	</script>
 	<script src="./screen/${id }/${language }/screen.json?rand=${Math.random()}" ></script>
 </html>
