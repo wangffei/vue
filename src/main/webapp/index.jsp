@@ -186,7 +186,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<!-- 内容组件属性 -->
 						<div v-if="fields[3]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">内容</div>
 						<div v-if="fields[3]" style="width:100%;overflow:hidden;">
-							<div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div></div><div class="layui-btn layui-btn-xs layui-btn-normal">选择apk</div></div>
+							<div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div>
 							<div style="display:flex;margin-top:5px;flex-wrap:wrap;">
 								<div class="content_img" @contextmenu="leftmenu(index)" @click="leftmenu(index)" style="width:40px;height:40px;margin:5px 0px 0px 5px;" v-for="(img , index) in ((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item]) == undefined || typeof((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item])) == 'undefined') ? [] : (TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item].imgs : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item].imgs)"><img :src="img" style="width:40px;height:40px;cursor:pointer;display:block;" title="修改"></div>
 							</div>
@@ -285,92 +285,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							4:false , //导航栏属性编辑
 						} , //属性编辑器
 						apks:[
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} ,
-							{name:"腾讯视频" , packageName:"com.pack.tencent" , image:"./img/image.png" , url:""} 
 						] , //apk的数据，仓库中可选apk
 						screenWidth:500 ,
 						cursor:"default" ,
@@ -508,11 +422,69 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							this.flag = true ;
 						}
 					} ,
+					selectApk:function(){
+						var html = '<div style="width:100%;height:100%;align-items:center;justify-content:center;display:flex;"><div style="width:30px;height:30px;"><img style="width:30px;height:30px;" src="./img/uploading.gif"></div></div>' ;
+						var panel = layer.open({
+						  type: 1, 
+						  title:"应用商城" ,
+						  area:['800px' , '400px'] ,
+						  content: html
+						});
+						if(this.apks.length == 0){
+							var self = this ;
+							if(this.apks.length == 0){
+								$.ajax({
+									url:global.apks ,
+									type:"GET" ,
+									success:function(res){
+										if(res.code != 200){
+											layer.msg("【faild】"+res.msg, {icon: 5});
+											layer.close(panel) ;
+										}else{
+											self.apks = res.data ;
+											layer.close(panel) ;
+											self.apkShow(self.apks) ;
+										}
+									} , 
+									error:function(){
+										layer.msg("获取数据失败", {icon: 5});
+										layer.close(panel) ;
+									}
+								}) ;
+							}
+						}else{
+							layer.close(panel) ;
+							this.apkShow(this.apks) ;
+						}
+					} ,
+					apkShow:function(arr){
+						var html = '' ;
+						for(var i=0 ; i<arr.length ; i++){
+							html+="<div style='width:71px;height:80px;display:flex;flex-direction:column;text-align:center;cursor:pointer;' onclick='apkSelect("+i+")' onmouseout ='apkOut(this)' onmouseover='apkHover(this)'><img style='width:50px;height:50px;margin-left:10px;' src='./img/image.png'>"+(arr[i].apkName.length >= 4 ? arr[i].apkName.substr(0 , 4) : arr[i].apkName)+"</div>" ;
+						}
+						html = "<div style='width:100%;height:100%;display:flex;flex-wrap:wrap;'>"+html+"</div>" ;
+						apkPanel = layer.open({
+						  type: 1, 
+						  title:"应用商城" ,
+						  area:['800px' , '400px'] ,
+						  content: html
+						});
+					} ,
 					save:function(){
 						$.ajax({
 							url:"pageUpload" ,
 							type:"POST" ,
-							data:{language:global.language , id:global.id , code:JSON.stringify(this.TVscreenInfo)}
+							data:{language:global.language , id:global.id , code:JSON.stringify(this.TVscreenInfo)} ,
+							success:function(res){
+								if(res.code == 500){
+									layer.msg("【faild】"+res.msg, {icon: 5});
+								}else if(res.code == 200){
+									layer.msg("【success】"+res.msg, {icon: 5});
+								}
+							} ,
+							error:function(){
+								layer.msg("上传失败", {icon: 5});
+							}
 						})
 					} ,
 					fullScreen:function(){
@@ -847,11 +819,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			}
 			
+			//采用jsonp的形式请求用户数据
 			function fun_id_1(code){
 				var data = JSON.parse(code) ;
-				console.log(data)
 				vue.$data.TVscreenInfo = data ;
 			}
+			
+			//选apk时鼠标移上的事件
+			function apkHover(e){
+				e.style.background = "#dfdfdf" ;
+			}
+			
+			//选apk时鼠标移出事件
+			function apkOut(e){
+				e.style.background = "none" ;
+			}
+			
+			//选择apk事件
+			function apkSelect(index){
+				layer.close(apkPanel) ;
+				vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apkName = vue.$data.apks[index].apkName ;
+				vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apk = vue.$data.apks[index].packageUrl ;
+			}
 	</script>
-	<script src="./screen/${id }/${language }/screen.json" ></script>
+	<script src="./screen/${id }/${language }/screen.json?rand=${Math.random()}" ></script>
 </html>
