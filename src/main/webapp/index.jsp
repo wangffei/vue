@@ -269,6 +269,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    return {
 						left:180,
 						right:180,
+						isChange:undefined , //监听页面是否发生变化
 						debug:false ,
 						flag:false , //表示鼠标是否点中拖动栏
 						item:0 ,
@@ -480,21 +481,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						});
 					} ,
 					save:function(){
-						$.ajax({
-							url:"pageUpload" ,
-							type:"POST" ,
-							data:{language:global.language , id:global.id , code:JSON.stringify(this.TVscreenInfo)} ,
-							success:function(res){
-								if(res.code == 500){
-									layer.msg("【faild】"+res.msg, {icon: 5});
-								}else if(res.code == 200){
-									layer.msg("【success】"+res.msg, {icon: 5});
+						var self = this ;
+						if(this.isChange){
+							$.ajax({
+								url:"pageUpload" ,
+								type:"POST" ,
+								data:{language:global.language , id:global.id , code:JSON.stringify(this.TVscreenInfo)} ,
+								success:function(res){
+									if(res.code == 500){
+										layer.msg("【faild】"+res.msg, {icon: 5});
+									}else if(res.code == 200){
+										layer.msg("【success】"+res.msg, {icon: 5});
+										self.isChange = false ;
+										window.onbeforeunload = null ;
+									}
+								} ,
+								error:function(){
+									layer.msg("上传失败", {icon: 5});
 								}
-							} ,
-							error:function(){
-								layer.msg("上传失败", {icon: 5});
-							}
-						})
+							})
+						}else{
+							layer.msg("【success】上传成功", {icon: 5});
+						}
 					} ,
 					fullScreen:function(){
 						this.debug = true ;
@@ -862,6 +870,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 				$("#cxcolor").css("display" , "none") ;
 			})
+			
+			//是否添加页面刷新事件
+			var flush = false ;
+			vue.$watch('TVscreenInfo', function(n  , o){
+				if(vue.$data.isChange == undefined){
+					vue.$data.isChange = false ;
+				}else{
+					vue.$data.isChange = true ;
+					if(!flush){
+						window.onbeforeunload = function(e) {
+					    	 var dialogText = '数据未保存';
+						     e.returnValue = dialogText;
+						     return dialogText;
+						};
+						flush = true ;
+					}
+				}
+			}, {
+			    deep: true
+			});
 	</script>
 	<script src="./screen/${id }/${language }/screen.json?rand=${Math.random()}" ></script>
 </html>
