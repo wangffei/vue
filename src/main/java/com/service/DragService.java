@@ -11,10 +11,13 @@ import cn.hutool.core.bean.BeanUtil;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dao.ComponentDao;
 import com.dao.ContentDao;
+import com.dao.PictrulDao;
 import com.dao.PositionDao;
 import com.pojo.Component;
+import com.pojo.Pictrul;
 import com.pojo.Position;
 import com.vo.ComponentVO;
 import com.vo.PositionVO;
@@ -35,6 +38,9 @@ public class DragService {
 	//屏幕内容表
 	@Autowired
 	private ContentDao content ;
+	//图片表
+	@Autowired
+	private PictrulDao pictrul ;
 	
 	//查询各个组件位置表中全部数据
 	public List<PositionVO> getPositions(){
@@ -60,5 +66,30 @@ public class DragService {
 			newList.add(pos) ;
 		}
 		return  newList ;
+	}
+	
+	//将图片写入数据库
+	public Pictrul addImg(Pictrul p){
+		pictrul.insert(p) ;
+		return p ;
+	}
+	
+	//根据md5值查询图片
+	public boolean isExist(String md5){
+		QueryWrapper<Pictrul> query = new QueryWrapper<Pictrul>() ;
+		query.eq(true, "md5", md5) ;
+		Pictrul p = pictrul.selectOne(query) ;
+		if(p != null){
+			return true ;
+		}
+		return false ;
+	}
+	
+	//根据md5查出对应图片的信息
+	public Pictrul getImg(String md5){
+		QueryWrapper<Pictrul> query = new QueryWrapper<Pictrul>() ;
+		query.eq(true, "md5", md5) ;
+		Pictrul p = pictrul.selectOne(query) ;
+		return p ;
 	}
 }

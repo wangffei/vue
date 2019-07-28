@@ -129,7 +129,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 			</div>
 			<div :style="{display:debug ? 'none' : 'flex'}" @mousedown="item_click_down($event , 1)" class="select-item-left select-item"></div>
-			<div class="center panel" style="border-radius:10px;">
+			<div class="center panel" style="border-radius:10px;overflow:hidden;">
 				<div class="vue-panel-content" style="border-radius:10px;">
 					<div class="main_TV_panel" @click="panelClick($event)" @mouseup="insert($event)" @mousemove="panelMove($event)" style="width:100%;border-radius:10px;overflow:hidden;position:relative;top:0px;" :style="{height:debug ? '100%' : '80%'}">
 						<img style="width:100%;height:100%;z-index:1;position:absolute;top:0px;display:block;" :src="TVscreenInfo.panel.BG.img" />
@@ -139,7 +139,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<c:forEach items="${components }" var="i">
 									<c:forEach items="${i.positions }" var="j">
 										<c:if test="${j.name==item.id }">
-											<<c:out value="${i.name }"></c:out> v-if="TVscreenInfo.showControl['${item.id }']['${i.id }']" :data="TVscreenInfo.panel" ref="${ i.name }"  v-on:click.stop="alert('123')" :now="this.editeEl" :fields="fields"></<c:out value="${i.name }"></c:out>>
+											<<c:out value="${i.name }"></c:out> oncontextmenu="deleteComponent('${item.id }' , '${i.id }' , '${item.type }')" v-if="TVscreenInfo.showControl['${item.id }']['${i.id }']" :data="TVscreenInfo.panel" ref="${ i.name }"  v-on:click.stop="alert('123')" :now="this.editeEl" :fields="fields"></<c:out value="${i.name }"></c:out>>
 										</c:if>
 									</c:forEach>
 								</c:forEach>
@@ -176,6 +176,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								  <option value="s">小</option>
 								</select>  
 							</div>
+							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">
+								方向：<select name="city" lay-verify="" v-model="dirction" style="width:60px;height:25px;">
+								  <option value="l">向左</option>
+								  <option value="r">向右</option>
+								</select>  
+							</div>
 							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">内容：<textarea v-model="text" name="" required lay-verify="required" placeholder="请输入" class="layui-textarea" style="width:60%;"></textarea></div>
 						</div>
 						<!-- 文件属性 -->
@@ -206,9 +212,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</div>
 		<div id="cxcolor" style="display: none;top: 30px;position:fixed;right:400px;z-index:2000;"><table style="width:200px;height:180px;"><tbody><tr><td title="#000000" style="background-color:#000000"></td><td title="#000000" style="background-color:#000000"></td><td title="#000000" style="background-color:#000000"></td><td title="#000000" style="background-color:#000000"></td><td title="#003300" style="background-color:#003300"></td><td title="#006600" style="background-color:#006600"></td><td title="#009900" style="background-color:#009900"></td><td title="#00cc00" style="background-color:#00cc00"></td><td title="#00ff00" style="background-color:#00ff00"></td><td title="#330000" style="background-color:#330000"></td><td title="#333300" style="background-color:#333300"></td><td title="#336600" style="background-color:#336600"></td><td title="#339900" style="background-color:#339900"></td><td title="#33cc00" style="background-color:#33cc00"></td><td title="#33ff00" style="background-color:#33ff00"></td><td title="#660000" style="background-color:#660000"></td><td title="#663300" style="background-color:#663300"></td><td title="#666600" style="background-color:#666600"></td><td title="#669900" style="background-color:#669900"></td><td title="#66cc00" style="background-color:#66cc00"></td><td title="#66ff00" style="background-color:#66ff00"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#333333" style="background-color:#333333"></td><td title="#000000" style="background-color:#000000"></td><td title="#000033" style="background-color:#000033"></td><td title="#003333" style="background-color:#003333"></td><td title="#006633" style="background-color:#006633"></td><td title="#009933" style="background-color:#009933"></td><td title="#00cc33" style="background-color:#00cc33"></td><td title="#00ff33" style="background-color:#00ff33"></td><td title="#330033" style="background-color:#330033"></td><td title="#333333" style="background-color:#333333"></td><td title="#336633" style="background-color:#336633"></td><td title="#339933" style="background-color:#339933"></td><td title="#33cc33" style="background-color:#33cc33"></td><td title="#33ff33" style="background-color:#33ff33"></td><td title="#660033" style="background-color:#660033"></td><td title="#663333" style="background-color:#663333"></td><td title="#666633" style="background-color:#666633"></td><td title="#669933" style="background-color:#669933"></td><td title="#66cc33" style="background-color:#66cc33"></td><td title="#66ff33" style="background-color:#66ff33"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#666666" style="background-color:#666666"></td><td title="#000000" style="background-color:#000000"></td><td title="#000066" style="background-color:#000066"></td><td title="#003366" style="background-color:#003366"></td><td title="#006666" style="background-color:#006666"></td><td title="#009966" style="background-color:#009966"></td><td title="#00cc66" style="background-color:#00cc66"></td><td title="#00ff66" style="background-color:#00ff66"></td><td title="#330066" style="background-color:#330066"></td><td title="#333366" style="background-color:#333366"></td><td title="#336666" style="background-color:#336666"></td><td title="#339966" style="background-color:#339966"></td><td title="#33cc66" style="background-color:#33cc66"></td><td title="#33ff66" style="background-color:#33ff66"></td><td title="#660066" style="background-color:#660066"></td><td title="#663366" style="background-color:#663366"></td><td title="#666666" style="background-color:#666666"></td><td title="#669966" style="background-color:#669966"></td><td title="#66cc66" style="background-color:#66cc66"></td><td title="#66ff66" style="background-color:#66ff66"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#999999" style="background-color:#999999"></td><td title="#000000" style="background-color:#000000"></td><td title="#000099" style="background-color:#000099"></td><td title="#003399" style="background-color:#003399"></td><td title="#006699" style="background-color:#006699"></td><td title="#009999" style="background-color:#009999"></td><td title="#00cc99" style="background-color:#00cc99"></td><td title="#00ff99" style="background-color:#00ff99"></td><td title="#330099" style="background-color:#330099"></td><td title="#333399" style="background-color:#333399"></td><td title="#336699" style="background-color:#336699"></td><td title="#339999" style="background-color:#339999"></td><td title="#33cc99" style="background-color:#33cc99"></td><td title="#33ff99" style="background-color:#33ff99"></td><td title="#660099" style="background-color:#660099"></td><td title="#663399" style="background-color:#663399"></td><td title="#666699" style="background-color:#666699"></td><td title="#669999" style="background-color:#669999"></td><td title="#66cc99" style="background-color:#66cc99"></td><td title="#66ff99" style="background-color:#66ff99"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#cccccc" style="background-color:#cccccc"></td><td title="#000000" style="background-color:#000000"></td><td title="#0000cc" style="background-color:#0000cc"></td><td title="#0033cc" style="background-color:#0033cc"></td><td title="#0066cc" style="background-color:#0066cc"></td><td title="#0099cc" style="background-color:#0099cc"></td><td title="#00cccc" style="background-color:#00cccc"></td><td title="#00ffcc" style="background-color:#00ffcc"></td><td title="#3300cc" style="background-color:#3300cc"></td><td title="#3333cc" style="background-color:#3333cc"></td><td title="#3366cc" style="background-color:#3366cc"></td><td title="#3399cc" style="background-color:#3399cc"></td><td title="#33cccc" style="background-color:#33cccc"></td><td title="#33ffcc" style="background-color:#33ffcc"></td><td title="#6600cc" style="background-color:#6600cc"></td><td title="#6633cc" style="background-color:#6633cc"></td><td title="#6666cc" style="background-color:#6666cc"></td><td title="#6699cc" style="background-color:#6699cc"></td><td title="#66cccc" style="background-color:#66cccc"></td><td title="#66ffcc" style="background-color:#66ffcc"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#ffffff" style="background-color:#ffffff"></td><td title="#000000" style="background-color:#000000"></td><td title="#0000ff" style="background-color:#0000ff"></td><td title="#0033ff" style="background-color:#0033ff"></td><td title="#0066ff" style="background-color:#0066ff"></td><td title="#0099ff" style="background-color:#0099ff"></td><td title="#00ccff" style="background-color:#00ccff"></td><td title="#00ffff" style="background-color:#00ffff"></td><td title="#3300ff" style="background-color:#3300ff"></td><td title="#3333ff" style="background-color:#3333ff"></td><td title="#3366ff" style="background-color:#3366ff"></td><td title="#3399ff" style="background-color:#3399ff"></td><td title="#33ccff" style="background-color:#33ccff"></td><td title="#33ffff" style="background-color:#33ffff"></td><td title="#6600ff" style="background-color:#6600ff"></td><td title="#6633ff" style="background-color:#6633ff"></td><td title="#6666ff" style="background-color:#6666ff"></td><td title="#6699ff" style="background-color:#6699ff"></td><td title="#66ccff" style="background-color:#66ccff"></td><td title="#66ffff" style="background-color:#66ffff"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#ff0000" style="background-color:#ff0000"></td><td title="#000000" style="background-color:#000000"></td><td title="#990000" style="background-color:#990000"></td><td title="#993300" style="background-color:#993300"></td><td title="#996600" style="background-color:#996600"></td><td title="#999900" style="background-color:#999900"></td><td title="#99cc00" style="background-color:#99cc00"></td><td title="#99ff00" style="background-color:#99ff00"></td><td title="#cc0000" style="background-color:#cc0000"></td><td title="#cc3300" style="background-color:#cc3300"></td><td title="#cc6600" style="background-color:#cc6600"></td><td title="#cc9900" style="background-color:#cc9900"></td><td title="#cccc00" style="background-color:#cccc00"></td><td title="#ccff00" style="background-color:#ccff00"></td><td title="#ff0000" style="background-color:#ff0000"></td><td title="#ff3300" style="background-color:#ff3300"></td><td title="#ff6600" style="background-color:#ff6600"></td><td title="#ff9900" style="background-color:#ff9900"></td><td title="#ffcc00" style="background-color:#ffcc00"></td><td title="#ffff00" style="background-color:#ffff00"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#00ff00" style="background-color:#00ff00"></td><td title="#000000" style="background-color:#000000"></td><td title="#990033" style="background-color:#990033"></td><td title="#993333" style="background-color:#993333"></td><td title="#996633" style="background-color:#996633"></td><td title="#999933" style="background-color:#999933"></td><td title="#99cc33" style="background-color:#99cc33"></td><td title="#99ff33" style="background-color:#99ff33"></td><td title="#cc0033" style="background-color:#cc0033"></td><td title="#cc3333" style="background-color:#cc3333"></td><td title="#cc6633" style="background-color:#cc6633"></td><td title="#cc9933" style="background-color:#cc9933"></td><td title="#cccc33" style="background-color:#cccc33"></td><td title="#ccff33" style="background-color:#ccff33"></td><td title="#ff0033" style="background-color:#ff0033"></td><td title="#ff3333" style="background-color:#ff3333"></td><td title="#ff6633" style="background-color:#ff6633"></td><td title="#ff9933" style="background-color:#ff9933"></td><td title="#ffcc33" style="background-color:#ffcc33"></td><td title="#ffff33" style="background-color:#ffff33"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#0000ff" style="background-color:#0000ff"></td><td title="#000000" style="background-color:#000000"></td><td title="#990066" style="background-color:#990066"></td><td title="#993366" style="background-color:#993366"></td><td title="#996666" style="background-color:#996666"></td><td title="#999966" style="background-color:#999966"></td><td title="#99cc66" style="background-color:#99cc66"></td><td title="#99ff66" style="background-color:#99ff66"></td><td title="#cc0066" style="background-color:#cc0066"></td><td title="#cc3366" style="background-color:#cc3366"></td><td title="#cc6666" style="background-color:#cc6666"></td><td title="#cc9966" style="background-color:#cc9966"></td><td title="#cccc66" style="background-color:#cccc66"></td><td title="#ccff66" style="background-color:#ccff66"></td><td title="#ff0066" style="background-color:#ff0066"></td><td title="#ff3366" style="background-color:#ff3366"></td><td title="#ff6666" style="background-color:#ff6666"></td><td title="#ff9966" style="background-color:#ff9966"></td><td title="#ffcc66" style="background-color:#ffcc66"></td><td title="#ffff66" style="background-color:#ffff66"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#ffff00" style="background-color:#ffff00"></td><td title="#000000" style="background-color:#000000"></td><td title="#990099" style="background-color:#990099"></td><td title="#993399" style="background-color:#993399"></td><td title="#996699" style="background-color:#996699"></td><td title="#999999" style="background-color:#999999"></td><td title="#99cc99" style="background-color:#99cc99"></td><td title="#99ff99" style="background-color:#99ff99"></td><td title="#cc0099" style="background-color:#cc0099"></td><td title="#cc3399" style="background-color:#cc3399"></td><td title="#cc6699" style="background-color:#cc6699"></td><td title="#cc9999" style="background-color:#cc9999"></td><td title="#cccc99" style="background-color:#cccc99"></td><td title="#ccff99" style="background-color:#ccff99"></td><td title="#ff0099" style="background-color:#ff0099"></td><td title="#ff3399" style="background-color:#ff3399"></td><td title="#ff6699" style="background-color:#ff6699"></td><td title="#ff9999" style="background-color:#ff9999"></td><td title="#ffcc99" style="background-color:#ffcc99"></td><td title="#ffff99" style="background-color:#ffff99"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#00ffff" style="background-color:#00ffff"></td><td title="#000000" style="background-color:#000000"></td><td title="#9900cc" style="background-color:#9900cc"></td><td title="#9933cc" style="background-color:#9933cc"></td><td title="#9966cc" style="background-color:#9966cc"></td><td title="#9999cc" style="background-color:#9999cc"></td><td title="#99cccc" style="background-color:#99cccc"></td><td title="#99ffcc" style="background-color:#99ffcc"></td><td title="#cc00cc" style="background-color:#cc00cc"></td><td title="#cc33cc" style="background-color:#cc33cc"></td><td title="#cc66cc" style="background-color:#cc66cc"></td><td title="#cc99cc" style="background-color:#cc99cc"></td><td title="#cccccc" style="background-color:#cccccc"></td><td title="#ccffcc" style="background-color:#ccffcc"></td><td title="#ff00cc" style="background-color:#ff00cc"></td><td title="#ff33cc" style="background-color:#ff33cc"></td><td title="#ff66cc" style="background-color:#ff66cc"></td><td title="#ff99cc" style="background-color:#ff99cc"></td><td title="#ffcccc" style="background-color:#ffcccc"></td><td title="#ffffcc" style="background-color:#ffffcc"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#ff00ff" style="background-color:#ff00ff"></td><td title="#000000" style="background-color:#000000"></td><td title="#9900ff" style="background-color:#9900ff"></td><td title="#9933ff" style="background-color:#9933ff"></td><td title="#9966ff" style="background-color:#9966ff"></td><td title="#9999ff" style="background-color:#9999ff"></td><td title="#99ccff" style="background-color:#99ccff"></td><td title="#99ffff" style="background-color:#99ffff"></td><td title="#cc00ff" style="background-color:#cc00ff"></td><td title="#cc33ff" style="background-color:#cc33ff"></td><td title="#cc66ff" style="background-color:#cc66ff"></td><td title="#cc99ff" style="background-color:#cc99ff"></td><td title="#ccccff" style="background-color:#ccccff"></td><td title="#ccffff" style="background-color:#ccffff"></td><td title="#ff00ff" style="background-color:#ff00ff"></td><td title="#ff33ff" style="background-color:#ff33ff"></td><td title="#ff66ff" style="background-color:#ff66ff"></td><td title="#ff99ff" style="background-color:#ff99ff"></td><td title="#ffccff" style="background-color:#ffccff"></td><td title="#ffffff" style="background-color:#ffffff"></td></tr></tbody></table></div>
+		<input type="file" style="display:none;" id="file" onchange="selectFile()" />
 	</div>
   </body>
 	<script src="./js/vue.min.js"></script>
+	<script src="./js/spark-md5.min.js"></script>
  	<script>
 		/**
 		 * 预定义部分全局的变量
@@ -217,7 +225,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			"temp":false ,
 			"id":${id} ,  //当前电视id
 			"language":"${language}",  //当前编辑语种
-			"apks":"http://woosyun.com:9090/api/getapk" //apk的接口
+			"apks":"http://woosyun.com:8080/api/getapk" //apk的接口
 		} 
 		var bgImg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAH0CAYAAACHEBA3AAAE3UlEQVR42u3UMREAAAgDsRqoN/yrQQdchhj44dN2AC6ICIBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFGJYIgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgUYlgiAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBRiWEIBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhAYYlAmBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBhiUCYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQGGJQJgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhAYYlBGBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWMBvC9p8boFKPUhmAAAAAElFTkSuQmCC" ;
 		//bgImg = "https://t12.baidu.com/it/u=2897648120,2717953286&fm=76" ;
@@ -262,7 +270,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			global.mouseRightMenu = layui.mouseRightMenu,global.layer = layui.layer;
 				
 		})
-		console.log(init) ;
 		var vue = new Vue({
 			el:"#app",
 			data:function () {
@@ -275,8 +282,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						item:0 ,
 						file:"" , //选择的文件
 						text:"" , //文字编辑
-						size:"" ,
+						size:"18" ,
 						color:"" ,
+						dirction:"r" , 
+						fun:function(){console.log("未知错误")} ,  //选择文件时执行的回调函数
 						temp:"" ,
 						fields:{
 							0:true, //背景设置
@@ -324,6 +333,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									"id":undefined,
 									title:"" ,
 									size:"13" ,
+									dirction:"r" ,
 									color:this.color
 								} ,
 								"VUECLOCK":{
@@ -372,6 +382,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  				this.TVscreenInfo.panel.VUEPMD.size = s ;
 			  			}
 			  		} ,
+			  		dirction:function(n , o){
+			  			if(this.editeEl["type"] == "VUEPMD"){
+			  				this.TVscreenInfo.panel.VUEPMD.dirction = this.dirction ;
+			  			}
+			  		} ,
 			  		color:function(n , o){
 			  			if(this.editeEl.type == "VUEPMD"){
 			  				this.TVscreenInfo.panel.VUEPMD.color = n ;
@@ -394,6 +409,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  				if(i*1){
 			  					this.TVscreenInfo.showControl[5][i] = false ;
 			  				}
+			  			}
+			  			if(n == undefined || typeof(n) == "undefined" || this.TVscreenInfo.panel.MAIN.data[n] == undefined || typeof(this.TVscreenInfo.panel.MAIN.data[n]) == "undefined"){
+			  				return ;
 			  			}
 			  			if(this.TVscreenInfo.panel.MAIN.data[n].data == undefined || typeof(this.TVscreenInfo.panel.MAIN.data[n].data) == "undefined" || this.TVscreenInfo.panel.MAIN.data[n].data.length == 0){
 			  				this.TVscreenInfo.panel.MAIN.content = false ;
@@ -470,7 +488,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					apkShow:function(arr){
 						var html = '' ;
 						for(var i=0 ; i<arr.length ; i++){
-							html+="<div style='width:71px;height:80px;display:flex;flex-direction:column;text-align:center;cursor:pointer;' onclick='apkSelect("+i+")' onmouseout ='apkOut(this)' onmouseover='apkHover(this)'><img style='width:50px;height:50px;margin-left:10px;' src='./img/image.png'>"+(arr[i].apkName.length >= 4 ? arr[i].apkName.substr(0 , 4) : arr[i].apkName)+"</div>" ;
+							html+="<div style='width:71px;height:80px;display:flex;flex-direction:column;text-align:center;cursor:pointer;' onclick='apkSelect("+i+")' onmouseout ='apkOut(this)' onmouseover='apkHover(this)'><img style='width:50px;height:50px;margin-left:10px;' src='"+arr[i].image+"'>"+(arr[i].apkName.length >= 4 ? arr[i].apkName.substr(0 , 4) : arr[i].apkName)+"</div>" ;
 						}
 						html = "<div style='width:100%;height:100%;display:flex;flex-wrap:wrap;'>"+html+"</div>" ;
 						apkPanel = layer.open({
@@ -483,6 +501,65 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					save:function(){
 						var self = this ;
 						if(this.isChange){
+							//在真正保存前进行一次md5验证，可大大减轻服务器压力，相同文件可做到一次上传多次使用
+							var spark = new SparkMD5();
+							//var md5 = spark.append(base64).end() ;
+							var md5 = {} ;
+							//遍历界面中所有图片，找出新添加的图片
+							//1.找背景
+							if(this.TVscreenInfo.panel.BG.img.startsWith("data:image/")){
+								var m = spark.append(this.TVscreenInfo.panel.BG.img).end() ;
+								md5["self.TVscreenInfo.panel.BG.img"] = m ;
+							}
+							//将logo中的图片找出来
+							if(this.TVscreenInfo.panel.VUELOGO.img.startsWith("data:image/")){
+								var m = spark.append(this.TVscreenInfo.panel.VUELOGO.img).end() ;
+								md5["self.TVscreenInfo.panel.VUELOGO.img"] = m ;
+							}
+							//将导航栏中所有的图片找出来
+							for(var i in this.TVscreenInfo.panel.MAIN.data){
+								if(this.TVscreenInfo.panel.MAIN.data[i].img.startsWith("data:image/")){
+									var m = spark.append(this.TVscreenInfo.panel.MAIN.data[i].img).end() ;
+									md5["self.TVscreenInfo.panel.MAIN.data["+i+"].img"] = m ;
+								}
+								if(this.TVscreenInfo.panel.MAIN.data[i].selectedImg.startsWith("data:image/")){
+									var m = spark.append(this.TVscreenInfo.panel.MAIN.data[i].selectedImg).end() ;
+									md5["self.TVscreenInfo.panel.MAIN.data["+i+"].selectedImg"] = m ;
+								}
+								//将内容组件中所有的图片找出来
+								for(var j in this.TVscreenInfo.panel.MAIN.data[i].data.info){
+									for(var n in this.TVscreenInfo.panel.MAIN.data[i].data.info[j].imgs){
+										if(this.TVscreenInfo.panel.MAIN.data[i].data.info[j].imgs[n].startsWith("data:image/")){
+											var m = spark.append(this.TVscreenInfo.panel.MAIN.data[i].data.info[j].imgs[n]).end() ;
+											md5["self.TVscreenInfo.panel.MAIN.data["+i+"].data.info["+j+"].imgs["+n+"]"] = m ;
+										}
+									}
+								}
+							}
+							var result = "" ;
+							//进行md5校验
+							$.ajax({
+								url:"md5Check" ,
+								type:"POST" ,
+								data:{data:JSON.stringify(md5)} ,
+								async:false ,
+								success:function(res){
+									result = res ;
+								} ,
+								error:function(){
+									layer.msg("验证失败，请检查网络是否通畅", {icon: 5});
+								}
+							}) ;
+							if(result == ""){
+								return ;
+							}else{
+								layer.msg(result.msg , {icon: 5});
+								for(var i in result.data){
+									if(result.data[i] != "404" || result.data[i] != 404){
+										eval(result.data[i]) ;
+									}
+								}
+							}
 							$.ajax({
 								url:"pageUpload" ,
 								type:"POST" ,
@@ -530,7 +607,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}
 					} ,
 					addImg:function(msg){
-						var file = document.createElement("input") ;
+						/*var file = document.createElement("input") ;
 						file.type = "file" 
 						var self = this ;
 						file.onchange = function(e){
@@ -564,8 +641,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img = base64 ;
 								}
 							}
+						}*/
+						//file.click() ;
+						var self = this ;
+						this.fun = function(base64){
+							if(msg == "content"){
+								if(self.TVscreenInfo.panel.MAIN.bar){
+			 						self.TVscreenInfo.panel.MAIN.data[self.TVscreenInfo.panel.MAIN.item].data.info[self.editeEl["content_item"]].imgs.push(base64) ;
+			 					}else{
+			 						self.TVscreenInfo.panel.MAIN.data[0].data.info[self.editeEl["content_item"]].imgs.push(base64) ;
+			 					}
+							}else if(msg == "bar_add"){
+								if(self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img == "" || self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img == undefined || typeof(self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img) == "undefined"){
+									self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img = base64 ;
+								}else{
+									self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].selectedImg = base64 ;
+								}
+							}else if(msg == "bar_change"){
+								self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img = base64 ;
+							}
 						}
-						file.click() ; 
+						$("#file").click() ;
 					} ,
 					leftmenu:function (index){
 						var data = {content:$(this).html()}
@@ -582,7 +678,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			 						self.TVscreenInfo.panel.MAIN.data[0].data.info[self.editeEl["content_item"]].imgs.splice(index , 1) ;
 			 					}
 			 				} else if(d.type == 2){
-			 					var file = document.createElement("input") ;
+			 					/*var file = document.createElement("input") ;
 								file.type = "file" 
 								file.onchange = function(e){
 									var f = "" ;
@@ -599,14 +695,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									var base64 = "";
 									r.onload = function(e) {
 										base64 = e.target.result;
-										if(self.TVscreenInfo.panel.MAIN.bar){
-					 						self.TVscreenInfo.panel.MAIN.data[self.TVscreenInfo.panel.MAIN.item].data.info[self.editeEl["content_item"]].imgs.splice(index , 1 , base64) ;
-					 					}else{
-					 						self.TVscreenInfo.panel.MAIN.data[0].data.info[self.editeEl["content_item"]].imgs.splice(index , 1 , base64) ;
-					 					}
+										
 									}
+								}*/
+								self.fun = function(base64){
+									if(self.TVscreenInfo.panel.MAIN.bar){
+				 						self.TVscreenInfo.panel.MAIN.data[self.TVscreenInfo.panel.MAIN.item].data.info[self.editeEl["content_item"]].imgs.splice(index , 1 , base64) ;
+				 					}else{
+				 						self.TVscreenInfo.panel.MAIN.data[0].data.info[self.editeEl["content_item"]].imgs.splice(index , 1 , base64) ;
+				 					}
 								}
-								file.click() ; 
+								$("#file").click() ; 
 			 				}
 			 			})
 						return false;
@@ -617,7 +716,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}
 					} ,
 					bg_change:function(){
-						var file = document.createElement("input") ;
+						/*var file = document.createElement("input") ;
 						file.type = "file" 
 						var self = this;
 						file.onchange = function(e){
@@ -638,8 +737,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								self.TVscreenInfo.panel.BG.flag = true ;
 								self.TVscreenInfo.panel.BG.img = base64 ;
 							}
+						}*/
+						var self = this ;
+						this.fun = function(base64){
+							self.TVscreenInfo.panel.BG.flag = true ;
+							self.TVscreenInfo.panel.BG.img = base64 ;
 						}
-						file.click() ;
+						$("#file").click() ;
 					} ,
 					colorSelet:function(e){
 						var panel = document.getElementById("cxcolor") ;
@@ -667,7 +771,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}
 					} ,
 					file_select:function(){
-						var file = document.createElement("input") ;
+						/*var file = document.createElement("input") ;
 						file.type = "file" 
 						var self = this;
 						file.onchange = function(e){
@@ -685,10 +789,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							var base64 = "";
 							r.onload = function(e) {
 								base64 = e.target.result;
-								self.file = base64 ;
+								
 							}
+						}*/
+						var self = this ;
+						this.fun = function(base64){
+							self.file = base64 ;
 						}
-						file.click() ;
+						$("#file").click() ;
 					} ,
 					item_click_up:function(){
 						this.flag = false ;
@@ -879,6 +987,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}else{
 					vue.$data.isChange = true ;
 					if(!flush){
+						//监听页面刷新，用于提示用户数据未保存
 						window.onbeforeunload = function(e) {
 					    	 var dialogText = '数据未保存';
 						     e.returnValue = dialogText;
@@ -890,6 +999,72 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}, {
 			    deep: true
 			});
+			
+			//右键删除组件
+			function deleteComponent(position , id , type){
+				var data = {content:$(this).html()}
+	 			var menu_data=[
+					{'data':data,'type':1,'title':'删除'}
+				]
+				var self = this ;
+	 			global.mouseRightMenu.open(menu_data,false,function(d){
+	 				if(type == "CONTENT"){
+	 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.id = "" ;
+	 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.typeid = "" ;
+	 					console.log(vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info) ;
+	 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.length) ;
+	 					vue.$data.TVscreenInfo.panel.MAIN.content = false ;
+	 					//vue.$data.TVscreenInfo.panel.MAIN.item = 0 ;
+	 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
+	 				}else if(type == "BAR"){
+	 					var sid = layer.confirm('此操作会删除整个导航栏和内容组件的数据，是否继续', {
+	 						  btn: ['确认', '取消'] //可以无限个按钮
+	 						}, function(index){
+	 							vue.$data.TVscreenInfo.panel.MAIN.bar = false ;
+	 		 					vue.$data.TVscreenInfo.panel.MAIN.content = false ;
+	 		 					vue.$data.TVscreenInfo.panel.MAIN.item = undefined ;
+	 		 					vue.$data.TVscreenInfo.panel.MAIN.data.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data.length) ;
+	 		 					vue.$data.TVscreenInfo.panel.MAIN.id = undefined ;
+	 		 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
+	 							layer.close(sid)
+	 						}, function(index){
+	 							 return ;
+	 					})
+	 				}else if(type == "VUELOGO"){
+	 					vue.$data.TVscreenInfo.panel["VUELOGO"].img = undefined ;
+	 					vue.$data.TVscreenInfo.panel["VUELOGO"].id = undefined ;
+	 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
+	 				}else if(type == "VUEPMD"){
+	 					vue.$data.TVscreenInfo.panel["VUEPMD"].id = "" ;
+	 					vue.$data.TVscreenInfo.panel["VUEPMD"].title = "" ;
+	 					vue.$data.TVscreenInfo.panel["VUEPMD"].dirction = "" ;
+	 					vue.$data.TVscreenInfo.panel["VUEPMD"].color = "" ;
+	 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
+	 				}else if(type == "VUECLOCK"){
+	 					vue.$data.TVscreenInfo.panel["VUECLOCK"] = {} ;
+	 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
+	 				}
+	 			})
+			}
+			
+			//文件选择方法
+			function selectFile(e){
+				event = event ? event : window.event; 
+				var r = new FileReader();
+				var id = layer.load(1); //风格1的加载
+				r.readAsDataURL(event.target.files[0]);
+				var base64 = "";
+				var size = event.target.files[0].size ;
+				var currentSize = 0 ;
+				r.onload = function(e) {
+					base64 = e.target.result;
+					currentSize += (e.target.result.substr(e.target.result.indexOf(",") + 1)).length*0.75 ;
+					if(currentSize >= size){
+						vue.$data.fun(base64) ;
+						layer.close(id) ;
+					}
+				}
+			}
 	</script>
 	<script src="./screen/${id }/${language }/screen.json?rand=${Math.random()}" ></script>
 </html>
