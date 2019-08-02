@@ -19,8 +19,16 @@ public class Position {
 	//组件大小(设置占屏比)
 	private String width ;
 	private String height ;
+	//位置描述
+	private String msg ;
 	
 	
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
 	public Integer getId() {
 		return id;
 	}

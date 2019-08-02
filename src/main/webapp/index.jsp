@@ -18,7 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			width:100%;height:100%;
 		}
 		#app{
-			width:100%;height:100%;
+			width:100%;
 		}
 		#vue-drag-content{
 		 	width:100%;
@@ -113,7 +113,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    <div id="app" :style="{cursor:cursor}">
+  	<div style="width:100%;height:50px;background:black;display:flex;justify-content:space-between;"><div style="width:200px;height:50px;line-height:50px;font-size:18px;color:white;margin-left:10px;">沃视电视界面编辑器</div><div style="width:100px;height:50px;color:white;line-height:50px;">语言:
+<select id="lang" name="language" lay-verify="" onchange="language(this)">
+  <c:if test="${language == 'CN' }">
+  	<option value="CN" selected="true">中文</option>
+  </c:if>
+  <c:if test="${language != 'CN' }">
+  	<option value="CN">中文</option>
+  </c:if>
+  <c:if test="${language == 'EN' }">
+  	<option value="EN" selected="true">英文</option>
+  </c:if>
+  <c:if test="${language != 'EN' }">
+  	<option value="EN">英文</option>
+  </c:if>
+</select> </div></div>
+    <div id="app" :style="{cursor:cursor,height:(height - 77) + 'px'}">
 		<!-- 加上防拖拽事件 -->
 		<div id="vue-drag-content" @mousemove="item_click_move($event)" @mouseup="item_click_up()" ondragstart="window.event.returnValue=false;return false;" oncontextmenu="window.event.returnValue=false;return false;" onselectstart="event.returnValue=false;return false;">
 		  <div :style="{width:this.left+'px' , display:debug ? 'none' : 'flex'}">
@@ -135,11 +150,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<img style="width:100%;height:100%;z-index:1;position:absolute;top:0px;display:block;" :src="TVscreenInfo.panel.BG.img" />
 						<div v-if="!TVscreenInfo.panel.BG.flag" @click="bg_change()" style="background:gray;width:80%;height:60%;border:dotted;z-index:10;position:absolute;text-align:center;font-size:18px;color:white;cursor:pointer;" :style="{top:TVscreenInfo.height/2-TVscreenInfo.height*0.6/2+'px',left:TVscreenInfo.width/2-TVscreenInfo.width*0.8/2+'px',lineHeight:TVscreenInfo.height*0.6+'px'}">点击选择电视机背景图</div>
 						<c:forEach items="${list }" var="item">
-							<div class="vue-panel" type="${item.type }" pid="${item.id }" :style="{zIndex:2,width:${item.width },height:${item.height },${item.position.keySet().toArray()[0] }:${item.position.get(item.position.keySet().toArray()[0]) },${item.position.keySet().toArray()[1] }:${item.position.get(item.position.keySet().toArray()[1]) }}">
+							<div pos = "${item.msg }" class="vue-panel" type="${item.type }" pid="${item.id }" :style="{zIndex:2,width:${item.width },height:${item.height },${item.position.keySet().toArray()[0] }:${item.position.get(item.position.keySet().toArray()[0]) },${item.position.keySet().toArray()[1] }:${item.position.get(item.position.keySet().toArray()[1]) }}">
 								<c:forEach items="${components }" var="i">
 									<c:forEach items="${i.positions }" var="j">
 										<c:if test="${j.name==item.id }">
-											<<c:out value="${i.name }"></c:out> oncontextmenu="deleteComponent('${item.id }' , '${i.id }' , '${item.type }')" v-if="TVscreenInfo.showControl['${item.id }']['${i.id }']" :data="TVscreenInfo.panel" ref="${ i.name }"  v-on:click.stop="alert('123')" :now="this.editeEl" :fields="fields"></<c:out value="${i.name }"></c:out>>
+											<<c:out value="${i.name }"></c:out> pos="${item.msg }" oncontextmenu="deleteComponent('${item.id }' , '${i.id }' , '${item.type }')" v-if="TVscreenInfo.showControl['${item.id }']['${i.id }']" :data="TVscreenInfo.panel" ref="${ i.name }"  v-on:click.stop="alert('123')" :now="this.editeEl" :fields="fields"></<c:out value="${i.name }"></c:out>>
 										</c:if>
 									</c:forEach>
 								</c:forEach>
@@ -168,7 +183,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</div>
 						<!-- 文字属性设置 -->
 						<div v-if="fields[1]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">文字</div>
-						<div v-if="fields[1]" style="width:100%;height:160px;overflow:hidden;">
+						<div v-if="fields[1]" style="width:100%;height:auto;overflow:hidden;">
 							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">
 								大小：<select name="city" lay-verify="" v-model="size" style="width:60px;height:25px;">
 								  <option value="l">大</option>
@@ -182,7 +197,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								  <option value="r">向右</option>
 								</select>  
 							</div>
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">内容：<textarea v-model="text" name="" required lay-verify="required" placeholder="请输入" class="layui-textarea" style="width:60%;"></textarea></div>
+							<div style="display:flex;width:100%;padding-left:5px;margin-top:20px;">内容：<textarea v-model="text" name="" required lay-verify="required" placeholder="请输入" class="layui-textarea" style="width:60%;"></textarea></div>
 						</div>
 						<!-- 文件属性 -->
 						<div v-if="fields[2]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">图片</div>
@@ -214,6 +229,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="cxcolor" style="display: none;top: 30px;position:fixed;right:400px;z-index:2000;"><table style="width:200px;height:180px;"><tbody><tr><td title="#000000" style="background-color:#000000"></td><td title="#000000" style="background-color:#000000"></td><td title="#000000" style="background-color:#000000"></td><td title="#000000" style="background-color:#000000"></td><td title="#003300" style="background-color:#003300"></td><td title="#006600" style="background-color:#006600"></td><td title="#009900" style="background-color:#009900"></td><td title="#00cc00" style="background-color:#00cc00"></td><td title="#00ff00" style="background-color:#00ff00"></td><td title="#330000" style="background-color:#330000"></td><td title="#333300" style="background-color:#333300"></td><td title="#336600" style="background-color:#336600"></td><td title="#339900" style="background-color:#339900"></td><td title="#33cc00" style="background-color:#33cc00"></td><td title="#33ff00" style="background-color:#33ff00"></td><td title="#660000" style="background-color:#660000"></td><td title="#663300" style="background-color:#663300"></td><td title="#666600" style="background-color:#666600"></td><td title="#669900" style="background-color:#669900"></td><td title="#66cc00" style="background-color:#66cc00"></td><td title="#66ff00" style="background-color:#66ff00"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#333333" style="background-color:#333333"></td><td title="#000000" style="background-color:#000000"></td><td title="#000033" style="background-color:#000033"></td><td title="#003333" style="background-color:#003333"></td><td title="#006633" style="background-color:#006633"></td><td title="#009933" style="background-color:#009933"></td><td title="#00cc33" style="background-color:#00cc33"></td><td title="#00ff33" style="background-color:#00ff33"></td><td title="#330033" style="background-color:#330033"></td><td title="#333333" style="background-color:#333333"></td><td title="#336633" style="background-color:#336633"></td><td title="#339933" style="background-color:#339933"></td><td title="#33cc33" style="background-color:#33cc33"></td><td title="#33ff33" style="background-color:#33ff33"></td><td title="#660033" style="background-color:#660033"></td><td title="#663333" style="background-color:#663333"></td><td title="#666633" style="background-color:#666633"></td><td title="#669933" style="background-color:#669933"></td><td title="#66cc33" style="background-color:#66cc33"></td><td title="#66ff33" style="background-color:#66ff33"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#666666" style="background-color:#666666"></td><td title="#000000" style="background-color:#000000"></td><td title="#000066" style="background-color:#000066"></td><td title="#003366" style="background-color:#003366"></td><td title="#006666" style="background-color:#006666"></td><td title="#009966" style="background-color:#009966"></td><td title="#00cc66" style="background-color:#00cc66"></td><td title="#00ff66" style="background-color:#00ff66"></td><td title="#330066" style="background-color:#330066"></td><td title="#333366" style="background-color:#333366"></td><td title="#336666" style="background-color:#336666"></td><td title="#339966" style="background-color:#339966"></td><td title="#33cc66" style="background-color:#33cc66"></td><td title="#33ff66" style="background-color:#33ff66"></td><td title="#660066" style="background-color:#660066"></td><td title="#663366" style="background-color:#663366"></td><td title="#666666" style="background-color:#666666"></td><td title="#669966" style="background-color:#669966"></td><td title="#66cc66" style="background-color:#66cc66"></td><td title="#66ff66" style="background-color:#66ff66"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#999999" style="background-color:#999999"></td><td title="#000000" style="background-color:#000000"></td><td title="#000099" style="background-color:#000099"></td><td title="#003399" style="background-color:#003399"></td><td title="#006699" style="background-color:#006699"></td><td title="#009999" style="background-color:#009999"></td><td title="#00cc99" style="background-color:#00cc99"></td><td title="#00ff99" style="background-color:#00ff99"></td><td title="#330099" style="background-color:#330099"></td><td title="#333399" style="background-color:#333399"></td><td title="#336699" style="background-color:#336699"></td><td title="#339999" style="background-color:#339999"></td><td title="#33cc99" style="background-color:#33cc99"></td><td title="#33ff99" style="background-color:#33ff99"></td><td title="#660099" style="background-color:#660099"></td><td title="#663399" style="background-color:#663399"></td><td title="#666699" style="background-color:#666699"></td><td title="#669999" style="background-color:#669999"></td><td title="#66cc99" style="background-color:#66cc99"></td><td title="#66ff99" style="background-color:#66ff99"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#cccccc" style="background-color:#cccccc"></td><td title="#000000" style="background-color:#000000"></td><td title="#0000cc" style="background-color:#0000cc"></td><td title="#0033cc" style="background-color:#0033cc"></td><td title="#0066cc" style="background-color:#0066cc"></td><td title="#0099cc" style="background-color:#0099cc"></td><td title="#00cccc" style="background-color:#00cccc"></td><td title="#00ffcc" style="background-color:#00ffcc"></td><td title="#3300cc" style="background-color:#3300cc"></td><td title="#3333cc" style="background-color:#3333cc"></td><td title="#3366cc" style="background-color:#3366cc"></td><td title="#3399cc" style="background-color:#3399cc"></td><td title="#33cccc" style="background-color:#33cccc"></td><td title="#33ffcc" style="background-color:#33ffcc"></td><td title="#6600cc" style="background-color:#6600cc"></td><td title="#6633cc" style="background-color:#6633cc"></td><td title="#6666cc" style="background-color:#6666cc"></td><td title="#6699cc" style="background-color:#6699cc"></td><td title="#66cccc" style="background-color:#66cccc"></td><td title="#66ffcc" style="background-color:#66ffcc"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#ffffff" style="background-color:#ffffff"></td><td title="#000000" style="background-color:#000000"></td><td title="#0000ff" style="background-color:#0000ff"></td><td title="#0033ff" style="background-color:#0033ff"></td><td title="#0066ff" style="background-color:#0066ff"></td><td title="#0099ff" style="background-color:#0099ff"></td><td title="#00ccff" style="background-color:#00ccff"></td><td title="#00ffff" style="background-color:#00ffff"></td><td title="#3300ff" style="background-color:#3300ff"></td><td title="#3333ff" style="background-color:#3333ff"></td><td title="#3366ff" style="background-color:#3366ff"></td><td title="#3399ff" style="background-color:#3399ff"></td><td title="#33ccff" style="background-color:#33ccff"></td><td title="#33ffff" style="background-color:#33ffff"></td><td title="#6600ff" style="background-color:#6600ff"></td><td title="#6633ff" style="background-color:#6633ff"></td><td title="#6666ff" style="background-color:#6666ff"></td><td title="#6699ff" style="background-color:#6699ff"></td><td title="#66ccff" style="background-color:#66ccff"></td><td title="#66ffff" style="background-color:#66ffff"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#ff0000" style="background-color:#ff0000"></td><td title="#000000" style="background-color:#000000"></td><td title="#990000" style="background-color:#990000"></td><td title="#993300" style="background-color:#993300"></td><td title="#996600" style="background-color:#996600"></td><td title="#999900" style="background-color:#999900"></td><td title="#99cc00" style="background-color:#99cc00"></td><td title="#99ff00" style="background-color:#99ff00"></td><td title="#cc0000" style="background-color:#cc0000"></td><td title="#cc3300" style="background-color:#cc3300"></td><td title="#cc6600" style="background-color:#cc6600"></td><td title="#cc9900" style="background-color:#cc9900"></td><td title="#cccc00" style="background-color:#cccc00"></td><td title="#ccff00" style="background-color:#ccff00"></td><td title="#ff0000" style="background-color:#ff0000"></td><td title="#ff3300" style="background-color:#ff3300"></td><td title="#ff6600" style="background-color:#ff6600"></td><td title="#ff9900" style="background-color:#ff9900"></td><td title="#ffcc00" style="background-color:#ffcc00"></td><td title="#ffff00" style="background-color:#ffff00"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#00ff00" style="background-color:#00ff00"></td><td title="#000000" style="background-color:#000000"></td><td title="#990033" style="background-color:#990033"></td><td title="#993333" style="background-color:#993333"></td><td title="#996633" style="background-color:#996633"></td><td title="#999933" style="background-color:#999933"></td><td title="#99cc33" style="background-color:#99cc33"></td><td title="#99ff33" style="background-color:#99ff33"></td><td title="#cc0033" style="background-color:#cc0033"></td><td title="#cc3333" style="background-color:#cc3333"></td><td title="#cc6633" style="background-color:#cc6633"></td><td title="#cc9933" style="background-color:#cc9933"></td><td title="#cccc33" style="background-color:#cccc33"></td><td title="#ccff33" style="background-color:#ccff33"></td><td title="#ff0033" style="background-color:#ff0033"></td><td title="#ff3333" style="background-color:#ff3333"></td><td title="#ff6633" style="background-color:#ff6633"></td><td title="#ff9933" style="background-color:#ff9933"></td><td title="#ffcc33" style="background-color:#ffcc33"></td><td title="#ffff33" style="background-color:#ffff33"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#0000ff" style="background-color:#0000ff"></td><td title="#000000" style="background-color:#000000"></td><td title="#990066" style="background-color:#990066"></td><td title="#993366" style="background-color:#993366"></td><td title="#996666" style="background-color:#996666"></td><td title="#999966" style="background-color:#999966"></td><td title="#99cc66" style="background-color:#99cc66"></td><td title="#99ff66" style="background-color:#99ff66"></td><td title="#cc0066" style="background-color:#cc0066"></td><td title="#cc3366" style="background-color:#cc3366"></td><td title="#cc6666" style="background-color:#cc6666"></td><td title="#cc9966" style="background-color:#cc9966"></td><td title="#cccc66" style="background-color:#cccc66"></td><td title="#ccff66" style="background-color:#ccff66"></td><td title="#ff0066" style="background-color:#ff0066"></td><td title="#ff3366" style="background-color:#ff3366"></td><td title="#ff6666" style="background-color:#ff6666"></td><td title="#ff9966" style="background-color:#ff9966"></td><td title="#ffcc66" style="background-color:#ffcc66"></td><td title="#ffff66" style="background-color:#ffff66"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#ffff00" style="background-color:#ffff00"></td><td title="#000000" style="background-color:#000000"></td><td title="#990099" style="background-color:#990099"></td><td title="#993399" style="background-color:#993399"></td><td title="#996699" style="background-color:#996699"></td><td title="#999999" style="background-color:#999999"></td><td title="#99cc99" style="background-color:#99cc99"></td><td title="#99ff99" style="background-color:#99ff99"></td><td title="#cc0099" style="background-color:#cc0099"></td><td title="#cc3399" style="background-color:#cc3399"></td><td title="#cc6699" style="background-color:#cc6699"></td><td title="#cc9999" style="background-color:#cc9999"></td><td title="#cccc99" style="background-color:#cccc99"></td><td title="#ccff99" style="background-color:#ccff99"></td><td title="#ff0099" style="background-color:#ff0099"></td><td title="#ff3399" style="background-color:#ff3399"></td><td title="#ff6699" style="background-color:#ff6699"></td><td title="#ff9999" style="background-color:#ff9999"></td><td title="#ffcc99" style="background-color:#ffcc99"></td><td title="#ffff99" style="background-color:#ffff99"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#00ffff" style="background-color:#00ffff"></td><td title="#000000" style="background-color:#000000"></td><td title="#9900cc" style="background-color:#9900cc"></td><td title="#9933cc" style="background-color:#9933cc"></td><td title="#9966cc" style="background-color:#9966cc"></td><td title="#9999cc" style="background-color:#9999cc"></td><td title="#99cccc" style="background-color:#99cccc"></td><td title="#99ffcc" style="background-color:#99ffcc"></td><td title="#cc00cc" style="background-color:#cc00cc"></td><td title="#cc33cc" style="background-color:#cc33cc"></td><td title="#cc66cc" style="background-color:#cc66cc"></td><td title="#cc99cc" style="background-color:#cc99cc"></td><td title="#cccccc" style="background-color:#cccccc"></td><td title="#ccffcc" style="background-color:#ccffcc"></td><td title="#ff00cc" style="background-color:#ff00cc"></td><td title="#ff33cc" style="background-color:#ff33cc"></td><td title="#ff66cc" style="background-color:#ff66cc"></td><td title="#ff99cc" style="background-color:#ff99cc"></td><td title="#ffcccc" style="background-color:#ffcccc"></td><td title="#ffffcc" style="background-color:#ffffcc"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#ff00ff" style="background-color:#ff00ff"></td><td title="#000000" style="background-color:#000000"></td><td title="#9900ff" style="background-color:#9900ff"></td><td title="#9933ff" style="background-color:#9933ff"></td><td title="#9966ff" style="background-color:#9966ff"></td><td title="#9999ff" style="background-color:#9999ff"></td><td title="#99ccff" style="background-color:#99ccff"></td><td title="#99ffff" style="background-color:#99ffff"></td><td title="#cc00ff" style="background-color:#cc00ff"></td><td title="#cc33ff" style="background-color:#cc33ff"></td><td title="#cc66ff" style="background-color:#cc66ff"></td><td title="#cc99ff" style="background-color:#cc99ff"></td><td title="#ccccff" style="background-color:#ccccff"></td><td title="#ccffff" style="background-color:#ccffff"></td><td title="#ff00ff" style="background-color:#ff00ff"></td><td title="#ff33ff" style="background-color:#ff33ff"></td><td title="#ff66ff" style="background-color:#ff66ff"></td><td title="#ff99ff" style="background-color:#ff99ff"></td><td title="#ffccff" style="background-color:#ffccff"></td><td title="#ffffff" style="background-color:#ffffff"></td></tr></tbody></table></div>
 		<input type="file" style="display:none;" id="file" onchange="selectFile()" />
 	</div>
+	<div id="load" style="position:fixed;background:white;width:100%;height:100%;top:0px;left:0px;z-index:99999;"></div>
   </body>
 	<script src="./js/vue.min.js"></script>
 	<script src="./js/spark-md5.min.js"></script>
@@ -276,6 +292,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    return {
 						left:180,
 						right:180,
+						height:$(document).height() ,
 						isChange:undefined , //监听页面是否发生变化
 						debug:false ,
 						flag:false , //表示鼠标是否点中拖动栏
@@ -325,6 +342,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									"id":undefined , 
 									"item":undefined , // 导航栏当前选中的项
 									"bar":false , //是否设置导航栏
+									"pos":"" ,
 									"content":false , //是否设置内容组件
 									"type":"" , // 导航栏位置信息
 									data:[]
@@ -334,7 +352,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									title:"" ,
 									size:"13" ,
 									dirction:"r" ,
-									color:this.color
+									color:this.color ,
+									"pos":""
 								} ,
 								"VUECLOCK":{
 									"id":undefined 
@@ -441,7 +460,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							}
 						}
 			  		} ,
-    				deep: true
+    				deep: true 
 			  } ,
 			  methods:{
 					item_click_down:function(e , item){
@@ -507,31 +526,45 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							var md5 = {} ;
 							//遍历界面中所有图片，找出新添加的图片
 							//1.找背景
-							if(this.TVscreenInfo.panel.BG.img.startsWith("data:image/")){
-								var m = spark.append(this.TVscreenInfo.panel.BG.img).end() ;
-								md5["self.TVscreenInfo.panel.BG.img"] = m ;
+							if(this.TVscreenInfo.panel.BG.img != undefined && typeof(this.TVscreenInfo.panel.BG.img) != "undefined"){
+								if(this.TVscreenInfo.panel.BG.img.startsWith("data:image/")){
+									var m = spark.append(this.TVscreenInfo.panel.BG.img).end() ;
+									md5["self.TVscreenInfo.panel.BG.img"] = m ;
+								}
 							}
 							//将logo中的图片找出来
-							if(this.TVscreenInfo.panel.VUELOGO.img.startsWith("data:image/")){
-								var m = spark.append(this.TVscreenInfo.panel.VUELOGO.img).end() ;
-								md5["self.TVscreenInfo.panel.VUELOGO.img"] = m ;
+							if(this.TVscreenInfo.panel.VUELOGO.img != undefined && typeof(this.TVscreenInfo.panel.VUELOGO.img) != "undefined"){
+								if(this.TVscreenInfo.panel.VUELOGO.img.startsWith("data:image/")){
+									var m = spark.append(this.TVscreenInfo.panel.VUELOGO.img).end() ;
+									md5["self.TVscreenInfo.panel.VUELOGO.img"] = m ;
+								}
 							}
 							//将导航栏中所有的图片找出来
-							for(var i in this.TVscreenInfo.panel.MAIN.data){
-								if(this.TVscreenInfo.panel.MAIN.data[i].img.startsWith("data:image/")){
-									var m = spark.append(this.TVscreenInfo.panel.MAIN.data[i].img).end() ;
-									md5["self.TVscreenInfo.panel.MAIN.data["+i+"].img"] = m ;
-								}
-								if(this.TVscreenInfo.panel.MAIN.data[i].selectedImg.startsWith("data:image/")){
-									var m = spark.append(this.TVscreenInfo.panel.MAIN.data[i].selectedImg).end() ;
-									md5["self.TVscreenInfo.panel.MAIN.data["+i+"].selectedImg"] = m ;
-								}
-								//将内容组件中所有的图片找出来
-								for(var j in this.TVscreenInfo.panel.MAIN.data[i].data.info){
-									for(var n in this.TVscreenInfo.panel.MAIN.data[i].data.info[j].imgs){
-										if(this.TVscreenInfo.panel.MAIN.data[i].data.info[j].imgs[n].startsWith("data:image/")){
-											var m = spark.append(this.TVscreenInfo.panel.MAIN.data[i].data.info[j].imgs[n]).end() ;
-											md5["self.TVscreenInfo.panel.MAIN.data["+i+"].data.info["+j+"].imgs["+n+"]"] = m ;
+							if(this.TVscreenInfo.panel.MAIN.data != undefined && typeof(this.TVscreenInfo.panel.MAIN.data) != "undefined"){
+								for(var i in this.TVscreenInfo.panel.MAIN.data){
+									if(this.TVscreenInfo.panel.MAIN.data[i].img != undefined && typeof(this.TVscreenInfo.panel.MAIN.data[i].img) != "undefined"){
+										if(this.TVscreenInfo.panel.MAIN.data[i].img.startsWith("data:image/")){
+											var m = spark.append(this.TVscreenInfo.panel.MAIN.data[i].img).end() ;
+											md5["self.TVscreenInfo.panel.MAIN.data["+i+"].img"] = m ;
+										}
+									}
+									if(this.TVscreenInfo.panel.MAIN.data[i].selectedImg != undefined && typeof(this.TVscreenInfo.panel.MAIN.data[i].selectedImg) != "undefined"){
+										if(this.TVscreenInfo.panel.MAIN.data[i].selectedImg.startsWith("data:image/")){
+											var m = spark.append(this.TVscreenInfo.panel.MAIN.data[i].selectedImg).end() ;
+											md5["self.TVscreenInfo.panel.MAIN.data["+i+"].selectedImg"] = m ;
+										}
+									}
+									//将内容组件中所有的图片找出来
+									if(this.TVscreenInfo.panel.MAIN.data[i].data != undefined && typeof(this.TVscreenInfo.panel.MAIN.data[i].data) != "undefined"){
+										for(var j in this.TVscreenInfo.panel.MAIN.data[i].data.info){
+											for(var n in this.TVscreenInfo.panel.MAIN.data[i].data.info[j].imgs){
+												if(this.TVscreenInfo.panel.MAIN.data[i].data.info[j].imgs[n] != undefined && typeof(this.TVscreenInfo.panel.MAIN.data[i].data.info[j].imgs[n]) != "undefined"){
+													if(this.TVscreenInfo.panel.MAIN.data[i].data.info[j].imgs[n].startsWith("data:image/")){
+														var m = spark.append(this.TVscreenInfo.panel.MAIN.data[i].data.info[j].imgs[n]).end() ;
+														md5["self.TVscreenInfo.panel.MAIN.data["+i+"].data.info["+j+"].imgs["+n+"]"] = m ;
+													}
+												}
+											}
 										}
 									}
 								}
@@ -645,6 +678,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						//file.click() ;
 						var self = this ;
 						this.fun = function(base64){
+							if(!base64.startsWith("data:image/")){
+								layer.alert("只支持图片") ;
+								return ;
+							}
 							if(msg == "content"){
 								if(self.TVscreenInfo.panel.MAIN.bar){
 			 						self.TVscreenInfo.panel.MAIN.data[self.TVscreenInfo.panel.MAIN.item].data.info[self.editeEl["content_item"]].imgs.push(base64) ;
@@ -699,6 +736,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									}
 								}*/
 								self.fun = function(base64){
+									if(!base64.startsWith("data:image/")){
+										layer.alert("只支持图片") ;
+										return ;
+									}
 									if(self.TVscreenInfo.panel.MAIN.bar){
 				 						self.TVscreenInfo.panel.MAIN.data[self.TVscreenInfo.panel.MAIN.item].data.info[self.editeEl["content_item"]].imgs.splice(index , 1 , base64) ;
 				 					}else{
@@ -740,6 +781,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}*/
 						var self = this ;
 						this.fun = function(base64){
+							if(!base64.startsWith("data:image/") && !base64.startsWith("data:vedio/")){
+								layer.alert("只支持图片或视频") ;
+								return ;
+							}
 							self.TVscreenInfo.panel.BG.flag = true ;
 							self.TVscreenInfo.panel.BG.img = base64 ;
 						}
@@ -794,6 +839,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}*/
 						var self = this ;
 						this.fun = function(base64){
+							if(!base64.startsWith("data:image/")){
+								layer.alert("只支持图片") ;
+								return ;
+							}
 							self.file = base64 ;
 						}
 						$("#file").click() ;
@@ -825,7 +874,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					},
 					insert:function(e){
 						var left = e.pageX - this.left - 6 ;
-						var top = e.pageY - 1 ;
+						var top = e.pageY - 50 - 1 ;
 						this.cursorOn(top , left) ;
 						this.current = {} ;
 						var list = document.querySelectorAll(".vue-panel") ;
@@ -842,6 +891,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						var list = document.querySelectorAll(".vue-panel") ;
 						//2.找出当前位置在哪几个标签的上方
 						var now = [] ;
+						//console.log(list)
 						for(var i=0 ; i<list.length ; i++){
 							if(left > list[i].offsetLeft && top > list[i].offsetTop && top < list[i].offsetTop+list[i].clientHeight && left < list[i].offsetLeft+list[i].clientWidth){
 								if(typeof(this.current.type) != "undefined" && typeof(this.current.id) != "undefined"){
@@ -881,6 +931,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											window.setTimeout(function(){
 												self.TVscreenInfo.panel.MAIN.item = 0 ;
 											} , 20)
+											this.TVscreenInfo.panel.MAIN.pos = list[i].getAttribute("pos") ;
 										}
 										return ;
 									}else if(this.TVscreenInfo.panel[this.current.type]["id"] != undefined || typeof(this.TVscreenInfo.panel[this.current.type]["id"]) != "undefined"){
@@ -893,6 +944,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									}
 									this.TVscreenInfo.showControl[list[i].getAttribute("pid")][this.current.id] = true ;
 									this.TVscreenInfo.panel[this.current.type]["id"] = this.current.id ;
+									this.TVscreenInfo.panel[this.current.type].pos = list[i].getAttribute("pos") ;
 								}
 								//console.log(list[i].getAttribute("type") != "CONTENT" && list[i].getAttribute("type") != "BAR")
 								if(list[i].getAttribute("type") != "CONTENT" && this.editeEl["type"] == "MAIN" && (typeof(this.editeEl["content_item"]) != "undefined" || this.editeEl["content_item"] != undefined)){
@@ -921,8 +973,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					this.screenWidth = document.body.clientWidth ;
 					var self = this ;
 					window.onload = function(){
+						var load = layer.load();
 						self.TVscreenInfo.width = document.querySelector(".main_TV_panel").offsetWidth ;
 						self.TVscreenInfo.height = document.querySelector(".main_TV_panel").offsetHeight ;
+						self.height = $(document).height() ;
+						layer.close(load) ;
+						$("#load").css("display" , "none") ;
 					}
 				},
 				//当组件发生更新时
@@ -934,10 +990,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					vue = this ;
 				}
 			});
+		
 			//屏幕大小发生改变时
 			window.onresize = function(){
 				vue.TVscreenInfo.width = document.querySelector(".main_TV_panel").offsetWidth ;
 				vue.TVscreenInfo.height = document.querySelector(".main_TV_panel").offsetHeight ;
+				vue.height = $(document).height() ;
 			}
 			
 			//监听esc按键，实现退出预览功能
@@ -951,6 +1009,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			function fun_id(code){
 				var data = JSON.parse(code) ;
 				vue.$data.TVscreenInfo = data ;
+				vue.$watch('TVscreenInfo.panel.MAIN.item', vue.itemListener, {
+				    deep: true
+				});
 			}
 			
 			//选apk时鼠标移上的事件
@@ -1011,7 +1072,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 				if(type == "CONTENT"){
 	 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.id = "" ;
 	 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.typeid = "" ;
-	 					console.log(vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info) ;
+	 					//console.log(vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info) ;
 	 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.length) ;
 	 					vue.$data.TVscreenInfo.panel.MAIN.content = false ;
 	 					//vue.$data.TVscreenInfo.panel.MAIN.item = 0 ;
@@ -1035,7 +1096,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 					vue.$data.TVscreenInfo.panel["VUELOGO"].id = undefined ;
 	 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
 	 				}else if(type == "VUEPMD"){
-	 					vue.$data.TVscreenInfo.panel["VUEPMD"].id = "" ;
+	 					vue.$data.TVscreenInfo.panel["VUEPMD"].id = undefined ;
 	 					vue.$data.TVscreenInfo.panel["VUEPMD"].title = "" ;
 	 					vue.$data.TVscreenInfo.panel["VUEPMD"].dirction = "" ;
 	 					vue.$data.TVscreenInfo.panel["VUEPMD"].color = "" ;
@@ -1064,6 +1125,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						layer.close(id) ;
 					}
 				}
+			}
+			
+			//切换语言方法
+			function language(obj){
+				window.location = "./screen?id=${id}&language="+obj.value ;
 			}
 	</script>
 	<script src="./screen/${id }/${language }/screen.json?rand=${Math.random()}" ></script>

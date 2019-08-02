@@ -16,7 +16,14 @@ public class PositionVO {
 	//组件大小(设置占屏比)
 	private String width ;
 	private String height ;
+	private String msg ;
 	
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
 	public String getType() {
 		return type;
 	}

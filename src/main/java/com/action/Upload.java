@@ -33,6 +33,8 @@ import com.vo.ApiClass;
 @Controller
 public class Upload {
 	
+	private String separator = File.separator;
+	
 	@Autowired
 	private DragService service ;
 	
@@ -92,10 +94,10 @@ public class Upload {
 			//将所有图片计算md5并存数据库
 			//图片存储路径
 			String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) ;
-			String path = System.getProperty("ROOT_PATH")+"screen\\images\\" + date;
+			String path = System.getProperty("ROOT_PATH")+"screen"+separator+"images"+separator + date;
 			//找出背景图片
 			String bgBase64 = (String)((Map)((Map)map.get("panel")).get("BG")).get("img") ;
-			if(bgBase64.startsWith("data:image/")){
+			if(bgBase64 != null && bgBase64.startsWith("data:image/")){
 				if(!new File(path).exists()){
 					new File(path).mkdirs() ;
 				}
@@ -112,7 +114,7 @@ public class Upload {
 	            	pictrul.setMd5(md5);
 	            	pictrul.setUrl("./screen/images/"+date+"/"+name);
 	            	Pictrul p = service.addImg(pictrul) ;
-	            	Base64.decodeToFile(bgBase64.substring(bgBase64.indexOf(",")+1), new File(path+"\\"+name)) ;
+	            	Base64.decodeToFile(bgBase64.substring(bgBase64.indexOf(",")+1), new File(path+separator+name)) ;
 	            	((Map)((Map)map.get("panel")).get("BG")).put("img", p.getUrl()) ;
 	            }else{
 	            	Pictrul p = service.getImg(md5) ;
@@ -121,7 +123,7 @@ public class Upload {
 			}
 			//1.找出logo中的图片
 			String logoBase64 = (String)((Map)((Map)map.get("panel")).get("VUELOGO")).get("img") ;
-			if(logoBase64.startsWith("data:image/")){
+			if(logoBase64 != null && logoBase64.startsWith("data:image/")){
 				if(!new File(path).exists()){
 					new File(path).mkdirs() ;
 				}
@@ -138,7 +140,7 @@ public class Upload {
 	            	pictrul.setMd5(md5);
 	            	pictrul.setUrl("./screen/images/"+date+"/"+name);
 	            	Pictrul p = service.addImg(pictrul) ;
-	            	Base64.decodeToFile(logoBase64.substring(logoBase64.indexOf(",")+1), new File(path+"\\"+name)) ;
+	            	Base64.decodeToFile(logoBase64.substring(logoBase64.indexOf(",")+1), new File(path+separator+name)) ;
 	            	((Map)((Map)map.get("panel")).get("VUELOGO")).put("img", p.getUrl()) ;
 	            }else{
 	            	Pictrul p = service.getImg(md5) ;
@@ -149,7 +151,7 @@ public class Upload {
 			List bars = (List)((Map)((Map)map.get("panel")).get("MAIN")).get("data") ;
 			for(Object o : bars){
 				String barBase64 = (String)((Map)o).get("img") ;
-				if(barBase64.startsWith("data:image/")){
+				if(barBase64 != null && barBase64.startsWith("data:image/")){
 					if(!new File(path).exists()){
 						new File(path).mkdirs() ;
 					}
@@ -166,7 +168,7 @@ public class Upload {
 		            	pictrul.setMd5(md5);
 		            	pictrul.setUrl("./screen/images/"+date+"/"+name);
 		            	Pictrul p = service.addImg(pictrul) ;
-		            	Base64.decodeToFile(barBase64.substring(barBase64.indexOf(",")+1), new File(path+"\\"+name)) ;
+		            	Base64.decodeToFile(barBase64.substring(barBase64.indexOf(",")+1), new File(path+separator+name)) ;
 		            	((Map)o).put("img", p.getUrl()) ;
 		            }else{
 		            	Pictrul p = service.getImg(md5) ;
@@ -178,7 +180,7 @@ public class Upload {
 				for(Object m : contents){
 					List<String> imgs = (List<String>)((Map)m).get("imgs") ;
 					for (int i=0 ; i<imgs.size() ; i++) {
-						if(imgs.get(i).startsWith("data:image/")){
+						if(imgs.get(i) != null && imgs.get(i).startsWith("data:image/")){
 							if(!new File(path).exists()){
 								new File(path).mkdirs() ;
 							}
@@ -195,7 +197,7 @@ public class Upload {
 				            	pictrul.setMd5(md5);
 				            	pictrul.setUrl("./screen/images/"+date+"/"+name);
 				            	Pictrul p = service.addImg(pictrul) ;
-				            	Base64.decodeToFile(imgs.get(i).substring(imgs.get(i).indexOf(",")+1), new File(path+"\\"+name)) ;
+				            	Base64.decodeToFile(imgs.get(i).substring(imgs.get(i).indexOf(",")+1), new File(path+separator+name)) ;
 				            	imgs.set(i, p.getUrl()) ;
 				            }else{
 				            	Pictrul p = service.getImg(md5) ;
@@ -206,11 +208,11 @@ public class Upload {
 				}
 			}
 			//写文件
-			File dir = new File(System.getProperty("ROOT_PATH")+"screen/"+id+"/"+language) ;
+			File dir = new File(System.getProperty("ROOT_PATH")+"screen"+separator+id+separator+language) ;
 			if(!dir.exists()){
 				dir.mkdirs() ;
 			}
-			File file = new File(System.getProperty("ROOT_PATH")+"screen/"+id+"/"+language+"/screen.json") ;
+			File file = new File(System.getProperty("ROOT_PATH")+"screen"+separator+id+separator+language+separator+"screen.json") ;
 			OutputStreamWriter writer = null ;
 			try {
 				writer = new OutputStreamWriter(new FileOutputStream(file) , "utf-8") ;
