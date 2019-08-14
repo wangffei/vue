@@ -17,7 +17,7 @@ import com.dao.ContentDao;
 import com.dao.PictrulDao;
 import com.dao.PositionDao;
 import com.pojo.Component;
-import com.pojo.Pictrul;
+import com.pojo.FileInfo;
 import com.pojo.Position;
 import com.vo.ComponentVO;
 import com.vo.PositionVO;
@@ -57,7 +57,9 @@ public class DragService {
 	
 	//查询出所有组件
 	public List<ComponentVO> getAllComponents(){
-		List<Component> list = component.selectList(null) ;
+		QueryWrapper<Component> query = new QueryWrapper<Component>() ;
+		query.select("id" , "name" , "types" , "code" , "img" , "width" , "height") ;
+		List<Component> list = component.selectList(query) ;
 		List<ComponentVO> newList = new ArrayList<ComponentVO>() ;
 		for(Component p : list){
 			ComponentVO pos = new ComponentVO() ;
@@ -69,16 +71,16 @@ public class DragService {
 	}
 	
 	//将图片写入数据库
-	public Pictrul addImg(Pictrul p){
+	public FileInfo addImg(FileInfo p){
 		pictrul.insert(p) ;
 		return p ;
 	}
 	
 	//根据md5值查询图片
 	public boolean isExist(String md5){
-		QueryWrapper<Pictrul> query = new QueryWrapper<Pictrul>() ;
+		QueryWrapper<FileInfo> query = new QueryWrapper<FileInfo>() ;
 		query.eq(true, "md5", md5) ;
-		Pictrul p = pictrul.selectOne(query) ;
+		FileInfo p = pictrul.selectOne(query) ;		
 		if(p != null){
 			return true ;
 		}
@@ -86,10 +88,26 @@ public class DragService {
 	}
 	
 	//根据md5查出对应图片的信息
-	public Pictrul getImg(String md5){
-		QueryWrapper<Pictrul> query = new QueryWrapper<Pictrul>() ;
+	public FileInfo getImg(String md5){
+		QueryWrapper<FileInfo> query = new QueryWrapper<FileInfo>() ;
 		query.eq(true, "md5", md5) ;
-		Pictrul p = pictrul.selectOne(query) ;
+		FileInfo p = pictrul.selectOne(query) ;
 		return p ;
+	}
+	
+	//根据内容组件id获取组件布局
+	public String getLayout(String id){
+		
+		QueryWrapper<Component> query = new QueryWrapper<Component>() ;
+		query.select("area") ;
+		query.eq(true , "id" , id) ;
+		
+		Component c = component.selectOne(query) ;
+		
+		if(c != null){
+			return c.getArea() ;
+		}
+		
+		return null ;
 	}
 }

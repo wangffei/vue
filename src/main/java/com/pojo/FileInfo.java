@@ -2,13 +2,15 @@ package com.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * 图片表
  * @author wangfei
  *
  */
-public class Pictrul {
+@TableName("fileinfo")
+public class FileInfo {
 	//图片id
 	@TableId(type=IdType.AUTO)
 	private Integer id ;
@@ -16,7 +18,15 @@ public class Pictrul {
 	private String md5 ;
 	//图片地址
 	private String url ;
+	//文件类型
+	private String type ;
 	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public Integer getId() {
 		return id;
 	}

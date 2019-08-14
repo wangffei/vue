@@ -204,12 +204,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div v-if="fields[2]" style="width:100%;height:50px;overflow:hidden;">
 							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">文件：<div @click="file_select()" class="layui-btn layui-btn-xs">选择图片</div></div>
 						</div>
+						<div v-if="fields[6]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">类型</div>
+						<div v-if="fields[6]" style="width:100%;height:50px;">
+						  <select style="width:60%;height:30px;margin:10px auto;" class="layui-input" v-model="TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl['content_item']].type" name="type" lay-verify="required">
+					        <option value="img">图片</option>
+					        <option value="video">视频</option>
+					      </select>
+					    </div>
 						<!-- 内容组件属性 -->
-						<div v-if="fields[3]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">内容</div>
-						<div v-if="fields[3]" style="width:100%;overflow:hidden;">
-							<div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl["content_item"]].apkName.length >= 4 ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl["content_item"]].apkName.substr(0 , 4) : TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div>
+						<div v-if="fields[3] && TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl['content_item']].type == 'img'" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">图片</div>
+						<div v-if="fields[3] && TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl['content_item']].type == 'img'" style="width:100%;overflow:hidden;">
+							<div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl["content_item"]].apkName.length >= 4 ? TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl["content_item"]].apkName.substr(0 , 4) : TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div>
 							<div style="display:flex;margin-top:5px;flex-wrap:wrap;">
-								<div class="content_img" @contextmenu="leftmenu(index)" @click="leftmenu(index)" style="width:40px;height:40px;margin:5px 0px 0px 5px;" v-for="(img , index) in ((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item]) == undefined || typeof((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item])) == 'undefined') ? [] : (TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].data.info[editeEl.content_item].imgs : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item].imgs)"><img :src="img" style="width:40px;height:40px;cursor:pointer;display:block;" title="修改"></div>
+								<div class="content_img" @contextmenu="leftmenu(index)" @click="leftmenu(index)" style="width:40px;height:40px;margin:5px 0px 0px 5px;" v-for="(img , index) in ((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item]) == undefined || typeof((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item])) == 'undefined') ? [] : (TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl.content_item].imgs : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item].imgs)"><img :src="img" style="width:40px;height:40px;cursor:pointer;display:block;" title="修改"></div>
 							</div>
 							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="addImg('content')" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">添加图片</button></div>
 						</div>
@@ -218,9 +225,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div v-if="fields[4]" style="width:100%;overflow:hidden;">
 							<div v-for="(item,index) in TVscreenInfo.panel.MAIN.data" style="display:flex;width:90%;padding-left:5px;flex-wrap:wrap;font-size:12px;line-height:25px;height:25px;color:gray;border:1px solid #91dbff;box-shadow:1px 1px 115px #e3e3e3;margin-top:3px;position:relative;" ><input v-model="item.name" style="width:70%;height:100%;border:0px;"><img src="./img/close.png" style="display:block;float:right;width:20px;height:20px;position:absolute;right:0px;cursor:pointer;" @click="removeBar(index)"></div>
 						</div>
-						<div v-if="fields[4]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">图标</div>
-						<div v-if="fields[4]" style="width:100%;overflow:hidden;">
-							<div v-if="$refs['v-bar_icon'].typeid == 'bar_icon'" style="display:flex;width:100%;padding-left:5px;flex-wrap:wrap;margin:5px;"><img style="width:40px;height:40px;" @click="addImg('bar_change')" v-if="TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img != undefined && typeof(TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img) != 'undefined' && TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img != ''" :src="TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img"><div style="width:40px;height:40px;line-height:40px;text-align:center;font-size:12px;color:white;background:gray;" v-if="TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img == undefined || typeof(TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img) == 'undefined' || TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img == ''"  @click="addImg('bar_change')">添加</div></div>
+						<div v-if="fields[4] && TVscreenInfo.panel.MAIN.type == 'bar_icon'" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">图标</div>
+						<div v-if="fields[4] && TVscreenInfo.panel.MAIN.type == 'bar_icon'" style="width:100%;overflow:hidden;">
+							<div v-if="TVscreenInfo.panel.MAIN.type == 'bar_icon'" style="display:flex;width:100%;padding-left:5px;flex-wrap:wrap;margin:5px;"><img style="width:40px;height:40px;" @click="addImg('bar_change')" v-if="TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img != undefined && typeof(TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img) != 'undefined' && TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img != ''" :src="TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img"><div style="width:40px;height:40px;line-height:40px;text-align:center;font-size:12px;color:white;background:gray;" v-if="TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img == undefined || typeof(TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img) == 'undefined' || TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img == ''"  @click="addImg('bar_change')">添加</div></div>
+						</div>
+						<div v-if="fields[5] && TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl['content_item']].type == 'video'" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">视频</div>
+						<div v-if="fields[5] && TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl['content_item']].type == 'video'" style="width:100%;overflow:hidden;">
+							<div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl["content_item"]].apkName.length >= 4 ? TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl["content_item"]].apkName.substr(0 , 4) : TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div>
+							<div style="width:80%;margin:0px aoto;height:30px;line-height:30px;text-align:center;font-size:12px;color:gray;">{{name}}</div>
+							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="$('#video').click()" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">选择视频</button></div>
 						</div>
 					</div>
 				</div>
@@ -228,6 +241,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 		<div id="cxcolor" style="display: none;top: 30px;position:fixed;right:400px;z-index:2000;"><table style="width:200px;height:180px;"><tbody><tr><td title="#000000" style="background-color:#000000"></td><td title="#000000" style="background-color:#000000"></td><td title="#000000" style="background-color:#000000"></td><td title="#000000" style="background-color:#000000"></td><td title="#003300" style="background-color:#003300"></td><td title="#006600" style="background-color:#006600"></td><td title="#009900" style="background-color:#009900"></td><td title="#00cc00" style="background-color:#00cc00"></td><td title="#00ff00" style="background-color:#00ff00"></td><td title="#330000" style="background-color:#330000"></td><td title="#333300" style="background-color:#333300"></td><td title="#336600" style="background-color:#336600"></td><td title="#339900" style="background-color:#339900"></td><td title="#33cc00" style="background-color:#33cc00"></td><td title="#33ff00" style="background-color:#33ff00"></td><td title="#660000" style="background-color:#660000"></td><td title="#663300" style="background-color:#663300"></td><td title="#666600" style="background-color:#666600"></td><td title="#669900" style="background-color:#669900"></td><td title="#66cc00" style="background-color:#66cc00"></td><td title="#66ff00" style="background-color:#66ff00"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#333333" style="background-color:#333333"></td><td title="#000000" style="background-color:#000000"></td><td title="#000033" style="background-color:#000033"></td><td title="#003333" style="background-color:#003333"></td><td title="#006633" style="background-color:#006633"></td><td title="#009933" style="background-color:#009933"></td><td title="#00cc33" style="background-color:#00cc33"></td><td title="#00ff33" style="background-color:#00ff33"></td><td title="#330033" style="background-color:#330033"></td><td title="#333333" style="background-color:#333333"></td><td title="#336633" style="background-color:#336633"></td><td title="#339933" style="background-color:#339933"></td><td title="#33cc33" style="background-color:#33cc33"></td><td title="#33ff33" style="background-color:#33ff33"></td><td title="#660033" style="background-color:#660033"></td><td title="#663333" style="background-color:#663333"></td><td title="#666633" style="background-color:#666633"></td><td title="#669933" style="background-color:#669933"></td><td title="#66cc33" style="background-color:#66cc33"></td><td title="#66ff33" style="background-color:#66ff33"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#666666" style="background-color:#666666"></td><td title="#000000" style="background-color:#000000"></td><td title="#000066" style="background-color:#000066"></td><td title="#003366" style="background-color:#003366"></td><td title="#006666" style="background-color:#006666"></td><td title="#009966" style="background-color:#009966"></td><td title="#00cc66" style="background-color:#00cc66"></td><td title="#00ff66" style="background-color:#00ff66"></td><td title="#330066" style="background-color:#330066"></td><td title="#333366" style="background-color:#333366"></td><td title="#336666" style="background-color:#336666"></td><td title="#339966" style="background-color:#339966"></td><td title="#33cc66" style="background-color:#33cc66"></td><td title="#33ff66" style="background-color:#33ff66"></td><td title="#660066" style="background-color:#660066"></td><td title="#663366" style="background-color:#663366"></td><td title="#666666" style="background-color:#666666"></td><td title="#669966" style="background-color:#669966"></td><td title="#66cc66" style="background-color:#66cc66"></td><td title="#66ff66" style="background-color:#66ff66"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#999999" style="background-color:#999999"></td><td title="#000000" style="background-color:#000000"></td><td title="#000099" style="background-color:#000099"></td><td title="#003399" style="background-color:#003399"></td><td title="#006699" style="background-color:#006699"></td><td title="#009999" style="background-color:#009999"></td><td title="#00cc99" style="background-color:#00cc99"></td><td title="#00ff99" style="background-color:#00ff99"></td><td title="#330099" style="background-color:#330099"></td><td title="#333399" style="background-color:#333399"></td><td title="#336699" style="background-color:#336699"></td><td title="#339999" style="background-color:#339999"></td><td title="#33cc99" style="background-color:#33cc99"></td><td title="#33ff99" style="background-color:#33ff99"></td><td title="#660099" style="background-color:#660099"></td><td title="#663399" style="background-color:#663399"></td><td title="#666699" style="background-color:#666699"></td><td title="#669999" style="background-color:#669999"></td><td title="#66cc99" style="background-color:#66cc99"></td><td title="#66ff99" style="background-color:#66ff99"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#cccccc" style="background-color:#cccccc"></td><td title="#000000" style="background-color:#000000"></td><td title="#0000cc" style="background-color:#0000cc"></td><td title="#0033cc" style="background-color:#0033cc"></td><td title="#0066cc" style="background-color:#0066cc"></td><td title="#0099cc" style="background-color:#0099cc"></td><td title="#00cccc" style="background-color:#00cccc"></td><td title="#00ffcc" style="background-color:#00ffcc"></td><td title="#3300cc" style="background-color:#3300cc"></td><td title="#3333cc" style="background-color:#3333cc"></td><td title="#3366cc" style="background-color:#3366cc"></td><td title="#3399cc" style="background-color:#3399cc"></td><td title="#33cccc" style="background-color:#33cccc"></td><td title="#33ffcc" style="background-color:#33ffcc"></td><td title="#6600cc" style="background-color:#6600cc"></td><td title="#6633cc" style="background-color:#6633cc"></td><td title="#6666cc" style="background-color:#6666cc"></td><td title="#6699cc" style="background-color:#6699cc"></td><td title="#66cccc" style="background-color:#66cccc"></td><td title="#66ffcc" style="background-color:#66ffcc"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#ffffff" style="background-color:#ffffff"></td><td title="#000000" style="background-color:#000000"></td><td title="#0000ff" style="background-color:#0000ff"></td><td title="#0033ff" style="background-color:#0033ff"></td><td title="#0066ff" style="background-color:#0066ff"></td><td title="#0099ff" style="background-color:#0099ff"></td><td title="#00ccff" style="background-color:#00ccff"></td><td title="#00ffff" style="background-color:#00ffff"></td><td title="#3300ff" style="background-color:#3300ff"></td><td title="#3333ff" style="background-color:#3333ff"></td><td title="#3366ff" style="background-color:#3366ff"></td><td title="#3399ff" style="background-color:#3399ff"></td><td title="#33ccff" style="background-color:#33ccff"></td><td title="#33ffff" style="background-color:#33ffff"></td><td title="#6600ff" style="background-color:#6600ff"></td><td title="#6633ff" style="background-color:#6633ff"></td><td title="#6666ff" style="background-color:#6666ff"></td><td title="#6699ff" style="background-color:#6699ff"></td><td title="#66ccff" style="background-color:#66ccff"></td><td title="#66ffff" style="background-color:#66ffff"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#ff0000" style="background-color:#ff0000"></td><td title="#000000" style="background-color:#000000"></td><td title="#990000" style="background-color:#990000"></td><td title="#993300" style="background-color:#993300"></td><td title="#996600" style="background-color:#996600"></td><td title="#999900" style="background-color:#999900"></td><td title="#99cc00" style="background-color:#99cc00"></td><td title="#99ff00" style="background-color:#99ff00"></td><td title="#cc0000" style="background-color:#cc0000"></td><td title="#cc3300" style="background-color:#cc3300"></td><td title="#cc6600" style="background-color:#cc6600"></td><td title="#cc9900" style="background-color:#cc9900"></td><td title="#cccc00" style="background-color:#cccc00"></td><td title="#ccff00" style="background-color:#ccff00"></td><td title="#ff0000" style="background-color:#ff0000"></td><td title="#ff3300" style="background-color:#ff3300"></td><td title="#ff6600" style="background-color:#ff6600"></td><td title="#ff9900" style="background-color:#ff9900"></td><td title="#ffcc00" style="background-color:#ffcc00"></td><td title="#ffff00" style="background-color:#ffff00"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#00ff00" style="background-color:#00ff00"></td><td title="#000000" style="background-color:#000000"></td><td title="#990033" style="background-color:#990033"></td><td title="#993333" style="background-color:#993333"></td><td title="#996633" style="background-color:#996633"></td><td title="#999933" style="background-color:#999933"></td><td title="#99cc33" style="background-color:#99cc33"></td><td title="#99ff33" style="background-color:#99ff33"></td><td title="#cc0033" style="background-color:#cc0033"></td><td title="#cc3333" style="background-color:#cc3333"></td><td title="#cc6633" style="background-color:#cc6633"></td><td title="#cc9933" style="background-color:#cc9933"></td><td title="#cccc33" style="background-color:#cccc33"></td><td title="#ccff33" style="background-color:#ccff33"></td><td title="#ff0033" style="background-color:#ff0033"></td><td title="#ff3333" style="background-color:#ff3333"></td><td title="#ff6633" style="background-color:#ff6633"></td><td title="#ff9933" style="background-color:#ff9933"></td><td title="#ffcc33" style="background-color:#ffcc33"></td><td title="#ffff33" style="background-color:#ffff33"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#0000ff" style="background-color:#0000ff"></td><td title="#000000" style="background-color:#000000"></td><td title="#990066" style="background-color:#990066"></td><td title="#993366" style="background-color:#993366"></td><td title="#996666" style="background-color:#996666"></td><td title="#999966" style="background-color:#999966"></td><td title="#99cc66" style="background-color:#99cc66"></td><td title="#99ff66" style="background-color:#99ff66"></td><td title="#cc0066" style="background-color:#cc0066"></td><td title="#cc3366" style="background-color:#cc3366"></td><td title="#cc6666" style="background-color:#cc6666"></td><td title="#cc9966" style="background-color:#cc9966"></td><td title="#cccc66" style="background-color:#cccc66"></td><td title="#ccff66" style="background-color:#ccff66"></td><td title="#ff0066" style="background-color:#ff0066"></td><td title="#ff3366" style="background-color:#ff3366"></td><td title="#ff6666" style="background-color:#ff6666"></td><td title="#ff9966" style="background-color:#ff9966"></td><td title="#ffcc66" style="background-color:#ffcc66"></td><td title="#ffff66" style="background-color:#ffff66"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#ffff00" style="background-color:#ffff00"></td><td title="#000000" style="background-color:#000000"></td><td title="#990099" style="background-color:#990099"></td><td title="#993399" style="background-color:#993399"></td><td title="#996699" style="background-color:#996699"></td><td title="#999999" style="background-color:#999999"></td><td title="#99cc99" style="background-color:#99cc99"></td><td title="#99ff99" style="background-color:#99ff99"></td><td title="#cc0099" style="background-color:#cc0099"></td><td title="#cc3399" style="background-color:#cc3399"></td><td title="#cc6699" style="background-color:#cc6699"></td><td title="#cc9999" style="background-color:#cc9999"></td><td title="#cccc99" style="background-color:#cccc99"></td><td title="#ccff99" style="background-color:#ccff99"></td><td title="#ff0099" style="background-color:#ff0099"></td><td title="#ff3399" style="background-color:#ff3399"></td><td title="#ff6699" style="background-color:#ff6699"></td><td title="#ff9999" style="background-color:#ff9999"></td><td title="#ffcc99" style="background-color:#ffcc99"></td><td title="#ffff99" style="background-color:#ffff99"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#00ffff" style="background-color:#00ffff"></td><td title="#000000" style="background-color:#000000"></td><td title="#9900cc" style="background-color:#9900cc"></td><td title="#9933cc" style="background-color:#9933cc"></td><td title="#9966cc" style="background-color:#9966cc"></td><td title="#9999cc" style="background-color:#9999cc"></td><td title="#99cccc" style="background-color:#99cccc"></td><td title="#99ffcc" style="background-color:#99ffcc"></td><td title="#cc00cc" style="background-color:#cc00cc"></td><td title="#cc33cc" style="background-color:#cc33cc"></td><td title="#cc66cc" style="background-color:#cc66cc"></td><td title="#cc99cc" style="background-color:#cc99cc"></td><td title="#cccccc" style="background-color:#cccccc"></td><td title="#ccffcc" style="background-color:#ccffcc"></td><td title="#ff00cc" style="background-color:#ff00cc"></td><td title="#ff33cc" style="background-color:#ff33cc"></td><td title="#ff66cc" style="background-color:#ff66cc"></td><td title="#ff99cc" style="background-color:#ff99cc"></td><td title="#ffcccc" style="background-color:#ffcccc"></td><td title="#ffffcc" style="background-color:#ffffcc"></td></tr><tr><td title="#000000" style="background-color:#000000"></td><td title="#ff00ff" style="background-color:#ff00ff"></td><td title="#000000" style="background-color:#000000"></td><td title="#9900ff" style="background-color:#9900ff"></td><td title="#9933ff" style="background-color:#9933ff"></td><td title="#9966ff" style="background-color:#9966ff"></td><td title="#9999ff" style="background-color:#9999ff"></td><td title="#99ccff" style="background-color:#99ccff"></td><td title="#99ffff" style="background-color:#99ffff"></td><td title="#cc00ff" style="background-color:#cc00ff"></td><td title="#cc33ff" style="background-color:#cc33ff"></td><td title="#cc66ff" style="background-color:#cc66ff"></td><td title="#cc99ff" style="background-color:#cc99ff"></td><td title="#ccccff" style="background-color:#ccccff"></td><td title="#ccffff" style="background-color:#ccffff"></td><td title="#ff00ff" style="background-color:#ff00ff"></td><td title="#ff33ff" style="background-color:#ff33ff"></td><td title="#ff66ff" style="background-color:#ff66ff"></td><td title="#ff99ff" style="background-color:#ff99ff"></td><td title="#ffccff" style="background-color:#ffccff"></td><td title="#ffffff" style="background-color:#ffffff"></td></tr></tbody></table></div>
 		<input type="file" style="display:none;" id="file" onchange="selectFile()" />
+		<div style="display:none;" id="video"></div>
 	</div>
 	<div id="load" style="position:fixed;background:white;width:100%;height:100%;top:0px;left:0px;z-index:99999;"></div>
   </body>
@@ -300,6 +314,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						file:"" , //选择的文件
 						text:"" , //文字编辑
 						size:"18" ,
+						name:"" , //视频文件名字
 						color:"" ,
 						dirction:"r" , 
 						fun:function(){console.log("未知错误")} ,  //选择文件时执行的回调函数
@@ -310,6 +325,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							2:false , //图片选择
 							3:false ,  //内容组件中图,apk选择
 							4:false , //导航栏属性编辑
+							5:false , //视频文件选择
+							6:false , //类容组件卡片类型
 						} , //属性编辑器
 						apks:[
 						] , //apk的数据，仓库中可选apk
@@ -457,6 +474,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								this.fields[4] = true ;
 							}else if(this.editeEl["content_item"] != "undefined" && this.editeEl["content_item"] != undefined){
 								this.fields[3] = true ;
+								this.fields[5] = true ;
+								this.fields[6] = true ;
 							}
 						}
 			  		} ,
@@ -912,6 +931,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											}else{
 												this.TVscreenInfo.panel.MAIN.content = true ;
 												this.TVscreenInfo.panel.MAIN.bar = false ;
+												//this.TVscreenInfo.panel.MAIN.item = 0 ;
 											}
 										}
 										return ;
@@ -1070,13 +1090,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				var self = this ;
 	 			global.mouseRightMenu.open(menu_data,false,function(d){
 	 				if(type == "CONTENT"){
-	 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.id = "" ;
-	 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.typeid = "" ;
-	 					//console.log(vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info) ;
-	 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.length) ;
-	 					vue.$data.TVscreenInfo.panel.MAIN.content = false ;
-	 					//vue.$data.TVscreenInfo.panel.MAIN.item = 0 ;
-	 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
+	 					if(vue.$data.TVscreenInfo.panel.MAIN.item != undefined || typeof(vue.$data.TVscreenInfo.panel.MAIN.item) != "undefined"){
+		 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.id = undefined ;
+		 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.typeid = "" ;
+		 					//console.log(vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info) ;
+		 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.length) ;
+		 					vue.$data.TVscreenInfo.panel.MAIN.content = false ;
+		 					//vue.$data.TVscreenInfo.panel.MAIN.item = 0 ;
+		 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
+	 					}else{
+	 						if(vue.$data.TVscreenInfo.panel.MAIN.data.length == 1){
+	 							vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id = undefined ;
+			 					vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid = "" ;
+			 					//console.log(vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info) ;
+			 					//vue.$data.TVscreenInfo.panel.MAIN.data[0].data.info.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data[0].data.info.length) ;
+			 					vue.$data.TVscreenInfo.panel.MAIN.data.splice(0 , 1) ;
+			 					vue.$data.TVscreenInfo.panel.MAIN.content = false ;
+			 					//vue.$data.TVscreenInfo.panel.MAIN.item = 0 ;
+			 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
+	 						}
+	 					}
 	 				}else if(type == "BAR"){
 	 					var sid = layer.confirm('此操作会删除整个导航栏和内容组件的数据，是否继续', {
 	 						  btn: ['确认', '取消'] //可以无限个按钮
@@ -1108,15 +1141,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 			})
 			}
 			
+			var fileName = "" ;
+			var fileSize = "" ;
 			//文件选择方法
 			function selectFile(e){
 				event = event ? event : window.event; 
+				if(event.target.files[0] == undefined){
+					return ;
+				}
 				var r = new FileReader();
 				var id = layer.load(1); //风格1的加载
-				r.readAsDataURL(event.target.files[0]);
+				r.readAsDataURL(event.target.files[0]);		
 				var base64 = "";
 				var size = event.target.files[0].size ;
 				var currentSize = 0 ;
+				if(!event.target.files[0].type.startsWith("image")){
+					layer.alert("此处只能选择图片") ;
+					layer.close(id) ;
+					return
+				}
 				r.onload = function(e) {
 					base64 = e.target.result;
 					currentSize += (e.target.result.substr(e.target.result.indexOf(",") + 1)).length*0.75 ;
@@ -1127,10 +1170,44 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			}
 			
+			//视频选择
+			function videoFile(e){
+				
+			}
+			
 			//切换语言方法
 			function language(obj){
 				window.location = "./screen?id=${id}&language="+obj.value ;
 			}
+			
+			//layui的文件上传模块
+			layui.use('upload', function(){
+			  var upload = layui.upload;
+			  
+			  var id = "" ;
+			  
+			  //执行示例
+			  var uploadInst = upload.render({
+			    elem: '#video'
+			    ,url: 'upload'
+			    ,done: function(res){
+			      layer.close(id) ;
+			      if(res.code == 200){
+			    	  vue.$data.name = res.msg ;
+			    	  vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]]["video"] = res.data ;
+			      }
+			    }
+			    ,error: function(){
+			      layer.close(id) ;
+			      layer.alert("视频上传失败") ;
+			    },
+			    before:function(e){
+			    	console.log(e)
+			    	id = layer.load(1) ;
+			    } ,
+			    accept:"video"
+			  });
+			});
 	</script>
 	<script src="./screen/${id }/${language }/screen.json?rand=${Math.random()}" ></script>
 </html>

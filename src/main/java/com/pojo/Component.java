@@ -26,7 +26,15 @@ public class Component {
 	private String height ;
 	//组件描述内容
 	private String msg ;
+	//组件布局信息
+	private String area ;
 	
+	public String getArea() {
+		return area;
+	}
+	public void setArea(String area) {
+		this.area = area;
+	}
 	public String getMsg() {
 		return msg;
 	}

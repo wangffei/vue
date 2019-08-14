@@ -8,6 +8,15 @@ public class ApiClass {
 	//数据
 	private Object data ;
 	
+	
+	public ApiClass(){}
+	
+	public ApiClass(Integer code, String msg, Object data) {
+		super();
+		this.code = code;
+		this.msg = msg;
+		this.data = data;
+	}
 	public Integer getCode() {
 		return code;
 	}

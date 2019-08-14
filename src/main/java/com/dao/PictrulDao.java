@@ -1,8 +1,8 @@
 package com.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.pojo.Pictrul;
+import com.pojo.FileInfo;
 
-public interface PictrulDao extends BaseMapper<Pictrul> {
+public interface PictrulDao extends BaseMapper<FileInfo> {
 
 }
