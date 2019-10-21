@@ -310,7 +310,7 @@ public class Upload {
 		result.put("data", new HashMap()) ;
 		((Map)result.get("data")).put("CN", new HashMap()) ;
 		((Map)result.get("data")).put("EN", new HashMap()) ;
-		((Map)result.get("data")).put("SERVER", "http://192.168.123.22/vueDrag") ;
+		((Map)result.get("data")).put("SERVER", "http://106.13.59.71/vueDrag") ;
 		
 		//构造数据结构
 		if(language != null && language.equals("CN")){
@@ -454,6 +454,7 @@ public class Upload {
 			data.put("main", new HashMap()) ;
 			//导航栏类型
 			((Map)data.get("main")).put("type" , bar.get("type")) ;
+			((Map)data.get("main")).put("pos" , bar.get("pos")) ;
 			if(Boolean.parseBoolean(bar.get("bar").toString())){
 				((Map)data.get("main")).put("exist" , true) ;
 			}else{
@@ -466,7 +467,9 @@ public class Upload {
 				Map m = new HashMap() ;
 				//获取导航栏图标地址
 				String img = (String) ((Map)d.get(i)).get("img") ;
+				String name = (String) ((Map)d.get(i)).get("name") ;
 				m.put("icon", img) ;
+				m.put("name", name) ;
 				//内容组件
 				((Map)((Map)d.get(i)).get("data")).put("layout", service.getLayout(((Map)((Map)d.get(i)).get("data")).get("id").toString())) ;
 				m.put("content", ((Map)d.get(i)).get("data")) ;

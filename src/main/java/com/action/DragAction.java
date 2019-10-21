@@ -27,7 +27,7 @@ public class DragAction {
 	@RequestMapping("/screen")
 	private String jumpToJSP(HttpServletRequest request , String id , String language){
 		if(id == null || language == null){
-			return "error.html" ;
+			return "/vuePage/error.html" ;
 		}
 		//查出所有组件
 		request.setAttribute("components", service.getAllComponents());
@@ -36,7 +36,7 @@ public class DragAction {
 		request.setAttribute("list", service.getPositions());  
 		request.setAttribute("id", id);
 		request.setAttribute("language", language);
-		return "forward:index.jsp" ;
+		return "forward:/vuePage/index.jsp" ;
 	}
 	
 }
