@@ -103,6 +103,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<link rel="stylesheet" href="./js/layui/css/layui.css">
+	<!-- 引入样式 -->
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <script type="text/javascript" src="./js/jquery-1.11.0.min.js"></script>
     <script src="./js/layui/layui.js"></script>
     <!-- 引入右键菜单插件 -->
@@ -247,6 +249,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </body>
 	<script src="./js/vue.min.js"></script>
 	<script src="./js/spark-md5.min.js"></script>
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
  	<script>
 		/**
 		 * 预定义部分全局的变量
@@ -430,7 +433,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  			}
 			  		} ,
 			  		"TVscreenInfo.panel.CONTENT.id": function(n , o) {
-			  			//当设置内容组件
+			  			//当设置内容组件   
 			  			if((o == undefined || typeof(o) == "undefined") && (n != undefined || typeof(n) != "undefined")){
 			  				
 			  			}
@@ -547,6 +550,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					save:function(){
 						var self = this ;
 						if(this.isChange){
+							if(!this.TVscreenInfo.panel.MAIN.content ){
+								layui.use('layer', function(){
+								  var layer = layui.layer;
+								  
+								  layer.msg('请选择内容组件', {icon: 5});
+								}); 
+								return
+							}
 							//在真正保存前进行一次md5验证，可大大减轻服务器压力，相同文件可做到一次上传多次使用
 							var spark = new SparkMD5();
 							//var md5 = spark.append(base64).end() ;
@@ -726,6 +737,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							}
 						}
 						$("#file").click() ;
+						this.$forceUpdate()
 					} ,
 					leftmenu:function (index){
 						var data = {content:$(this).html()}
