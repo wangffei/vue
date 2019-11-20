@@ -177,66 +177,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="right panel" :style="{width:this.right+'px' , display:debug ? 'none' : 'flex'}">
 				<div class="vue-panel-content">
 					<div class="vue-size">
-						<!-- 电视机背景设置 -->
-						<div v-if="fields[0]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">背景</div>
-						<div v-if="fields[0]" style="width:100%;height:100px;overflow:hidden;">
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">背景：<div @click="bg_change()" class="layui-btn layui-btn-xs">选择图片</div></div>
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">颜色：<input readonly="readonly" type="text" style="height:25px;width:25px;cursor:pointer;" @click="colorSelet($event)" :style="{background:(editeEl['type'] == 'MAIN' && editeEl['content_item'] != undefined && typeof(editeEl['content_item']) != 'undefined') ? TVscreenInfo.panel.border : TVscreenInfo.panel.color}" /></div>
-						</div>
-						<!-- 文字属性设置 -->
-						<div v-if="fields[1]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">文字</div>
-						<div v-if="fields[1]" style="width:100%;height:auto;overflow:hidden;">
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">
-								大小：<select name="city" lay-verify="" v-model="size" style="width:60px;height:25px;">
-								  <option value="l">大</option>
-								  <option value="m">中</option>
-								  <option value="s">小</option>
-								</select>  
-							</div>
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">
-								方向：<select name="city" lay-verify="" v-model="dirction" style="width:60px;height:25px;">
-								  <option value="l">向左</option>
-								  <option value="r">向右</option>
-								</select>  
-							</div>
-							<div style="display:flex;width:100%;padding-left:5px;margin-top:20px;">内容：<textarea v-model="text" name="" required lay-verify="required" placeholder="请输入" class="layui-textarea" style="width:60%;"></textarea></div>
-						</div>
-						<!-- 文件属性 -->
-						<div v-if="fields[2]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">图片</div>
-						<div v-if="fields[2]" style="width:100%;height:50px;overflow:hidden;">
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">文件：<div @click="file_select()" class="layui-btn layui-btn-xs">选择图片</div></div>
-						</div>
-						<div v-if="fields[6]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">类型</div>
-						<div v-if="fields[6]" style="width:100%;height:50px;">
-						  <select style="width:60%;height:30px;margin:10px auto;" class="layui-input" v-model="TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl['content_item']].type" name="type" lay-verify="required">
-					        <option value="img">图片</option>
-					        <option value="video">视频</option>
-					      </select>
-					    </div>
-						<!-- 内容组件属性 -->
-						<div v-if="fields[3] && TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl['content_item']].type == 'img'" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">图片</div>
-						<div v-if="fields[3] && TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl['content_item']].type == 'img'" style="width:100%;overflow:hidden;">
-							<div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl["content_item"]].apkName.length >= 4 ? TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl["content_item"]].apkName.substr(0 , 4) : TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div>
-							<div style="display:flex;margin-top:5px;flex-wrap:wrap;">
-								<div class="content_img" @contextmenu="leftmenu(index)" @click="leftmenu(index)" style="width:40px;height:40px;margin:5px 0px 0px 5px;" v-for="(img , index) in ((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item]) == undefined || typeof((TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl.content_item] : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item])) == 'undefined') ? [] : (TVscreenInfo.panel.MAIN.bar ? TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl.content_item].imgs : TVscreenInfo.panel.MAIN.data[0].data.info[editeEl.content_item].imgs)"><img :src="img" style="width:40px;height:40px;cursor:pointer;display:block;" title="修改"></div>
-							</div>
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="addImg('content')" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">添加图片</button></div>
-						</div>
-						<!-- 导航栏组件属性 -->
-						<div v-if="fields[4]" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;display:flex;"><div style="width:70%;">菜单</div><div class="layui-btn layui-btn-xs layui-btn-primary" style="width:50px;" @click="addBarItem()">添加</div></div>
-						<div v-if="fields[4]" style="width:100%;overflow:hidden;">
-							<div v-for="(item,index) in TVscreenInfo.panel.MAIN.data" style="display:flex;width:90%;padding-left:5px;flex-wrap:wrap;font-size:12px;line-height:25px;height:25px;color:gray;border:1px solid #91dbff;box-shadow:1px 1px 115px #e3e3e3;margin-top:3px;position:relative;" ><input v-model="item.name" style="width:70%;height:100%;border:0px;"><img src="./img/close.png" style="display:block;float:right;width:20px;height:20px;position:absolute;right:0px;cursor:pointer;" @click="removeBar(index)"></div>
-						</div>
-						<div v-if="fields[4] && TVscreenInfo.panel.MAIN.type == 'bar_icon'" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">图标</div>
-						<div v-if="fields[4] && TVscreenInfo.panel.MAIN.type == 'bar_icon'" style="width:100%;overflow:hidden;">
-							<div v-if="TVscreenInfo.panel.MAIN.type == 'bar_icon'" style="display:flex;width:100%;padding-left:5px;flex-wrap:wrap;margin:5px;"><img style="width:40px;height:40px;" @click="addImg('bar_change')" v-if="TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img != undefined && typeof(TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img) != 'undefined' && TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img != ''" :src="TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img"><div style="width:40px;height:40px;line-height:40px;text-align:center;font-size:12px;color:white;background:gray;" v-if="TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img == undefined || typeof(TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img) == 'undefined' || TVscreenInfo.panel.MAIN.data[TVscreenInfo.panel.MAIN.item].img == ''"  @click="addImg('bar_change')">添加</div></div>
-						</div>
-						<div v-if="fields[5] && TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl['content_item']].type == 'video'" style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">视频</div>
-						<div v-if="fields[5] && TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl['content_item']].type == 'video'" style="width:100%;overflow:hidden;">
-							<div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl["content_item"]].apkName.length >= 4 ? TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl["content_item"]].apkName.substr(0 , 4) : TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div>
-							<div style="width:80%;margin:0px aoto;height:30px;line-height:30px;text-align:center;font-size:12px;color:gray;">{{name}}</div>
-							<div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="$('#video').click()" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">选择视频</button></div>
-						</div>
+						<!-- 右侧属性编辑组件放置区域 -->
 					</div>
 				</div>
 			</div>
@@ -250,6 +191,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="./js/vue.min.js"></script>
 	<script src="./js/spark-md5.min.js"></script>
 	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<script src="./js/fields.js"></script>
  	<script>
 		/**
 		 * 预定义部分全局的变量
@@ -260,49 +202,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			"language":"${language}",  //当前编辑语种
 			"apks":"http://woosyun.com:8080/api/getapk" //apk的接口
 		} 
-		var bgImg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAH0CAYAAACHEBA3AAAE3UlEQVR42u3UMREAAAgDsRqoN/yrQQdchhj44dN2AC6ICIBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFGJYIgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgUYlgiAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBRiWEIBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhAYYlAmBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBhiUCYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQGGJQJgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhAYYlBGBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWIBhARgWgGEBhgVgWACGBRgWgGEBhgVgWACGBRgWgGEBGBZgWACGBWBYgGEBGBaAYQGGBWBYAIYFGBaAYQEYFmBYAIYFYFiAYQEYFoBhAYYFYFgAhgUYFoBhAYYFYFgAhgUYFoBhARgWYFgAhgVgWMBvC9p8boFKPUhmAAAAAElFTkSuQmCC" ;
-		//bgImg = "https://t12.baidu.com/it/u=2897648120,2717953286&fm=76" ;
+		var bgImg = "img/bgImg.png" ;
 		//后台渲染，进行组件注册
-		var array = {"CONTENT":[],"VUELOGO":[],"VUECLOCK":[],"BAR":[],"VUEPMD":[]} ; //组件的详细信息
-		var init = {} ; //组件初始状态(主要控制组件是否显示)
+		var array = ${array} ; //组件的详细信息
+		var init = ${init} ; //组件初始状态(主要控制组件是否显示)
 		<c:forEach items="${components}" var="item">
 			//注册组件
 			Vue.component("${item.name}" , ${item.code}) ;
-			//将后台传过来的组件，和组件位置数据进行整合
-			<c:forEach items="${list}" var="i">
-				{
-					var te = ${item.positions} ;
-					if(te[0].name == ${i.id}){
-						var com = {} ;
-						com.id = ${item.id} ;
-						com.name = "${item.name}" ;
-						com.img = "${item.img}" ;
-						com.width = "${item.width}" ;
-						com.height = "${item.height}" ;
-						com.msg = "${item.msg}" ;
-						com.type = "${i.type}" ;
-						com.positions = ${item.positions} ;
-						array["${i.type}"].push(com) ;
-					}
-					if(typeof(init["${i.id}"]) == "undefined"){
-						init["${i.id}"] = {} ;
-					}
-					for(var i=0 ; i<te.length ; i++){
-						if(te[i].name == ${i.id}){
-							init["${i.id}"]["${item.id}"] = false ;
-							init["${i.id}"]["${item.id}"+"woos"] = "${item.name}" ;
-						}
-					}
-				}
-			</c:forEach>
-			//console.log(init) ;
 		</c:forEach>
-		//使用右键菜单插件
-		layui.config({base: './js/mouseRightMenu/'})
-		layui.use(['mouseRightMenu','layer','jquery'],function(){
-			global.mouseRightMenu = layui.mouseRightMenu,global.layer = layui.layer;
-				
-		})
 		var vue = new Vue({
 			el:"#app",
 			data:function () {
@@ -315,13 +222,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						flag:false , //表示鼠标是否点中拖动栏
 						item:0 ,
 						file:"" , //选择的文件
-						text:"" , //文字编辑
-						size:"18" ,
 						name:"" , //视频文件名字
-						color:"" ,
-						dirction:"r" , 
+						color:"" , 
 						fun:function(){console.log("未知错误")} ,  //选择文件时执行的回调函数
 						temp:"" ,
+						//右侧属性编辑的绑定数据
 						fields:{
 							0:true, //背景设置
 							1:false , //文字编辑
@@ -368,20 +273,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									data:[]
 								} ,  //内容组件与导航栏合并
 								"VUEPMD":{
-									"id":undefined,
-									title:"" ,
-									size:"13" ,
-									dirction:"r" ,
-									color:this.color ,
-									"pos":""
+									"id":undefined, //跑马灯的id
+									title:"" ,	//跑马灯的内容
+									size:"13" ,	//跑马灯的大小
+									dirction:"r" ,	//跑马灯的方向r表示向右
+									color:this.color ,	//跑马灯的字体颜色
+									"pos":""		//跑马灯的相对位置
 								} ,
 								"VUECLOCK":{
 									"id":undefined 
 								}   
 							} ,		//已在面板上设置的组件
+							//页面左侧组件展开控制数据
 							items:[true , false , false , false , false] ,
+							//控制中间面板中组件的现实与隐藏
 							showControl:init , //控制各个组件是否显示		
 						} ,
+						//页面左侧组件的绑定数据
 						componentItems:[
 							{name:"logo",list:array["VUELOGO"]},
 							{name:"天气",list:array["VUECLOCK"]},
@@ -392,6 +300,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    }
 			  } ,
 			  watch:{
+				  	//当右侧文件选择发生改变时，给页面中指定参数赋值
 			  		file:function(n , o){
 			  			if(this.editeEl.type == "VUELOGO"){
 			  				this.TVscreenInfo.panel.VUELOGO.img = n ;
@@ -404,47 +313,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  				}
 			  			}
 			  		} ,
-			  		text:function(n , o){
-			  			if(this.editeEl.type == "VUEPMD"){
-			  				this.TVscreenInfo.panel.VUEPMD.title = n ;
-			  			}
-			  		} ,
-			  		size:function(n , o){
-			  			if(this.editeEl.type == "VUEPMD"){
-			  				var s = 12 ;
-			  				if(n == "s"){
-			  					s = 12 ;
-			  				}else if(n == "m"){
-			  					s = 18 ;
-			  				}else if(n == "l"){
-			  					s = 25 ;
-			  				}
-			  				this.TVscreenInfo.panel.VUEPMD.size = s ;
-			  			}
-			  		} ,
-			  		dirction:function(n , o){
-			  			if(this.editeEl["type"] == "VUEPMD"){
-			  				this.TVscreenInfo.panel.VUEPMD.dirction = this.dirction ;
-			  			}
-			  		} ,
 			  		color:function(n , o){
 			  			if(this.editeEl.type == "VUEPMD"){
 			  				this.TVscreenInfo.panel.VUEPMD.color = n ;
 			  			}
 			  		} ,
-			  		"TVscreenInfo.panel.CONTENT.id": function(n , o) {
-			  			//当设置内容组件   
-			  			if((o == undefined || typeof(o) == "undefined") && (n != undefined || typeof(n) != "undefined")){
-			  				
-			  			}
-			  		},
-			  		"TVscreenInfo.panel.BAR.id":function(n , o){
-			  			//当设置导航栏组件时
-			  			if((o == undefined || typeof(o) == "undefined") && (n != undefined || typeof(n) != "undefined")){
-			  				alert() ;
-			  			}
-			  		} ,
+			  		//监听用户点击导航栏的哪一项
 			  		"TVscreenInfo.panel.MAIN.item":function(n , o){
+			  			//将所有的内容组件隐藏
 			  			for(var i in this.TVscreenInfo.showControl[5]){
 			  				if(i*1){
 			  					this.TVscreenInfo.showControl[5][i] = false ;
@@ -459,8 +335,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  			}else{
 			  				this.TVscreenInfo.panel.MAIN.content = true ;
 			  			}
+			  			//将当前点击的内容组件显示
 			  			this.TVscreenInfo.showControl[5][this.TVscreenInfo.panel.MAIN.data[n].data.id] = true ;
 			  		} ,
+			  		//控制右侧属性栏显示与隐藏
 			  		"editeEl.type":function(n , o){
 			  			//将当前所点击的组件属性栏打开
 			  			var m = {"VUEPMD":1} ;
@@ -486,12 +364,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     				deep: true 
 			  } ,
 			  methods:{
+				  //此编辑器的左右拉动事件
 					item_click_down:function(e , item){
 						if(!this.flag){
 							this.item = item ;
 							this.flag = true ;
 						}
 					} ,
+					//左右拉的一个事件
+					item_click_move:function(e){
+						if(this.flag){
+							if(this.item == 1){
+								if(e.pageX <= 100){
+									return ;
+								}
+								this.left = e.pageX ;
+							}else if(this.item == 2){
+								if(this.screenWidth - e.pageX <= 100){
+									return ;
+								}
+								this.right = this.screenWidth - e.pageX ;
+							}
+						}
+					} ,
+					//左右拉的一个事件
+					item_click_up:function(){
+						this.flag = false ;
+						this.cursor = "default" ;
+					} ,
+					//展开左侧的一项组件
 					openOne:function(index){
 						var len = this.TVscreenInfo.items.length ;
 						for(var i=0 ; i<len ; i++){
@@ -499,54 +400,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}
 						this.TVscreenInfo.items[index] = true ;
 					} ,
-					selectApk:function(){
-						var html = '<div style="width:100%;height:100%;align-items:center;justify-content:center;display:flex;"><div style="width:30px;height:30px;"><img style="width:30px;height:30px;" src="./img/uploading.gif"></div></div>' ;
-						var panel = layer.open({
-						  type: 1, 
-						  title:"应用商城" ,
-						  area:['800px' , '400px'] ,
-						  content: html
-						});
-						if(this.apks.length == 0){
-							var self = this ;
-							if(this.apks.length == 0){
-								$.ajax({
-									url:global.apks ,
-									type:"GET" ,
-									success:function(res){
-										if(res.code != 200){
-											layer.msg("【faild】"+res.msg, {icon: 5});
-											layer.close(panel) ;
-										}else{
-											self.apks = res.data ;
-											layer.close(panel) ;
-											self.apkShow(self.apks) ;
-										}
-									} , 
-									error:function(){
-										layer.msg("获取数据失败", {icon: 5});
-										layer.close(panel) ;
-									}
-								}) ;
-							}
-						}else{
-							layer.close(panel) ;
-							this.apkShow(this.apks) ;
-						}
-					} ,
-					apkShow:function(arr){
-						var html = '' ;
-						for(var i=0 ; i<arr.length ; i++){
-							html+="<div style='width:71px;height:80px;display:flex;flex-direction:column;text-align:center;cursor:pointer;' onclick='apkSelect("+i+")' onmouseout ='apkOut(this)' onmouseover='apkHover(this)'><img style='width:50px;height:50px;margin-left:10px;' src='"+arr[i].image+"'>"+(arr[i].apkName.length >= 4 ? arr[i].apkName.substr(0 , 4) : arr[i].apkName)+"</div>" ;
-						}
-						html = "<div style='width:100%;height:100%;display:flex;flex-wrap:wrap;'>"+html+"</div>" ;
-						apkPanel = layer.open({
-						  type: 1, 
-						  title:"应用商城" ,
-						  area:['800px' , '400px'] ,
-						  content: html
-						});
-					} ,
+					//编辑好以后保存数据
 					save:function(){
 						var self = this ;
 						if(this.isChange){
@@ -652,93 +506,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							layer.msg("【success】上传成功", {icon: 5});
 						}
 					} ,
+					//全屏，预览模式
 					fullScreen:function(){
 						this.debug = true ;
 						layer.msg('按ESC按钮退出', {icon: 5});
-					} , //全屏
-					removeBar:function(index){
-						if(this.TVscreenInfo.panel.MAIN.data != undefined && typeof(this.TVscreenInfo.panel.MAIN.data) != "undefined"){
-							if(this.TVscreenInfo.panel.MAIN.data.length < 4){
-								layer.msg('导航栏菜单个数不能低于3个', {icon: 5});
-								return ;
-							}
-							this.TVscreenInfo.panel.MAIN.data.splice(index , 1);
-						}
-					} ,
-					addBarItem:function(){
-						if(this.TVscreenInfo.panel.MAIN.data != undefined && typeof(this.TVscreenInfo.panel.MAIN.data) != "undefined"){
-							var data = {} ;
-							data.id = this.TVscreenInfo.panel.MAIN.data.length ;
-							data.name = "" ;
-							data.img = "" ;
-							data.selectedImg = "" ;
-							data.selectedColor = "" ;
-							data.data = [] ;
-							this.TVscreenInfo.panel.MAIN.data.push(data);
-						}
-					} ,
-					addImg:function(msg){
-						/*var file = document.createElement("input") ;
-						file.type = "file" 
-						var self = this ;
-						file.onchange = function(e){
-							var f = "" ;
-							if(e.path == undefined || typeof(e.path)){
-								f = e.target.files[0] ;
-							}else{
-								f = e.path[0].files[0] ;
-							}
-							if(undefined == f) {
-								return;
-							}
-							r = new FileReader();
-							r.readAsDataURL(f);
-							var base64 = "";
-							r.onload = function(e) {
-								base64 = e.target.result;
-								if(msg == "content"){
-									if(self.TVscreenInfo.panel.MAIN.bar){
-				 						self.TVscreenInfo.panel.MAIN.data[self.TVscreenInfo.panel.MAIN.item].data.info[self.editeEl["content_item"]].imgs.push(base64) ;
-				 					}else{
-				 						self.TVscreenInfo.panel.MAIN.data[0].data.info[self.editeEl["content_item"]].imgs.push(base64) ;
-				 					}
-								}else if(msg == "bar_add"){
-									if(self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img == "" || self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img == undefined || typeof(self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img) == "undefined"){
-										self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img = base64 ;
-									}else{
-										self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].selectedImg = base64 ;
-									}
-								}else if(msg == "bar_change"){
-									self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img = base64 ;
-								}
-							}
-						}*/
-						//file.click() ;
+					} , 
+					//向内容组件，导航栏组件中添加图片
+					addImg:function(value){
 						var self = this ;
 						this.fun = function(base64){
 							if(!base64.startsWith("data:image/")){
 								layer.alert("只支持图片") ;
 								return ;
 							}
-							if(msg == "content"){
+							if(value == "content"){
 								if(self.TVscreenInfo.panel.MAIN.bar){
 			 						self.TVscreenInfo.panel.MAIN.data[self.TVscreenInfo.panel.MAIN.item].data.info[self.editeEl["content_item"]].imgs.push(base64) ;
 			 					}else{
 			 						self.TVscreenInfo.panel.MAIN.data[0].data.info[self.editeEl["content_item"]].imgs.push(base64) ;
 			 					}
-							}else if(msg == "bar_add"){
+							}else if(value == "bar_add"){
 								if(self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img == "" || self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img == undefined || typeof(self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img) == "undefined"){
 									self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img = base64 ;
 								}else{
 									self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].selectedImg = base64 ;
 								}
-							}else if(msg == "bar_change"){
+							}else if(value == "bar_change"){
 								self.TVscreenInfo.panel.MAIN.data[self.editeEl["bar_item"]].img = base64 ;
 							}
 						}
 						$("#file").click() ;
 						this.$forceUpdate()
 					} ,
+					//鼠标左右键事件
 					leftmenu:function (index){
 						var data = {content:$(this).html()}
 			 			var menu_data=[
@@ -754,26 +554,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			 						self.TVscreenInfo.panel.MAIN.data[0].data.info[self.editeEl["content_item"]].imgs.splice(index , 1) ;
 			 					}
 			 				} else if(d.type == 2){
-			 					/*var file = document.createElement("input") ;
-								file.type = "file" 
-								file.onchange = function(e){
-									var f = "" ;
-									if(e.path == undefined || typeof(e.path)){
-										f = e.target.files[0] ;
-									}else{
-										f = e.path[0].files[0] ;
-									}
-									if(undefined == f) {
-										return;
-									}
-									r = new FileReader();
-									r.readAsDataURL(f);
-									var base64 = "";
-									r.onload = function(e) {
-										base64 = e.target.result;
-										
-									}
-								}*/
 								self.fun = function(base64){
 									if(!base64.startsWith("data:image/")){
 										layer.alert("只支持图片") ;
@@ -790,34 +570,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			 			})
 						return false;
 					} ,
+					//清除当前正在编辑数据
 					clear:function(){
 						for(var i in this.editeEl){
 							this.editeEl[i] = undefined ;
 						}
 					} ,
+					//背景切换
 					bg_change:function(){
-						/*var file = document.createElement("input") ;
-						file.type = "file" 
-						var self = this;
-						file.onchange = function(e){
-							var f = "" ;
-							if(e.path == undefined || typeof(e.path)){
-								f = e.target.files[0] ;
-							}else{
-								f = e.path[0].files[0] ;
-							}
-							if(undefined == f) {
-								return;
-							}
-							r = new FileReader();
-							r.readAsDataURL(f);
-							var base64 = "";
-							r.onload = function(e) {
-								base64 = e.target.result;
-								self.TVscreenInfo.panel.BG.flag = true ;
-								self.TVscreenInfo.panel.BG.img = base64 ;
-							}
-						}*/
 						var self = this ;
 						this.fun = function(base64){
 							if(!base64.startsWith("data:image/") && !base64.startsWith("data:vedio/")){
@@ -829,6 +589,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}
 						$("#file").click() ;
 					} ,
+					//颜色选择
 					colorSelet:function(e){
 						var panel = document.getElementById("cxcolor") ;
 						if(panel.style.display == "none"){
@@ -838,60 +599,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}
 						panel.style.top = (e.clientY+18)+'px' ;
 						panel.style.right = (document.body.clientWidth - e.clientX - 20)+'px' ;
-					} ,
-					item_click_move:function(e){
-						if(this.flag){
-							if(this.item == 1){
-								if(e.pageX <= 100){
-									return ;
-								}
-								this.left = e.pageX ;
-							}else if(this.item == 2){
-								if(this.screenWidth - e.pageX <= 100){
-									return ;
-								}
-								this.right = this.screenWidth - e.pageX ;
-							}
-						}
-					} ,
-					file_select:function(){
-						/*var file = document.createElement("input") ;
-						file.type = "file" 
-						var self = this;
-						file.onchange = function(e){
-							var f = "" ;
-							if(e.path == undefined || typeof(e.path)){
-								f = e.target.files[0] ;
-							}else{
-								f = e.path[0].files[0] ;
-							}
-							if(undefined == f) {
-								return;
-							}
-							r = new FileReader();
-							r.readAsDataURL(f);
-							var base64 = "";
-							r.onload = function(e) {
-								base64 = e.target.result;
-								
-							}
-						}*/
-						var self = this ;
-						this.fun = function(base64){
-							if(!base64.startsWith("data:image/")){
-								layer.alert("只支持图片") ;
-								return ;
-							}
-							self.file = base64 ;
-						}
-						$("#file").click() ;
-					} ,
-					item_click_up:function(){
-						this.flag = false ;
-						this.cursor = "default" ;
-					} ,
-					panelClick:function(e){
-						
 					} ,
 					panelMove:function(){
 						//1.找出所有class为vue-panel的标签
@@ -921,9 +628,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							list[i].style.border = "none" ;
 							list[i].style.background = "none" ;
 						}
-					},
-					selectCover:function(e){ //此方法求出标签所覆盖的所有的标签
-						
 					},
 					cursorOn:function(top , left){
 						//1.找出所有class为vue-panel的标签
@@ -1029,205 +733,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				beforeCreate:function(){
 					vue = this ;
 				}
-			});
+			});	
 		
-			//屏幕大小发生改变时
-			window.onresize = function(){
-				vue.TVscreenInfo.width = document.querySelector(".main_TV_panel").offsetWidth ;
-				vue.TVscreenInfo.height = document.querySelector(".main_TV_panel").offsetHeight ;
-				vue.height = $(document).height() ;
-			}
-			
-			//监听esc按键，实现退出预览功能
-			window.onkeyup = function(e){
-				if(e.keyCode == 27){ //退出预览
-					vue.$data.debug = false ;
-				}
-			}
-			
-			//采用jsonp的形式请求用户数据
-			function fun_id(code){
-				var data = JSON.parse(code) ;
-				vue.$data.TVscreenInfo = data ;
-				vue.$watch('TVscreenInfo.panel.MAIN.item', vue.itemListener, {
-				    deep: true
-				});
-			}
-			
-			//选apk时鼠标移上的事件
-			function apkHover(e){
-				e.style.background = "#dfdfdf" ;
-			}
-			
-			//选apk时鼠标移出事件
-			function apkOut(e){
-				e.style.background = "none" ;
-			}
-			
-			//选择apk事件
-			function apkSelect(index){
-				layer.close(apkPanel) ;
-				vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apkName = vue.$data.apks[index].apkName ;
-				vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apk = vue.$data.apks[index].packageUrl ;
-			}
-			
-			$("#cxcolor td").click(function(){
-				if(vue.$data.editeEl["type"] == "MAIN" && vue.$data.editeEl["content_item"] != undefined && typeof(vue.$data.editeEl["content_item"]) != "undefined"){
-					vue.$data.TVscreenInfo.panel.border = this.title ;
-				}else{
-					vue.$data.TVscreenInfo.panel.color = this.title ;
-				}
-				$("#cxcolor").css("display" , "none") ;
-			})
-			
-			//是否添加页面刷新事件
-			var flush = false ;
-			vue.$watch('TVscreenInfo', function(n  , o){
-				if(vue.$data.isChange == undefined){
-					vue.$data.isChange = false ;
-				}else{
-					vue.$data.isChange = true ;
-					if(!flush){
-						//监听页面刷新，用于提示用户数据未保存
-						window.onbeforeunload = function(e) {
-					    	 var dialogText = '数据未保存';
-						     e.returnValue = dialogText;
-						     return dialogText;
-						};
-						flush = true ;
-					}
-				}
-			}, {
+		//采用jsonp形式处理返回数据
+		function fun_id(code){
+			var data = JSON.parse(code) ;
+			vue.$data.TVscreenInfo = data ;
+			vue.$watch('TVscreenInfo.panel.MAIN.item', vue.itemListener, {
 			    deep: true
 			});
-			
-			//右键删除组件
-			function deleteComponent(position , id , type){
-				var data = {content:$(this).html()}
-	 			var menu_data=[
-					{'data':data,'type':1,'title':'删除'}
-				]
-				var self = this ;
-	 			global.mouseRightMenu.open(menu_data,false,function(d){
-	 				if(type == "CONTENT"){
-	 					if(vue.$data.TVscreenInfo.panel.MAIN.item != undefined || typeof(vue.$data.TVscreenInfo.panel.MAIN.item) != "undefined"){
-		 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.id = undefined ;
-		 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.typeid = "" ;
-		 					//console.log(vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info) ;
-		 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.length) ;
-		 					vue.$data.TVscreenInfo.panel.MAIN.content = false ;
-		 					//vue.$data.TVscreenInfo.panel.MAIN.item = 0 ;
-		 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
-	 					}else{
-	 						if(vue.$data.TVscreenInfo.panel.MAIN.data.length == 1){
-	 							vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id = undefined ;
-			 					vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid = "" ;
-			 					//console.log(vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info) ;
-			 					//vue.$data.TVscreenInfo.panel.MAIN.data[0].data.info.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data[0].data.info.length) ;
-			 					vue.$data.TVscreenInfo.panel.MAIN.data.splice(0 , 1) ;
-			 					vue.$data.TVscreenInfo.panel.MAIN.content = false ;
-			 					//vue.$data.TVscreenInfo.panel.MAIN.item = 0 ;
-			 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
-	 						}
-	 					}
-	 				}else if(type == "BAR"){
-	 					var sid = layer.confirm('此操作会删除整个导航栏和内容组件的数据，是否继续', {
-	 						  btn: ['确认', '取消'] //可以无限个按钮
-	 						}, function(index){
-	 							vue.$data.TVscreenInfo.panel.MAIN.bar = false ;
-	 		 					vue.$data.TVscreenInfo.panel.MAIN.content = false ;
-	 		 					vue.$data.TVscreenInfo.panel.MAIN.item = undefined ;
-	 		 					vue.$data.TVscreenInfo.panel.MAIN.data.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data.length) ;
-	 		 					vue.$data.TVscreenInfo.panel.MAIN.id = undefined ;
-	 		 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
-	 							layer.close(sid)
-	 						}, function(index){
-	 							 return ;
-	 					})
-	 				}else if(type == "VUELOGO"){
-	 					vue.$data.TVscreenInfo.panel["VUELOGO"].img = undefined ;
-	 					vue.$data.TVscreenInfo.panel["VUELOGO"].id = undefined ;
-	 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
-	 				}else if(type == "VUEPMD"){
-	 					vue.$data.TVscreenInfo.panel["VUEPMD"].id = undefined ;
-	 					vue.$data.TVscreenInfo.panel["VUEPMD"].title = "" ;
-	 					vue.$data.TVscreenInfo.panel["VUEPMD"].dirction = "" ;
-	 					vue.$data.TVscreenInfo.panel["VUEPMD"].color = "" ;
-	 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
-	 				}else if(type == "VUECLOCK"){
-	 					vue.$data.TVscreenInfo.panel["VUECLOCK"] = {} ;
-	 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
-	 				}
-	 			})
-			}
-			
-			var fileName = "" ;
-			var fileSize = "" ;
-			//文件选择方法
-			function selectFile(e){
-				event = event ? event : window.event; 
-				if(event.target.files[0] == undefined){
-					return ;
-				}
-				var r = new FileReader();
-				var id = layer.load(1); //风格1的加载
-				r.readAsDataURL(event.target.files[0]);		
-				var base64 = "";
-				var size = event.target.files[0].size ;
-				var currentSize = 0 ;
-				if(!event.target.files[0].type.startsWith("image")){
-					layer.alert("此处只能选择图片") ;
-					layer.close(id) ;
-					return
-				}
-				r.onload = function(e) {
-					base64 = e.target.result;
-					currentSize += (e.target.result.substr(e.target.result.indexOf(",") + 1)).length*0.75 ;
-					if(currentSize >= size){
-						vue.$data.fun(base64) ;
-						layer.close(id) ;
-					}
-				}
-			}
-			
-			//视频选择
-			function videoFile(e){
-				
-			}
-			
-			//切换语言方法
-			function language(obj){
-				window.location = "./screen?id=${id}&language="+obj.value ;
-			}
-			
-			//layui的文件上传模块
-			layui.use('upload', function(){
-			  var upload = layui.upload;
-			  
-			  var id = "" ;
-			  
-			  //执行示例
-			  var uploadInst = upload.render({
-			    elem: '#video'
-			    ,url: 'upload'
-			    ,done: function(res){
-			      layer.close(id) ;
-			      if(res.code == 200){
-			    	  vue.$data.name = res.msg ;
-			    	  vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]]["video"] = res.data ;
-			      }
-			    }
-			    ,error: function(){
-			      layer.close(id) ;
-			      layer.alert("视频上传失败") ;
-			    },
-			    before:function(e){
-			    	console.log(e)
-			    	id = layer.load(1) ;
-			    } ,
-			    accept:"video"
-			  });
-			});
+		}	
 	</script>
-	<script src="/screen/${id }/${language }/screen.json?rand=${Math.random()}" ></script>
+	<script src="js/init.js"></script>
+	<script src="js/event.js"></script>
+	<script src="screen/${id }/${language }/screen.json?rand=${Math.random()}" ></script>
 </html>
