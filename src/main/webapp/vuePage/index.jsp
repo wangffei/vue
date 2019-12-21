@@ -666,7 +666,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											  
 											  layer.msg('该类型组件只能有一个', {icon: 5});
 											}); 
-										}else{
+										}else{										
 											this.TVscreenInfo.showControl[list[i].getAttribute("pid")][this.current.id] = true ;
 											this.TVscreenInfo.panel["MAIN"]["id"] = this.current.id ;
 											this.TVscreenInfo.panel.MAIN.content = true ;
@@ -737,8 +737,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 		//采用jsonp形式处理返回数据
 		function fun_id(code){
-			var data = JSON.parse(code) ;
-			vue.$data.TVscreenInfo = data ;
+			var code_json = JSON.parse(code) ;
+			if(code_json.panel.MAIN.item == undefined || typeof(code_json.panel.MAIN.item) == undefined){
+				code_json.panel.MAIN.item = undefined ;
+				code_json.panel.MAIN.data.splice(0 , 1) ;
+			}
+			console.log(code_json)
+			vue.$data.TVscreenInfo = code_json ;
 			vue.$watch('TVscreenInfo.panel.MAIN.item', vue.itemListener, {
 			    deep: true
 			});

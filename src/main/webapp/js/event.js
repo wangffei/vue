@@ -30,6 +30,7 @@ function selectFile(e){
 
 //右键删除组件
 function deleteComponent(position , id , type){
+	
 	var data = {content:$(this).html()}
 		var menu_data=[
 		{'data':data,'type':1,'title':'删除'}
@@ -37,17 +38,19 @@ function deleteComponent(position , id , type){
 	var self = this ;
 	global.mouseRightMenu.open(menu_data,false,function(d){
 		if(type == "CONTENT"){
+			console.log(vue.$data.TVscreenInfo.panel.MAIN.item)
 			if(vue.$data.TVscreenInfo.panel.MAIN.item != undefined || typeof(vue.$data.TVscreenInfo.panel.MAIN.item) != "undefined"){
-				var id = "" ;
+				var id_1 = "" ;
 				var typeid = "" ;
 				var content = "" ;
 				var control = "" ;
 				try{
-					id = vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.id ;
+					id_1 = vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.id ;
 					typeid = vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.typeid ;
 					content = vue.$data.TVscreenInfo.panel.MAIN.content ;
 					control = vue.$data.TVscreenInfo.showControl[position][id] ;
 				}catch(err){
+					
 					layer.open({
 					  title: '错误'
 					  ,content: '删除失败'
@@ -62,7 +65,7 @@ function deleteComponent(position , id , type){
 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.length) ;
 				}catch(err){
-					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.id = id ;
+					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.id = id_1 ;
 					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.typeid = typeid ;
 					vue.$data.TVscreenInfo.panel.MAIN.content = content ;
 					vue.$data.TVscreenInfo.showControl[position][id] = control ;
@@ -75,12 +78,12 @@ function deleteComponent(position , id , type){
 				}
 			}else{
 				if(vue.$data.TVscreenInfo.panel.MAIN.data.length == 1){
-					var id = "" ;
+					var id_1 = "" ;
 					var typeid = "" ;
 					var content = "" ;
 					var control = "" ;
 					try{
-						id = vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id ;
+						id_1 = vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id ;
 						typeid = vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid ;
 						content =vue.$data.TVscreenInfo.panel.MAIN.content ;
 						control = vue.$data.TVscreenInfo.showControl[position][id] ;
@@ -99,7 +102,7 @@ function deleteComponent(position , id , type){
 						vue.$data.TVscreenInfo.showControl[position][id] = false ;
 						vue.$data.TVscreenInfo.panel.MAIN.data.splice(0 , 1) ;
 					}catch(err){
-						vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id = id ;
+						vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id = id_1 ;
 						vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid = typeid ;
 						vue.$data.TVscreenInfo.panel.MAIN.content = content ;
 						vue.$data.TVscreenInfo.showControl[position][id] = control ;
@@ -115,13 +118,46 @@ function deleteComponent(position , id , type){
 		}else if(type == "BAR"){
 			var sid = layer.confirm('此操作会删除整个导航栏和内容组件的数据，是否继续', {
 				  btn: ['确认', '取消'] //可以无限个按钮
-				}, function(index){
-					vue.$data.TVscreenInfo.panel.MAIN.bar = false ;
- 					vue.$data.TVscreenInfo.panel.MAIN.content = false ;
- 					vue.$data.TVscreenInfo.panel.MAIN.item = undefined ;
- 					vue.$data.TVscreenInfo.panel.MAIN.data.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data.length) ;
- 					vue.$data.TVscreenInfo.panel.MAIN.id = undefined ;
- 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
+				}, function(index){		
+					var bar = "" ;
+					var content = "" ;
+					var item = "" ;
+					var id_1 = "" ;
+					var control = "" ;
+					try{
+						var bar = vue.$data.TVscreenInfo.panel.MAIN.bar ;
+						var content = vue.$data.TVscreenInfo.panel.MAIN.conten ;
+						var item = vue.$data.TVscreenInfo.panel.MAIN.item ;
+						var id_1 = vue.$data.TVscreenInfo.panel.MAIN.id ;
+						var control = vue.$data.TVscreenInfo.showControl[position][id] ;
+					}catch(err){
+						layer.open({
+						  title: '错误'
+						  ,content: '删除失败'
+						});     
+						return ;
+					}
+					try{
+						vue.$data.TVscreenInfo.panel.MAIN.bar = false ;
+	 					vue.$data.TVscreenInfo.panel.MAIN.content = false ;
+	 					vue.$data.TVscreenInfo.panel.MAIN.item = undefined ;
+	 					vue.$data.TVscreenInfo.panel.MAIN.id = undefined ;
+	 					vue.$data.TVscreenInfo.showControl[position][id] = false ;
+	 					vue.$data.TVscreenInfo.panel.MAIN.data.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data.length) ;
+					}catch(err){
+						vue.$data.TVscreenInfo.panel.MAIN.bar = bar ;
+	 					vue.$data.TVscreenInfo.panel.MAIN.content = content ;
+	 					vue.$data.TVscreenInfo.panel.MAIN.item = item ;
+	 					vue.$data.TVscreenInfo.panel.MAIN.id = id_1 ;
+	 					vue.$data.TVscreenInfo.showControl[position][id] = control ;
+	 					layer.close(sid)
+	 					
+	 					layer.open({
+						  title: '错误'
+						  ,content: '删除失败'
+						});     
+						return ;
+					}
 					layer.close(sid)
 				}, function(index){
 					 return ;
@@ -156,9 +192,9 @@ function apkOut(e){
 //选择apk事件
 function apkSelect(index){
 	layer.close(apkPanel) ;
-	vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apkName = vue.$data.apks[index].apkName ;
-	vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apk = vue.$data.apks[index].packageUrl ;
-	vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].packageName = vue.$data.apks[index].packageName
+	vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item == undefined ? 0 : vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apkName = vue.$data.apks[index].apkName ;
+	vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item == undefined ? 0 : vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apk = vue.$data.apks[index].packageUrl ;
+	vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item == undefined ? 0 : vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].packageName = vue.$data.apks[index].packageName
 }
 
 $("#cxcolor td").click(function(){
