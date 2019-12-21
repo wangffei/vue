@@ -38,23 +38,78 @@ function deleteComponent(position , id , type){
 	global.mouseRightMenu.open(menu_data,false,function(d){
 		if(type == "CONTENT"){
 			if(vue.$data.TVscreenInfo.panel.MAIN.item != undefined || typeof(vue.$data.TVscreenInfo.panel.MAIN.item) != "undefined"){
-				vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.id = undefined ;
-				vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.typeid = "" ;
-				//console.log(vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info) ;
-				vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.length) ;
-				vue.$data.TVscreenInfo.panel.MAIN.content = false ;
-				//vue.$data.TVscreenInfo.panel.MAIN.item = 0 ;
-				vue.$data.TVscreenInfo.showControl[position][id] = false ;
+				var id = "" ;
+				var typeid = "" ;
+				var content = "" ;
+				var control = "" ;
+				try{
+					id = vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.id ;
+					typeid = vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.typeid ;
+					content = vue.$data.TVscreenInfo.panel.MAIN.content ;
+					control = vue.$data.TVscreenInfo.showControl[position][id] ;
+				}catch(err){
+					layer.open({
+					  title: '错误'
+					  ,content: '删除失败'
+					});     
+					return ;
+				}
+				
+				try{
+					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.id = undefined ;
+					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.typeid = "" ;
+					vue.$data.TVscreenInfo.panel.MAIN.content = false ;
+					vue.$data.TVscreenInfo.showControl[position][id] = false ;
+					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info.length) ;
+				}catch(err){
+					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.id = id ;
+					vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.typeid = typeid ;
+					vue.$data.TVscreenInfo.panel.MAIN.content = content ;
+					vue.$data.TVscreenInfo.showControl[position][id] = control ;
+					
+					layer.open({
+					  title: '错误'
+					  ,content: '删除失败'
+					});     
+					return ;
+				}
 			}else{
 				if(vue.$data.TVscreenInfo.panel.MAIN.data.length == 1){
-					vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id = undefined ;
-				vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid = "" ;
-				//console.log(vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info) ;
-				//vue.$data.TVscreenInfo.panel.MAIN.data[0].data.info.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data[0].data.info.length) ;
-				vue.$data.TVscreenInfo.panel.MAIN.data.splice(0 , 1) ;
-				vue.$data.TVscreenInfo.panel.MAIN.content = false ;
-				//vue.$data.TVscreenInfo.panel.MAIN.item = 0 ;
-				vue.$data.TVscreenInfo.showControl[position][id] = false ;
+					var id = "" ;
+					var typeid = "" ;
+					var content = "" ;
+					var control = "" ;
+					try{
+						id = vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id ;
+						typeid = vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid ;
+						content =vue.$data.TVscreenInfo.panel.MAIN.content ;
+						control = vue.$data.TVscreenInfo.showControl[position][id] ;
+					}catch(err){
+						layer.open({
+						  title: '错误'
+						  ,content: '删除失败'
+						});     
+						return ;
+					}
+					
+					try{
+						vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id = undefined ;
+						vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid = "" ;
+						vue.$data.TVscreenInfo.panel.MAIN.content = false ;
+						vue.$data.TVscreenInfo.showControl[position][id] = false ;
+						vue.$data.TVscreenInfo.panel.MAIN.data.splice(0 , 1) ;
+					}catch(err){
+						vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id = id ;
+						vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid = typeid ;
+						vue.$data.TVscreenInfo.panel.MAIN.content = content ;
+						vue.$data.TVscreenInfo.showControl[position][id] = control ;
+						
+						layer.open({
+						  title: '错误'
+						  ,content: '删除失败'
+						});     
+						return ;
+					}
 				}
 			}
 		}else if(type == "BAR"){
@@ -103,6 +158,7 @@ function apkSelect(index){
 	layer.close(apkPanel) ;
 	vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apkName = vue.$data.apks[index].apkName ;
 	vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apk = vue.$data.apks[index].packageUrl ;
+	vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].packageName = vue.$data.apks[index].packageName
 }
 
 $("#cxcolor td").click(function(){

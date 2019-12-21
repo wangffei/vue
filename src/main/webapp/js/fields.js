@@ -121,11 +121,12 @@ Vue.component("v-fields2" , {
 })
 
 Vue.component("v-fields3" , {
-	template:'<div><div style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">图片</div><div style="width:100%;overflow:hidden;"><div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName.length >= 4 ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName.substr(0 , 4) : data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div><div style="display:flex;margin-top:5px;flex-wrap:wrap;"><div class="content_img" @contextmenu="leftmenu(index)" @click="leftmenu(index)" style="width:40px;height:40px;margin:5px 0px 0px 5px;" v-for="(img , index) in ((data.MAIN.bar ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now.content_item] : data.MAIN.data[0].data.info[now.content_item]) == undefined || typeof((data.MAIN.bar ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now.content_item] : data.MAIN.data[0].data.info[now.content_item])) == \'undefined\') ? [] : (data.MAIN.bar ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now.content_item].imgs : data.MAIN.data[0].data.info[now.content_item].imgs)"><img :src="img" style="width:40px;height:40px;cursor:pointer;display:block;" title="修改"></div></div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="addImg" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">添加图片</button></div></div></div>',
+	template:'<div><div style="width:100%;height:25px;background:#82e7c6;line-height:25px;padding-left:10px;">图片</div><div style="width:100%;overflow:hidden;"><div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName.length >= 4 ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName.substr(0 , 4) : data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div><div style="display:flex;margin-top:5px;flex-wrap:wrap;"><div class="content_img" @contextmenu="leftmenu(index)" @click="leftmenu(index)" style="width:40px;height:40px;margin:5px 0px 0px 5px;" v-for="(img , index) in ((data.MAIN.bar ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now.content_item] : data.MAIN.data[0].data.info[now.content_item]) == undefined || typeof((data.MAIN.bar ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now.content_item] : data.MAIN.data[0].data.info[now.content_item])) == \'undefined\') ? [] : (data.MAIN.bar ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now.content_item].imgs : data.MAIN.data[0].data.info[now.content_item].imgs)"><img :src="img" style="width:40px;height:40px;cursor:pointer;display:block;" title="修改"></div></div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="addImg" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">添加图片</button><button @click="edite_sub_page" type="button" class="layui-btn layui-btn-xs layui-btn-primary" v-if="data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now[\'content_item\']].packageName == \'com.woos.ppt\'" style="width:90%;">编辑二级页面</button></div></div></div>',
 	name:"v-fields3" ,
 	data:function(){
 		return{
 			apkurl:"http://woosyun.com:8080/api/getapk" ,
+			//show_sub:this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].data.info[this.now['content_item']].packageName == 'com.woos.ppt'
 		}
 	} ,
 	props:{
@@ -134,9 +135,26 @@ Vue.component("v-fields3" , {
 		apks:[]
 	} ,
 	created(){
-		
+		console.log(this.show_sub)
 	} ,
 	methods:{
+		edite_sub_page:function(){
+			layui.use('layer', function(){
+			  var layer = layui.layer;
+			  
+			  layer.open({
+				  type: 2,
+				  shade: false,
+				  area: [vue.$data.TVscreenInfo.width , vue.$data.TVscreenInfo.height],
+				  maxmin: true,
+				  content: './vuePage/subPages.jsp',
+				  zIndex: layer.zIndex, //重点1
+				  success: function(layero){
+				    layer.setTop(layero); //重点2
+				  }
+				});
+			}); 
+		} ,
 		selectApk:function(){
 			var html = '<div style="width:100%;height:100%;align-items:center;justify-content:center;display:flex;"><div style="width:30px;height:30px;"><img style="width:30px;height:30px;" src="./img/uploading.gif"></div></div>' ;
 			var panel = layer.open({

@@ -53,9 +53,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			display:flex;
 			flex-direction:column;
 		}
-		#main .right{
+		/*#main .right{
 			width:230px;
 			height:100% ;
+			border-left:1px solid black;
+		}*/
+		#main .right{
+			width:0px;
+			height:0% ;
 			border-left:1px solid black;
 		}
 		#main .left .l-top{
@@ -121,7 +126,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
     <div id="app">
-    	<div id="top">沃视二级页面编辑器</div>
+    	<div id="top"><div style="margin-left:20px;float:left;">沃视二级页面编辑器</div><div @click="save()" style="float:right;background:#6abdca;margin-right:20px;height:40px;margin-top:5px;line-height:40px;width:100px;border-radius:10px;text-align:center;cursor:pointer;font-size:15px;">保存</div></div>
     	<div id="main" @mousedown="mousedown()" @mousemove="mousemove()" @mouseup="mouseup()">
     		<div class="left">
     			<div class="l-top">
@@ -155,7 +160,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </body>
   
   <script>
-  
+  	var item = parent.vue.$data.TVscreenInfo.panel.MAIN.item == undefined ? 0 : parent.vue.$data.TVscreenInfo.panel.MAIN.item ;
+  	var index = parent.vue.$data.editeEl['content_item'] ;
+  	var value = parent.vue.$data.TVscreenInfo.panel.MAIN.data[item].data.info[index].ppt ;
+  	
+  	if(value == undefined){
+  		value = [] ;
+  	}
+  	
   	var mouseMove = [] ;
   	var mouseDown = [] ;
   	var mouseUp   = [] ;
@@ -173,7 +185,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			panel:{
 				type:"imgs" ,
 				bg:"" ,
-				data:[]
+				data:value
 			}
   		},
 		created:function() {
@@ -217,6 +229,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			} ,
 			select:function(index){
 				this.imgItem.item = index ;
+			} ,
+			save:function(){
+				parent.vue.$data.TVscreenInfo.panel.MAIN.data[item].data.info[index].ppt = this.panel.data ;
+				console.log(this.panel.data)
+				layui.use('layer', function(){
+				  var layer = layui.layer;
+				  
+				  layer.msg('保存成功');
+				});	
 			}
 		}
   	}) ;
@@ -248,6 +269,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				fileFun.splice(0 , fileFun.length) ;
 			}
 		}
+  	}
+  	
+  	function getParameter(variable){
+  	       var query = window.location.search.substring(1);
+  	       var vars = query.split("&");
+  	       for (var i=0;i<vars.length;i++) {
+  	               var pair = vars[i].split("=");
+  	               if(pair[0] == variable){return pair[1];}
+  	       }
+  	       return(false);
   	}
 	
 	window.onresize = function(){
