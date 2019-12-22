@@ -220,6 +220,15 @@ public class Upload {
 					}
 				}
 			}
+			//没有导航栏时要额外处理一下
+			List<Object> l = (List<Object>)((Map)((Map)map.get("panel")).get("MAIN")).get("data") ;
+			String item = (String)((Map)((Map)map.get("panel")).get("MAIN")).get("item") ;
+			if(item == null){
+				int len = l.size() - 1 ;
+				for(int i=0 ; i<len ; i++){
+					l.remove(l.size() - 1) ;
+				}
+			}
 			//写文件
 			File dir = new File(System.getProperty("ROOT_PATH")+"screen"+separator+id+separator+language) ;
 			if(!dir.exists()){

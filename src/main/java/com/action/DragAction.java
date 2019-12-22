@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.service.DragService;
 import com.vo.ComponentVO;
@@ -75,5 +74,4 @@ public class DragAction {
 		request.setAttribute("language", language);
 		return "forward:/vuePage/index.jsp" ;
 	}
-	
 }

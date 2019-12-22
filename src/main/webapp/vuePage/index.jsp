@@ -740,9 +740,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var code_json = JSON.parse(code) ;
 			if(code_json.panel.MAIN.item == undefined || typeof(code_json.panel.MAIN.item) == undefined){
 				code_json.panel.MAIN.item = undefined ;
-				code_json.panel.MAIN.data.splice(0 , 1) ;
 			}
-			console.log(code_json)
 			vue.$data.TVscreenInfo = code_json ;
 			vue.$watch('TVscreenInfo.panel.MAIN.item', vue.itemListener, {
 			    deep: true

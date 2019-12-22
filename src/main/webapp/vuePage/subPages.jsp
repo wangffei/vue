@@ -143,7 +143,7 @@
 <body>
 <div id="app">
     <div id="top">二级页面编辑器
-        <div style="float: right">
+        <div style="float: right;margin-right:30px;">
             <button class="layui-btn" @click="del()">删除</button>
             <button class="layui-btn" @click="save()">保存</button>
         </div>
@@ -273,6 +273,7 @@
 				  
 				  layer.msg('保存成功');
 				});	
+				parent.vue.$data.isChange = true ;
 			}
         }
     });

@@ -77,42 +77,40 @@ function deleteComponent(position , id , type){
 					return ;
 				}
 			}else{
-				if(vue.$data.TVscreenInfo.panel.MAIN.data.length == 1){
-					var id_1 = "" ;
-					var typeid = "" ;
-					var content = "" ;
-					var control = "" ;
-					try{
-						id_1 = vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id ;
-						typeid = vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid ;
-						content =vue.$data.TVscreenInfo.panel.MAIN.content ;
-						control = vue.$data.TVscreenInfo.showControl[position][id] ;
-					}catch(err){
-						layer.open({
-						  title: '错误'
-						  ,content: '删除失败'
-						});     
-						return ;
-					}
+				var id_1 = "" ;
+				var typeid = "" ;
+				var content = "" ;
+				var control = "" ;
+				try{
+					id_1 = vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id ;
+					typeid = vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid ;
+					content =vue.$data.TVscreenInfo.panel.MAIN.content ;
+					control = vue.$data.TVscreenInfo.showControl[position][id] ;
+				}catch(err){
+					layer.open({
+					  title: '错误'
+					  ,content: '删除失败'
+					});     
+					return ;
+				}
+				
+				try{
+					vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id = undefined ;
+					vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid = "" ;
+					vue.$data.TVscreenInfo.panel.MAIN.content = false ;
+					vue.$data.TVscreenInfo.showControl[position][id] = false ;
+					vue.$data.TVscreenInfo.panel.MAIN.data.splice(0 , vue.$data.TVscreenInfo.panel.MAIN.data.length) ;
+				}catch(err){
+					vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id = id_1 ;
+					vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid = typeid ;
+					vue.$data.TVscreenInfo.panel.MAIN.content = content ;
+					vue.$data.TVscreenInfo.showControl[position][id] = control ;
 					
-					try{
-						vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id = undefined ;
-						vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid = "" ;
-						vue.$data.TVscreenInfo.panel.MAIN.content = false ;
-						vue.$data.TVscreenInfo.showControl[position][id] = false ;
-						vue.$data.TVscreenInfo.panel.MAIN.data.splice(0 , 1) ;
-					}catch(err){
-						vue.$data.TVscreenInfo.panel.MAIN.data[0].data.id = id_1 ;
-						vue.$data.TVscreenInfo.panel.MAIN.data[0].data.typeid = typeid ;
-						vue.$data.TVscreenInfo.panel.MAIN.content = content ;
-						vue.$data.TVscreenInfo.showControl[position][id] = control ;
-						
-						layer.open({
-						  title: '错误'
-						  ,content: '删除失败'
-						});     
-						return ;
-					}
+					layer.open({
+					  title: '错误'
+					  ,content: '删除失败'
+					});     
+					return ;
 				}
 			}
 		}else if(type == "BAR"){
