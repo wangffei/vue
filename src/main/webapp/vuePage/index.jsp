@@ -156,7 +156,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<c:forEach items="${components }" var="i">
 									<c:forEach items="${i.positions }" var="j">
 										<c:if test="${j.name==item.id }">
-											<<c:out value="${i.name }"></c:out> pos="${item.msg }" oncontextmenu="deleteComponent('${item.id }' , '${i.id }' , '${item.type }')" v-if="TVscreenInfo.showControl['${item.id }']['${i.id }']" :data="TVscreenInfo.panel" ref="${ i.name }"  v-on:click.stop="alert('123')" :now="this.editeEl" :fields="fields"></<c:out value="${i.name }"></c:out>>
+											<<c:out value="${i.name }"></c:out> pos="${item.msg }" oncontextmenu="deleteComponent('${item.id }' , '${i.id }' , '${item.type }')" v-if="TVscreenInfo.showControl['${item.id }']['${i.id }']" :data="TVscreenInfo.panel" ref="${ i.name }"  v-on:click.stop="" :now="this.editeEl" :fields="fields"></<c:out value="${i.name }"></c:out>>
 										</c:if>
 									</c:forEach>
 								</c:forEach>
@@ -581,7 +581,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						var self = this ;
 						this.fun = function(base64){
 							if(!base64.startsWith("data:image/") && !base64.startsWith("data:vedio/")){
-								layer.alert("只支持图片或视频") ;
+								layer.alert("只支持图片") ;
 								return ;
 							}
 							self.TVscreenInfo.panel.BG.flag = true ;

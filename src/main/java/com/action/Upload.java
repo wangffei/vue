@@ -264,6 +264,38 @@ public class Upload {
 		}
 	}
 	
+	//保存欢迎界面
+	@RequestMapping("/welcome_save")
+	@ResponseBody
+	public ApiClass welcomePageUpload(String id , String code){
+		ApiClass api = new ApiClass() ;
+		//写文件
+		File dir = new File(System.getProperty("ROOT_PATH")+"screen"+separator+id+separator+"welcome") ;
+		if(!dir.exists()){
+			dir.mkdirs() ;
+		}
+		File file = new File(System.getProperty("ROOT_PATH")+"screen"+separator+id+separator+"welcome"+separator+"welcome.json") ;
+		OutputStreamWriter writer = null ;
+		try {
+			writer = new OutputStreamWriter(new FileOutputStream(file) , "utf-8") ;
+			writer.write("fun_id"+"('"+code+"')");
+		} catch (IOException e) {
+			api.setCode(500);
+			api.setMsg("存储失败");
+			api.setData("");
+			return api ;
+		} finally{
+			if(writer != null){
+				try {
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return api ;
+	}
+	
 	/**
 	 * 上传数据之前进行md5验证，服务器已有的文件返回文件引用
 	 * @param data
@@ -503,7 +535,7 @@ public class Upload {
 		String fileName = file.getOriginalFilename() ;
 		String suffix = fileName.substring(fileName.lastIndexOf(".")) ;
 		FileOutputStream out = null ;
-		if(".mp4".equals(suffix) || ".avi".equals(suffix)){
+		if(".mp4".equals(suffix) || ".avi".equals(suffix) || ".mp3".equals(suffix)){
 			String newFile = UUID.randomUUID().toString().replaceAll("-", "")+suffix ;
 			try {
 				byte[] data = file.getBytes() ;
@@ -518,7 +550,7 @@ public class Upload {
 				
 				//存储区域
 				String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) ;
-				String path = System.getProperty("ROOT_PATH")+"screen"+separator+"upload"+separator + date;
+				String path = System.getProperty("ROOT_PATH")+"temp"+separator + date;
 				
 				if(!new File(path).exists()){
 					new File(path).mkdir() ;
@@ -531,10 +563,10 @@ public class Upload {
 				FileInfo video = new FileInfo() ;
 				video.setMd5(md5);
 				video.setType("video");
-				video.setUrl("./screen/upload/"+date+"/"+newFile);
+				video.setUrl("./temp/"+date+"/"+newFile);
 				service.addImg(video) ;
 				
-				return new ApiClass(200, "成功", "./screen/upload/"+date+"/"+newFile) ;
+				return new ApiClass(200, "成功", "./temp/"+date+"/"+newFile) ;
 			} catch (Exception e) {
 				return new ApiClass(500 , "文件数据异常" , "") ;
 			} finally{

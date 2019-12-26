@@ -74,4 +74,10 @@ public class DragAction {
 		request.setAttribute("language", language);
 		return "forward:/vuePage/index.jsp" ;
 	}
+	
+	@RequestMapping("/welcome")
+	public String welcome(HttpServletRequest request , String id){
+		request.setAttribute("id", id);
+		return "forward:/vuePage/welcomePage.jsp" ;
+	}
 }
