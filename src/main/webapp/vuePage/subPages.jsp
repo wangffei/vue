@@ -45,7 +45,7 @@
         #top {
             width: 100%;
             height: 50px;
-            background: blue;
+            background: #323232;
             font-size: 20px;
             line-height: 50px;
             color: white;

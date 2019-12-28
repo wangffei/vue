@@ -66,14 +66,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</div>
 						<div style="position:absolute;height:150px;" :style="{width:(width*0.8 - 100)+'px' , top:(TVscreenInfo.panel.TXT.position == 'top' ? 0.1*(height-150)+50 : TVscreenInfo.panel.TXT.position == 'center' ? (height - 150)/2 : (height - 200)) + 'px'}">
 							<div style="width:97%;margin:0px auto;height:25px;">
-								<input v-if="TVscreenInfo.panel.TXT.type == 'user_set'" v-model="TVscreenInfo.panel.TXT.value1" type="text" style="width:100%;height:100%;background-color:transparent;border:1px solid black;" :style="{color:TVscreenInfo.panel.TXT.color}" />
+								<input v-if="TVscreenInfo.panel.TXT.type == 'user_set'" v-model="TVscreenInfo.panel.TXT.value1" type="text" style="width:100%;height:100%;background-color:transparent;border:1px dashed white;" :style="{color:TVscreenInfo.panel.TXT.color}" />
 								<div v-if="TVscreenInfo.panel.TXT.type == 'default'" style="width:100%;height:100%;display:flex;">
 									<div :style="{color:TVscreenInfo.panel.TXT.color}" style="font-size:14px;line-height:25px;">尊敬的：</div>
-									<div @click="setUrl()" style="width:135px;height:20px;margin:2.5px;line-height:20px;text-align:center;" class="layui-btn layui-btn-primary">请点击填入接口</div>
 								</div>
 							</div>
 							<div style="width:97%;margin:10px auto;height:110px;">
-								<textarea v-model="TVscreenInfo.panel.TXT.value2" style="resize:none;width:100%;height:100%;background-color:transparent;border:1px solid black;" :style="{color:TVscreenInfo.panel.TXT.color}" ></textarea>
+								<textarea v-if="TVscreenInfo.panel.TXT.type != 'none'" v-model="TVscreenInfo.panel.TXT.value2" style="resize:none;width:100%;height:100%;background-color:transparent;border:1px dashed white;" :style="{color:TVscreenInfo.panel.TXT.color}" ></textarea>
 							</div>
 						</div>
 					</div>
@@ -119,6 +118,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<select style="height:25px;" v-model="TVscreenInfo.panel.TXT.type" class="layui-input" name="city" lay-verify="required">
 							  <option value="default">动态问候语</option>
 							  <option value="user_set">自定义</option>
+							  <option value="none">无</option>
 							</select>  
 						</div>
 						<div style="margin:15px 0px 0px 30px;font-size:12px;color:white;">颜色</div>

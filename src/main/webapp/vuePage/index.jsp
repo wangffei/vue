@@ -25,6 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  	height:100%;
 			display:flex;
 			border:0px;
+			background:gray ;
 		}
 		#vue-drag-content .select-item{
 			width:4px;
@@ -48,9 +49,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		.vue-panel-top{
 			height:25px;
 			line-height:25px;
-			color:black;
+			color:white;
 			font-size:13px ;
-			background:rgb(130, 231, 198);
+			background:#5f5f5f;
 			font-family: "楷体";
 			border-bottom:1px solid #f0fffa;
 			cursor:pointer;
@@ -115,7 +116,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-  	<div style="width:100%;height:50px;background:blue;display:flex;justify-content:space-between;"><div style="width:200px;height:50px;line-height:50px;font-size:18px;color:white;margin-left:10px;">沃视电视界面编辑器</div><div style="width:100px;height:50px;color:white;line-height:50px;">语言:
+  	<div style="width:100%;height:50px;background:#323232;display:flex;justify-content:space-between;"><div style="width:200px;height:50px;line-height:50px;font-size:18px;color:white;margin-left:10px;">沃视电视界面编辑器</div><div style="width:100px;height:50px;color:white;line-height:50px;">语言:
 <select id="lang" name="language" lay-verify="" onchange="language(this)">
   <c:if test="${language == 'CN' }">
   	<option value="CN" selected="true">中文</option>
@@ -137,10 +138,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="vue-panel-content">
 					<div v-for="(item,index) in this.componentItems">
 						<div @click="openOne(index)" class="vue-panel-top">{{item.name}}</div>
-						<div v-if="TVscreenInfo.items[index]" style="display:flex;flex-direction:column;">
+						<div v-if="TVscreenInfo.items[index]" style="display:flex;flex-direction:column;background:gray;">
 							<div @mousedown="componentClick($event , i.type , i.id)" :title="i.msg" v-for="i in item.list" class="vue-component" :style="{width:i.width,height:i.height,margin:'0px auto'}">
 								<img style="width:100%;height:100%;" :src="i.img" />
-							</div>
+							</div> 
 						</div>
 					</div>
 				</div>
@@ -148,27 +149,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div :style="{display:debug ? 'none' : 'flex'}" @mousedown="item_click_down($event , 1)" class="select-item-left select-item"></div>
 			<div class="center panel" style="border-radius:10px;overflow:hidden;">
 				<div class="vue-panel-content" style="border-radius:10px;">
-					<div class="main_TV_panel" @click="panelClick($event)" @mouseup="insert($event)" @mousemove="panelMove($event)" style="width:100%;border-radius:10px;overflow:hidden;position:relative;top:0px;" :style="{height:debug ? '100%' : '80%'}">
-						<img style="width:100%;height:100%;z-index:1;position:absolute;top:0px;display:block;" :src="TVscreenInfo.panel.BG.img" />
-						<div v-if="!TVscreenInfo.panel.BG.flag" @click="bg_change()" style="background:gray;width:80%;height:60%;border:dotted;z-index:10;position:absolute;text-align:center;font-size:18px;color:white;cursor:pointer;" :style="{top:TVscreenInfo.height/2-TVscreenInfo.height*0.6/2+'px',left:TVscreenInfo.width/2-TVscreenInfo.width*0.8/2+'px',lineHeight:TVscreenInfo.height*0.6+'px'}">点击选择电视机背景图</div>
-						<c:forEach items="${list }" var="item">
-							<div pos = "${item.msg }" class="vue-panel" type="${item.type }" pid="${item.id }" :style="{zIndex:2,width:${item.width },height:${item.height },${item.position.keySet().toArray()[0] }:${item.position.get(item.position.keySet().toArray()[0]) },${item.position.keySet().toArray()[1] }:${item.position.get(item.position.keySet().toArray()[1]) }}">
-								<c:forEach items="${components }" var="i">
-									<c:forEach items="${i.positions }" var="j">
-										<c:if test="${j.name==item.id }">
-											<<c:out value="${i.name }"></c:out> pos="${item.msg }" oncontextmenu="deleteComponent('${item.id }' , '${i.id }' , '${item.type }')" v-if="TVscreenInfo.showControl['${item.id }']['${i.id }']" :data="TVscreenInfo.panel" ref="${ i.name }"  v-on:click.stop="" :now="this.editeEl" :fields="fields"></<c:out value="${i.name }"></c:out>>
-										</c:if>
+					<div style="border:30px solid black;">
+						<div class="main_TV_panel" @click="panelClick($event)" @mouseup="insert($event)" @mousemove="panelMove($event)" style="width:100%;border-radius:10px;overflow:hidden;position:relative;top:0px;" :style="{height:debug ? '100%' : (height - 180)*0.8 + 'px'}">
+							<img style="width:100%;height:100%;z-index:1;position:absolute;top:0px;display:block;" :src="TVscreenInfo.panel.BG.img" />
+							<div v-if="!TVscreenInfo.panel.BG.flag" @click="bg_change()" style="background:gray;width:80%;height:60%;border:dotted;z-index:10;position:absolute;text-align:center;font-size:18px;color:white;cursor:pointer;" :style="{top:TVscreenInfo.height/2-TVscreenInfo.height*0.6/2+'px',left:TVscreenInfo.width/2-TVscreenInfo.width*0.8/2+'px',lineHeight:TVscreenInfo.height*0.6+'px'}">点击选择电视机背景图</div>
+							<c:forEach items="${list }" var="item">
+								<div pos = "${item.msg }" class="vue-panel" type="${item.type }" pid="${item.id }" :style="{zIndex:2,width:${item.width },height:${item.height },${item.position.keySet().toArray()[0] }:${item.position.get(item.position.keySet().toArray()[0]) },${item.position.keySet().toArray()[1] }:${item.position.get(item.position.keySet().toArray()[1]) }}">
+									<c:forEach items="${components }" var="i">
+										<c:forEach items="${i.positions }" var="j">
+											<c:if test="${j.name==item.id }">
+												<<c:out value="${i.name }"></c:out> pos="${item.msg }" oncontextmenu="deleteComponent('${item.id }' , '${i.id }' , '${item.type }')" v-if="TVscreenInfo.showControl['${item.id }']['${i.id }']" :data="TVscreenInfo.panel" ref="${ i.name }"  v-on:click.stop="" :now="this.editeEl" :fields="fields"></<c:out value="${i.name }"></c:out>>
+											</c:if>
+										</c:forEach>
 									</c:forEach>
-								</c:forEach>
-							</div>
-						</c:forEach>
+								</div>
+							</c:forEach>
+						</div>
 					</div>
-					<div class="main_TV_save" style="display:flex;" :style="{height:debug ? '0px' : '20%',display:debug ? 'none' : 'flex'}">
+					<div class="main_TV_save" style="display:flex;" :style="{height:debug ? '0px' : (height - 180)*0.2,display:debug ? 'none' : 'flex'}">
 						<div style="width:50%;align-items:center;justify-content:center;display:flex;">
-							<div class="layui-btn layui-btn-normal" style="width:160px;height:40px;text-align:center;font-size:16px;line-height:40px;" @click="save()">保存</div>
+							<div class="layui-btn layui-btn-primary" style="width:160px;height:40px;text-align:center;font-size:16px;line-height:40px;" @click="save()">保存</div>
 						</div>
 						<div style="width:50%;align-items:center;justify-content:center;display:flex;">
-							<div class="layui-btn layui-btn-normal" @click="fullScreen()" style="width:160px;height:40px;text-align:center;font-size:16px;line-height:40px;">预览</div>
+							<div class="layui-btn layui-btn-primary" @click="fullScreen()" style="width:160px;height:40px;text-align:center;font-size:16px;line-height:40px;">预览</div>
 						</div>
 					</div>
 				</div>
