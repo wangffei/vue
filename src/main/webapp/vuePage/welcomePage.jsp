@@ -15,7 +15,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script src="./js/layui/layui.js"></script>
 		<script src="./js/layui/layui.all.js"></script>
 		<script src="js/vue.min.js"></script>
-		<script src=""></script>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script type="text/javascript" src="./js/jquery-1.11.0.min.js"></script>
+		<!-- 引入右键菜单插件 -->
+    	<script src="./js/mouseRightMenu/mouseRightMenu.js"></script>
 		<style>
 			*{
 				margin:0px;
@@ -49,6 +55,40 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				height:100%;
 				border-left:1px solid black;
 			}
+			
+			.layer-skin-mouse-right-menu .layui-layer-content {
+				overflow-x: hidden !important;
+			}
+			
+			.layer-skin-mouse-right-menu{
+				border-radius: 5px !important;
+				width:50px;
+			}
+			
+			.mouse-right-menu {
+				padding: 5px 0;
+			}
+			
+			.mouse-right-menu .enian_menu .text {
+				width: 100%;
+				margin-left: 10px;
+				line-height: 40px;
+			}
+			
+			.mouse-right-menu .enian_menu {
+				width: 100%;
+				height: 40px;
+				border-bottom: 1px solid #eee;
+			}
+			.mouse-right-menu .enian_menu:last-child{ 
+				border-bottom:none;
+			}
+			.mouse-right-menu .enian_menu:hover {
+				cursor: pointer;
+				/*background: #009688;*/
+				background: #696969;
+				color: white;
+			}
 		</style>
 	</head>
 	<body>
@@ -60,7 +100,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div id="app-bottom" style="display:flex;width:100%;" :style="{height:(height - 50)+'px'}">
 				<div class="app-left" :style="{width:width*0.8+'px'}">
 					<div style="width:100%;border:20px solid black;margin:0px auto;" :style="{height:(height - 90)+'px' , width:(width*0.8 - 100)+'px'}">
-						<img v-if="TVscreenInfo.panel.BG.type == 'img'" :src="TVscreenInfo.panel.BG.url" style="width:100%;height:100%;" />
+						<el-carousel v-if="TVscreenInfo.panel.BG.type == 'img'" style="z-index:-1;" :height="height - 50 - 20 + 'px'">
+					      <el-carousel-item v-for="item in TVscreenInfo.panel.BG.url" :key="item">
+					        <img style="width:100%;height:100%;" class="small" :src="item" />
+					      </el-carousel-item>
+					    </el-carousel>
+						<!-- <img v-if="TVscreenInfo.panel.BG.type == 'img'" :src="TVscreenInfo.panel.BG.url" style="width:100%;height:100%;" /> -->
 						<div v-if="TVscreenInfo.panel.BG.type == 'video'" style="width:100%;height:100%;">
 							<video id="bg_video" style="width:100%;height:100%;object-fit:fill;" muted :src="TVscreenInfo.panel.BG.video" autoplay="autoplay"></video>
 						</div>
@@ -79,7 +124,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 				<div class="app-right" :style="{width:(width*0.2 - 1)+'px'}" style="overflow:auto;">
 					<div style="width:100%;height:30px;font-size:12px;text-align:center;background:#5f5f5f;color:white;line-height:30px;">属性栏</div>
-					<div item_height="250" class="item" style="width:100%;height:30px;border-top:2px solid black;line-height:30px;background:#5f5f5f;color:white;font-size:12px;cursor:pointer;">
+					<div item_height="160" class="item" style="width:100%;height:30px;border-top:2px solid black;line-height:30px;background:#5f5f5f;color:white;font-size:12px;cursor:pointer;">
 						<div style="width:40px;margin-left:10px;float:left;">背景</div>
 						<img src="./img/right.png" style="display: block;width:25px;height:25px;float:right;margin:2.5px;" />
 					</div>
@@ -91,13 +136,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							  <option value="video">视频</option>
 							</select>  
 						</div>
-						<div style="margin:15px 0px 0px 30px;font-size:12px;color:white;">文件</div>
-						<div style="width:60px;margin:15px 0px 0px 50px;">
-							<div @click="file_select()" style="width:60px;height:25px;line-height:25px;text-align:center;" class="layui-btn layui-btn-primary">选择</div>
-						</div>
 						<div style="margin:15px 0px 0px 30px;font-size:12px;color:white;">背景音乐</div>
-						<div style="width:60px;margin:15px 0px 0px 50px;">
+						<div style="width:60px;margin:15px 0px 0px 50px;display:flex;">
 							<div @click="music_select()" style="width:60px;height:25px;line-height:25px;text-align:center;" class="layui-btn layui-btn-primary">选择</div>
+							<div @click="music_remove()" v-if="TVscreenInfo.panel.BG.mp3 != ''" style="width:60px;height:25px;line-height:25px;text-align:center;" class="layui-btn layui-btn-primary">删除</div>
+						</div>
+					</div>
+					<div :item_height="TVscreenInfo.panel.BG.type == 'img' ? 150 : 100" class="item" style="width:100%;height:30px;border-top:2px solid black;line-height:30px;background:#5f5f5f;color:white;font-size:12px;cursor:pointer;">
+						<div style="width:40px;margin-left:10px;float:left;">{{TVscreenInfo.panel.BG.type == 'img' ? "图片" : "视频"}}</div>
+						<img src="./img/right.png" style="display: block;width:25px;height:25px;float:right;margin:2.5px;" />
+					</div>
+					<div style="width:100%;height:0px;background:gray;transition:height 0.5s;overflow:hidden;">
+						<div style="margin:15px 0px 0px 30px;font-size:12px;color:white;">文件</div>
+						<div style="width:100%;margin:15px 0px 0px 50px;display:flex;">
+							<div @click="file_select()" style="width:60px;height:25px;line-height:25px;text-align:center;" class="layui-btn layui-btn-primary">{{TVscreenInfo.panel.BG.type == 'img' ? "新增" : "选择"}}</div>
+						</div>
+						<div style="width:100%;height:50px;margin:20px 0px 0px 10px;display:flex;">
+							<div style="width:40px;height:40px;margin-left:5px;" v-for="(item , index) in TVscreenInfo.panel.BG.url">
+								<img @click="leftmenu(index)" :src="item" style="width:100%;height:100%;" />
+							</div>
 						</div>
 					</div>
 					<div item_height="250" class="item" style="width:100%;height:30px;border-top:2px solid black;line-height:30px;background:#5f5f5f;color:white;font-size:12px;cursor:pointer;">
@@ -135,6 +192,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 	</body>
 	<script>
+		var global = {}
+		//使用右键菜单插件
+		layui.config({base: './js/mouseRightMenu/'})
+		layui.use(['mouseRightMenu','layer','jquery'],function(){
+			global.mouseRightMenu = layui.mouseRightMenu,global.layer = layui.layer;	
+		})
 		
 		var vue = new Vue({
 			el:"#app" ,
@@ -146,7 +209,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					panel:{
 						BG:{
 							type:"img" ,
-							url:"./img/woos.png" ,
+							url:["./img/woos.png"] ,
 							video:"" ,
 							mp3:""
 						} , 
@@ -160,6 +223,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}
 					}
 				}
+			} ,
+			watch:{
+				"TVscreenInfo.panel.BG.type":function(n , o) {
+					document.querySelectorAll(".item")[1].click()
+					window.setTimeout(function(){
+						document.querySelectorAll(".item")[1].click()
+					} , 200)
+				} ,
+				deep:true
 			} ,
 			created(){
 				
@@ -179,7 +251,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					var self = this ;
 					if(this.TVscreenInfo.panel.BG.type == 'img'){
 						this.fun = function(base64){
-							self.TVscreenInfo.panel.BG.url = base64 ;
+							self.TVscreenInfo.panel.BG.url.push(base64) ;
 						}
 						document.getElementById("file").click() ;
 					}else{
@@ -188,6 +260,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				} ,
 				music_select:function(){
 					document.getElementById("audio_upload").click() ;
+				} ,
+				music_remove:function(){
+					this.TVscreenInfo.panel.BG.mp3 = "" ;
 				} ,
 				save:function(){
 					var self = this ;
@@ -205,7 +280,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							}
 						})
 					});
-				}
+				} ,
+				//鼠标左右键事件
+				leftmenu:function (index){
+					var self = this 
+					var data = {content:$(this).html()}
+		 			var menu_data=[
+						{'data':data,'type':1,'title':'删除'},
+						{'data':data,'type':2,'title':'修改'}
+					]
+					var self = this ;
+		 			global.mouseRightMenu.open(menu_data,false,function(d){
+		 				if(d.type == 1){
+		 					if(self.TVscreenInfo.panel.BG.url.length < 2) {
+		 						alert("至少要有一张图片")
+		 					}else{
+		 						self.TVscreenInfo.panel.BG.url.splice(index , 1)
+		 					}
+		 				} else if(d.type == 2){
+							self.fun = function(base64) {
+								self.TVscreenInfo.panel.BG.url[index] = base64
+								self.$forceUpdate()
+							}
+							document.getElementById("file").click() ;
+		 				}
+		 			})
+					return false;
+				} 
 			}
 		}) ;
 		
@@ -216,29 +317,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 		
 		//给属性选项添加点击事件,控制某一个属性的展开和收拢
-		layui.use('jquery', function(){
-			$ = layui.$  ;
-			$(".item").each(function(){
-				var self = $(this)
-				window.setTimeout(function(){
-					self.find("img").attr("src" , "./img/down.png")
-					self.find("img").css("margin-top" , "0px")
-					self.next().css("height" , self.attr("item_height")+'px')
-				} , 100)
-				$(this).click(function(){
-					var s = $(this).find("img").attr("src")+""
-					if(s.indexOf("right.png") != -1){
-						$(this).find("img").attr("src" , "./img/down.png")
-						$(this).find("img").css("margin-top" , "0px")
-						$(this).next().css("height" , $(this).attr("item_height")+'px')
-					}else{
-						$(this).find("img").attr("src" , "./img/right.png")
-						$(this).find("img").css("margin-top" , "2.5px")
-						$(this).next().css("height" , "0px")
-					}
-				})
-			}) ;
-		});
+		$(".item").each(function(){
+			var self = $(this)
+			window.setTimeout(function(){
+				self.find("img").attr("src" , "./img/down.png")
+				self.find("img").css("margin-top" , "0px")
+				self.next().css("height" , self.attr("item_height")+'px')
+			} , 100)
+			$(this).click(function(){
+				var s = $(this).find("img").attr("src")+""
+				if(s.indexOf("right.png") != -1){
+					$(this).find("img").attr("src" , "./img/down.png")
+					$(this).find("img").css("margin-top" , "0px")
+					$(this).next().css("height" , $(this).attr("item_height")+'px')
+				}else{
+					$(this).find("img").attr("src" , "./img/right.png")
+					$(this).find("img").css("margin-top" , "2.5px")
+					$(this).next().css("height" , "0px")
+				}
+			})
+		}) ;
 		//颜色选择器
 		layui.use('colorpicker', function(){
 		  var colorpicker = layui.colorpicker;

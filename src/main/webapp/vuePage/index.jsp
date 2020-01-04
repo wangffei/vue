@@ -149,8 +149,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div :style="{display:debug ? 'none' : 'flex'}" @mousedown="item_click_down($event , 1)" class="select-item-left select-item"></div>
 			<div class="center panel" style="border-radius:10px;overflow:hidden;">
 				<div class="vue-panel-content" style="border-radius:10px;">
-					<div style="border:30px solid black;">
-						<div class="main_TV_panel" @click="panelClick($event)" @mouseup="insert($event)" @mousemove="panelMove($event)" style="width:100%;border-radius:10px;overflow:hidden;position:relative;top:0px;" :style="{height:debug ? '100%' : (height - 180)*0.8 + 'px'}">
+					<div style="">
+						<div class="main_TV_panel" @mouseup="insert($event)" @mousemove="panelMove($event)" style="width:100%;border-radius:10px;overflow:hidden;position:relative;top:0px;" :style="{height:debug ? '100%' : (height - 180)*0.8 + 'px'}">
 							<img style="width:100%;height:100%;z-index:1;position:absolute;top:0px;display:block;" :src="TVscreenInfo.panel.BG.img" />
 							<div v-if="!TVscreenInfo.panel.BG.flag" @click="bg_change()" style="background:gray;width:80%;height:60%;border:dotted;z-index:10;position:absolute;text-align:center;font-size:18px;color:white;cursor:pointer;" :style="{top:TVscreenInfo.height/2-TVscreenInfo.height*0.6/2+'px',left:TVscreenInfo.width/2-TVscreenInfo.width*0.8/2+'px',lineHeight:TVscreenInfo.height*0.6+'px'}">点击选择电视机背景图</div>
 							<c:forEach items="${list }" var="item">
@@ -637,7 +637,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						var list = document.querySelectorAll(".vue-panel") ;
 						//2.找出当前位置在哪几个标签的上方
 						var now = [] ;
-						//console.log(list)
 						for(var i=0 ; i<list.length ; i++){
 							if(left > list[i].offsetLeft && top > list[i].offsetTop && top < list[i].offsetTop+list[i].clientHeight && left < list[i].offsetLeft+list[i].clientWidth){
 								if(typeof(this.current.type) != "undefined" && typeof(this.current.id) != "undefined"){
@@ -743,6 +742,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var code_json = JSON.parse(code) ;
 			if(code_json.panel.MAIN.item == undefined || typeof(code_json.panel.MAIN.item) == undefined){
 				code_json.panel.MAIN.item = undefined ;
+			}
+			var d = code_json.showControl ;
+			for(var i in init){
+				for(var j in init[i]){
+					if(d[i][j] == undefined){
+						d[i][j] = init[i][j]
+					}
+				}
 			}
 			vue.$data.TVscreenInfo = code_json ;
 			vue.$watch('TVscreenInfo.panel.MAIN.item', vue.itemListener, {

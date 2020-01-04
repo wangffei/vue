@@ -222,7 +222,7 @@ public class Upload {
 			}
 			//没有导航栏时要额外处理一下
 			List<Object> l = (List<Object>)((Map)((Map)map.get("panel")).get("MAIN")).get("data") ;
-			String item = (String)((Map)((Map)map.get("panel")).get("MAIN")).get("item") ;
+			String item = String.valueOf(((Map)((Map)map.get("panel")).get("MAIN")).get("item")) ;
 			if(item == null){
 				int len = l.size() - 1 ;
 				for(int i=0 ; i<len ; i++){
@@ -553,7 +553,7 @@ public class Upload {
 				String path = System.getProperty("ROOT_PATH")+"temp"+separator + date;
 				
 				if(!new File(path).exists()){
-					new File(path).mkdir() ;
+					new File(path).mkdirs() ;
 				}
 				
 				out = new FileOutputStream(path+separator+newFile) ;
@@ -568,6 +568,7 @@ public class Upload {
 				
 				return new ApiClass(200, "成功", "./temp/"+date+"/"+newFile) ;
 			} catch (Exception e) {
+				e.printStackTrace();
 				return new ApiClass(500 , "文件数据异常" , "") ;
 			} finally{
 				if(out != null){
