@@ -136,7 +136,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							  <option value="video">视频</option>
 							</select>  
 						</div>
-						<div style="margin:15px 0px 0px 30px;font-size:12px;color:white;">背景音乐</div>
+						<div style="margin:15px 0px 0px 30px;font-size:12px;color:white;display:flex;">背景音乐<el-checkbox style="margin:-2px 20px;color:white;" v-model="canplay" >播放</el-checkbox></div>
 						<div style="width:60px;margin:15px 0px 0px 50px;display:flex;">
 							<div @click="music_select()" style="width:60px;height:25px;line-height:25px;text-align:center;" class="layui-btn layui-btn-primary">选择</div>
 							<div @click="music_remove()" v-if="TVscreenInfo.panel.BG.mp3 != ''" style="width:60px;height:25px;line-height:25px;text-align:center;" class="layui-btn layui-btn-primary">删除</div>
@@ -151,9 +151,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div style="width:100%;margin:15px 0px 0px 50px;display:flex;">
 							<div @click="file_select()" style="width:60px;height:25px;line-height:25px;text-align:center;" class="layui-btn layui-btn-primary">{{TVscreenInfo.panel.BG.type == 'img' ? "新增" : "选择"}}</div>
 						</div>
-						<div style="width:100%;height:50px;margin:20px 0px 0px 10px;display:flex;">
+						<div v-if="TVscreenInfo.panel.BG.type == 'img'" style="width:100%;height:50px;margin:20px 0px 0px 10px;display:flex;">
 							<div style="width:40px;height:40px;margin-left:5px;" v-for="(item , index) in TVscreenInfo.panel.BG.url">
-								<img @click="leftmenu(index)" :src="item" style="width:100%;height:100%;" />
+								<img @contextmenu.prevent="leftmenu(index)" @click="leftmenu(index)" :src="item" style="width:100%;height:100%;" />
 							</div>
 						</div>
 					</div>
@@ -188,7 +188,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<input id="file" style="display:none;" type="file" onchange="selectFile()" />
 			<div id="video_upload" style="display:none;"></div>
 			<div id="audio_upload" style="display:none;"></div>
-			<audio loop="true" id="bg_music" :src="TVscreenInfo.panel.BG.mp3" autoplay="autoplay"></audio>
+			<audio loop="true" id="bg_music" :src="TVscreenInfo.panel.BG.mp3" :autoplay="canplay"></audio>
 		</div>
 	</body>
 	<script>
@@ -205,6 +205,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				width:document.querySelector("body").offsetWidth ,
 				height:document.querySelector("body").offsetHeight ,
 				fun:undefined ,
+				canplay:false ,
 				TVscreenInfo:{
 					panel:{
 						BG:{
@@ -230,6 +231,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					window.setTimeout(function(){
 						document.querySelectorAll(".item")[1].click()
 					} , 200)
+				} ,
+				canplay:function(n , o){
+					if(this.canplay){
+						document.getElementById("bg_music").play()
+					}else{
+						document.getElementById("bg_music").pause()
+					}
 				} ,
 				deep:true
 			} ,
