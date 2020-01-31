@@ -544,9 +544,9 @@ public class Upload {
 				String md5 = HexUtil.encodeHexStr(md5b) ;
 				
 				//验证一下文件是否存在
-				if(service.isExist(md5)){
-					return new ApiClass(200, "成功", service.getImg(md5).getUrl()) ;
-				}
+//				if(service.isExist(md5)){
+//					return new ApiClass(200, "成功", service.getImg(md5).getUrl()) ;
+//				}
 				
 				//存储区域
 				String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) ;

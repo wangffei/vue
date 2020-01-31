@@ -188,7 +188,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<input id="file" style="display:none;" type="file" onchange="selectFile()" />
 			<div id="video_upload" style="display:none;"></div>
 			<div id="audio_upload" style="display:none;"></div>
-			<audio loop="true" id="bg_music" :src="TVscreenInfo.panel.BG.mp3" :autoplay="canplay"></audio>
+			<audio loop="true" id="bg_music" :src="TVscreenInfo.panel.BG.mp3"></audio>
 		</div>
 	</body>
 	<script>
@@ -439,10 +439,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var data = JSON.parse(code) ;
 			vue.TVscreenInfo = data ;
 		}
-		
-		window.setTimeout(function(){
-			document.getElementById("bg_music").play()
-		} , 4000)
 	</script>
-	<script src="<%= path%>/screen/${id}/welcome/welcome.json"></script>
+	<script src="screen/${id}/welcome/welcome.json"></script>
 </html>
