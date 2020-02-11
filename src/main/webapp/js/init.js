@@ -18,6 +18,9 @@ layui.use('upload', function(){
       layer.close(id) ;
       if(res.code == 200){
     	  vue.$data.name = res.msg ;
+    	  if(vue.$data.TVscreenInfo.panel.MAIN.item == undefined){
+    		  vue.$data.TVscreenInfo.panel.MAIN.item = 0 ;
+    	  }
     	  vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]]["video"] = res.data ;
       }
     }

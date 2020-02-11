@@ -222,8 +222,8 @@ public class Upload {
 			}
 			//没有导航栏时要额外处理一下
 			List<Object> l = (List<Object>)((Map)((Map)map.get("panel")).get("MAIN")).get("data") ;
-			String item = String.valueOf(((Map)((Map)map.get("panel")).get("MAIN")).get("item")) ;
-			if(item == null){
+			boolean item = (Boolean) ((Map)((Map)map.get("panel")).get("MAIN")).get("bar") ;
+			if(!item){
 				int len = l.size() - 1 ;
 				for(int i=0 ; i<len ; i++){
 					l.remove(l.size() - 1) ;
