@@ -195,15 +195,6 @@ function apkSelect(index){
 	vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item == undefined ? 0 : vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].packageName = vue.$data.apks[index].packageName
 }
 
-$("#cxcolor td").click(function(){
-	if(vue.$data.editeEl["type"] == "MAIN" && vue.$data.editeEl["content_item"] != undefined && typeof(vue.$data.editeEl["content_item"]) != "undefined"){
-		vue.$data.TVscreenInfo.panel.border = this.title ;
-	}else{
-		vue.$data.TVscreenInfo.panel.color = this.title ;
-	}
-	$("#cxcolor").css("display" , "none") ;
-})
-
 //屏幕大小发生改变时
 window.onresize = function(){
 	vue.TVscreenInfo.width = document.querySelector(".main_TV_panel").offsetWidth ;

@@ -1,15 +1,27 @@
 //背景属性编辑
 Vue.component("v-fields0" , {
-	template:'<div><div style="width:100%;height:25px;background:#5f5f5f;line-height:25px;padding-left:10px;color:white;">背景</div><div style="width:100%;height:100px;overflow:hidden;"><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">背景：<div @click="bg_change()" class="layui-btn layui-btn-xs">选择图片</div></div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">颜色：<input readonly="readonly" type="text" style="height:25px;width:25px;cursor:pointer;" @click="colorSelet($event)" :style="{background:(now[\'type\'] == \'MAIN\' && now[\'content_item\'] != undefined && typeof(now[\'content_item\']) != \'undefined\') ? data.border : data.color}" /></div></div></div>',
+	template:'<div><div style="width:100%;height:25px;background:#5f5f5f;line-height:25px;padding-left:10px;color:white;">背景</div><div style="width:100%;height:100px;overflow:hidden;"><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">背景：<div @click="bg_change()" class="layui-btn layui-btn-xs">选择图片</div></div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">颜色：<el-color-picker size="small" v-model="color" show-alpha></el-color-picker></div></div></div>',
 	name:"v-fields0" ,
 	data:function(){
 		return{
-			
+			color:""
 		}
 	} ,
 	props:{
 		data:Object ,
-		now:Object 
+		now:Object ,
+		pcolor:String
+	} ,
+	watch:{
+		color:function(n , o){
+			if(this.now["type"] == "MAIN" && this.now["content_item"] != undefined && typeof(this.now["content_item"]) != "undefined"){
+				this.data.border = n ;
+			}else if(this.now["type"] == "VUEPMD"){
+				this.data.VUEPMD.color = n ;
+			}else{
+				this.data.color = n ;
+			}
+		}
 	} ,
 	created(){
 		
@@ -17,23 +29,22 @@ Vue.component("v-fields0" , {
 	methods:{
 		bg_change:function(){
 			this.$emit("bg_change") ;
-		} ,
-		colorSelet:function(event){
-			this.$emit("color" , event) ;
-		}
+		} 
 	} 
 })
-document.querySelector(".vue-size").innerHTML = document.querySelector(".vue-size").innerHTML + '<v-fields0 v-if="fields[0]" :data="TVscreenInfo.panel" :now="editeEl" @color="colorSelet" @bg_change="bg_change" ></v-fields0>' ;
+document.querySelector(".vue-size").innerHTML = document.querySelector(".vue-size").innerHTML + '<v-fields0 v-if="fields[0]" :data="TVscreenInfo.panel" :now="editeEl" @bg_change="bg_change" ></v-fields0>' ;
 
 //文字属性编辑
 Vue.component("v-fields1" , {
-	template:'<div><div style="width:100%;height:25px;background:#5f5f5f;line-height:25px;padding-left:10px;color:white;">文字</div><div style="width:100%;height:auto;overflow:hidden;"><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">大小：<select name="city" lay-verify="" v-model="size" style="width:60px;height:25px;"><option value="l">大</option> <option value="m">中</option> <option value="s">小</option></select></div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">方向：<select name="city" lay-verify="" v-model="dirction" style="width:60px;height:25px;"><option value="l">向左</option> <option value="r">向右</option></select>  </div><div style="display:flex;width:100%;padding-left:5px;margin-top:20px;">内容：<textarea v-model="text" name="" required lay-verify="required" placeholder="请输入" class="layui-textarea" style="width:60%;"></textarea></div></div></div>',
+	template:'<div><div style="width:100%;height:25px;background:#5f5f5f;line-height:25px;padding-left:10px;color:white;">文字</div><div style="width:100%;height:auto;overflow:hidden;"><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">大小：<select name="city" lay-verify="" v-model="size" style="width:60px;height:25px;"><option value="l">大</option> <option value="m">中</option> <option value="s">小</option></select></div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">速度：<select name="city" lay-verify="" v-model="speed" style="width:60px;height:25px;"><option value="l">快</option> <option value="m">中</option> <option value="s">慢</option></select></div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">背景色：<el-color-picker size="small" v-model="color" show-alpha></el-color-picker></div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">方向：<select name="city" lay-verify="" v-model="dirction" style="width:60px;height:25px;"><option value="l">向左</option> <option value="r">向右</option></select>  </div><div style="display:flex;width:100%;padding-left:5px;margin-top:20px;">内容：<textarea v-model="text" name="" required lay-verify="required" placeholder="请输入" class="layui-textarea" style="width:60%;"></textarea></div></div></div>',
 	name:"v-fields1" ,
 	data:function(){
 		return{
-			size:"18" ,
+			size:"s" ,
 			dirction:"r" ,
-			text:""
+			text:"" ,
+			color:"none" ,
+			speed:"s"
 		}
 	} ,
 	props:{
@@ -44,9 +55,11 @@ Vue.component("v-fields1" , {
 		this.size = this.data.VUEPMD.size
 		this.text = this.data.VUEPMD.title
 		this.dirction = this.data.VUEPMD.dirction
+		this.speed = this.data.VUEPMD.speed
+		this.color = this.data.VUEPMD.bkcolor
 	} ,
 	methods:{
-
+		
 	} ,
 	watch:{
 		dirction:function(n , o){
@@ -56,20 +69,22 @@ Vue.component("v-fields1" , {
 		} ,
 		size:function(n , o){
 			if(this.now.type == "VUEPMD"){
-  				var s = 12 ;
-  				if(n == "s"){
-  					s = 12 ;
-  				}else if(n == "m"){
-  					s = 18 ;
-  				}else if(n == "l"){
-  					s = 25 ;
-  				}
-  				this.data.VUEPMD.size = s ;
+  				this.data.VUEPMD.size = n ;
   			}
 		} ,
 		text:function(n , o){
   			if(this.now.type == "VUEPMD"){
   				this.data.VUEPMD.title = n ;
+  			}
+		} ,
+		speed:function(n , o){
+			if(this.now.type == "VUEPMD"){
+  				this.data.VUEPMD.speed = n ;
+  			}
+		} ,
+		color:function(n , o){
+			if(this.now.type == "VUEPMD"){
+  				this.data.VUEPMD.bkcolor = n ;
   			}
 		}
 	}

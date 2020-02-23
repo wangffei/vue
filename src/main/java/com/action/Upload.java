@@ -474,16 +474,9 @@ public class Upload {
 			data.put("pmd", new HashMap()) ;
 			((Map)data.get("pmd")).put("pos", ((Map)content.get("VUEPMD")).get("pos")) ;
 			((Map)data.get("pmd")).put("dir", ((Map)content.get("VUEPMD")).get("dirction")) ;
-			Integer size = Integer.parseInt(((Map)content.get("VUEPMD")).get("size").toString()) ;
-			if("12".equals(size)){
-				((Map)data.get("pmd")).put("size", "s") ;
-			}else if("18".equals(size)){
-				((Map)data.get("pmd")).put("size", "m") ;
-			}else if("25".equals(size)){
-				((Map)data.get("pmd")).put("size", "l") ;
-			}else{
-				((Map)data.get("pmd")).put("size", "m") ;
-			}
+			((Map)data.get("pmd")).put("size", ((Map)content.get("VUEPMD")).get("size").toString()) ;
+			((Map)data.get("pmd")).put("speed", ((Map)content.get("VUEPMD")).get("speed").toString()) ;
+			((Map)data.get("pmd")).put("bkcolor", ((Map)content.get("VUEPMD")).get("bkcolor").toString()) ;
 			((Map)data.get("pmd")).put("title", ((Map)content.get("VUEPMD")).get("title")) ;
 			//((Map)data.get("pmd")).put("msg", "pos表示位置 , dir表示跑马灯方向(l向左，r向右) , size跑马灯字体大小(s小，m中，l大) , title跑马灯内容") ;
 		}
