@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.HexUtil;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.pojo.FileInfo;
 import com.service.DragService;
@@ -218,6 +219,38 @@ public class Upload {
 				            }
 						}
 					}
+					if(((Map)m).get("apk") != null && !"".equals(((Map)m).get("apk"))) {
+						if(((Map)m).get("packageName") != null && "com.woos.ppt".equals(((Map)m).get("packageName"))) {
+							List<String> imgsPpt = (List<String>)((Map)m).get("ppt") ;
+							for (int i=0 ; i<imgsPpt.size() ; i++) {
+								if(imgsPpt.get(i) != null && imgsPpt.get(i).startsWith("data:image/")){
+									if(!new File(path).exists()){
+										new File(path).mkdirs() ;
+									}
+									String suffix = imgsPpt.get(i).substring(11 , imgsPpt.get(i).indexOf(";")) ;
+									String name = UUID.randomUUID().toString().replaceAll("-", "")+"."+suffix ;
+									//将md5图片转换成字节数组
+									//byte[] data = Base64.decode(imgs.get(i).substring(imgs.get(i).indexOf(",")+1)) ;
+									MessageDigest md5Digest = MessageDigest.getInstance("md5");
+									//对图片进行md5计算
+						            byte[] digest = md5Digest.digest(imgsPpt.get(i).getBytes());
+						            String md5 = HexUtil.encodeHexStr(digest) ;
+						            if(!service.isExist(md5)){
+						            	FileInfo pictrul = new FileInfo() ;
+						            	pictrul.setMd5(md5);
+						            	pictrul.setUrl("./screen/upload/"+date+"/"+name);
+						            	pictrul.setType("img");
+						            	FileInfo p = service.addImg(pictrul) ;
+						            	Base64.decodeToFile(imgsPpt.get(i).substring(imgsPpt.get(i).indexOf(",")+1), new File(path+separator+name)) ;
+						            	imgsPpt.set(i, p.getUrl()) ;
+						            }else{
+						            	FileInfo p = service.getImg(md5) ;
+						            	imgsPpt.set(i, p.getUrl()) ;
+						            }
+								}
+							}
+						}
+					}
 				}
 			}
 			//没有导航栏时要额外处理一下
@@ -267,18 +300,52 @@ public class Upload {
 	//保存欢迎界面
 	@RequestMapping("/welcome_save")
 	@ResponseBody
-	public ApiClass welcomePageUpload(String id , String code){
+	public ApiClass welcomePageUpload(String id , String code) throws NoSuchAlgorithmException{
 		ApiClass api = new ApiClass() ;
 		//写文件
 		File dir = new File(System.getProperty("ROOT_PATH")+"screen"+separator+id+separator+"welcome") ;
 		if(!dir.exists()){
 			dir.mkdirs() ;
 		}
+		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) ;
+		String path = System.getProperty("ROOT_PATH")+"screen"+separator+"upload"+separator + date;
+		JSONObject json = JSONObject.parseObject(code) ;
+		String type = json.getJSONObject("panel").getJSONObject("BG").getString("type") ;
+		if(type != null && type.equals("img")) {
+			JSONArray array = json.getJSONObject("panel").getJSONObject("BG").getJSONArray("url") ;
+			for(int i = 0 ; i < array.size() ; i++) {
+				if(array.getString(i) != null && array.getString(i).startsWith("data:image/")){
+					if(!new File(path).exists()){
+						new File(path).mkdirs() ;
+					}
+					String suffix = array.getString(i).substring(11 , array.getString(i).indexOf(";")) ;
+					String name = UUID.randomUUID().toString().replaceAll("-", "")+"."+suffix ;
+					//将md5图片转换成字节数组
+					//byte[] data = Base64.decode(imgs.get(i).substring(imgs.get(i).indexOf(",")+1)) ;
+					MessageDigest md5Digest = MessageDigest.getInstance("md5");
+					//对图片进行md5计算
+		            byte[] digest = md5Digest.digest(array.getString(i).getBytes());
+		            String md5 = HexUtil.encodeHexStr(digest) ;
+		            if(!service.isExist(md5)){
+		            	FileInfo pictrul = new FileInfo() ;
+		            	pictrul.setMd5(md5);
+		            	pictrul.setUrl("./screen/upload/"+date+"/"+name);
+		            	pictrul.setType("img");
+		            	FileInfo p = service.addImg(pictrul) ;
+		            	Base64.decodeToFile(array.getString(i).substring(array.getString(i).indexOf(",")+1), new File(path+separator+name)) ;
+		            	array.set(i, p.getUrl()) ;
+		            }else{
+		            	FileInfo p = service.getImg(md5) ;
+		            	array.set(i, p.getUrl()) ;
+		            }
+				}
+			}
+		}
 		File file = new File(System.getProperty("ROOT_PATH")+"screen"+separator+id+separator+"welcome"+separator+"welcome.json") ;
 		OutputStreamWriter writer = null ;
 		try {
 			writer = new OutputStreamWriter(new FileOutputStream(file) , "utf-8") ;
-			writer.write("fun_id"+"('"+code+"')");
+			writer.write("fun_id"+"('"+json.toJSONString()+"')");
 		} catch (IOException e) {
 			api.setCode(500);
 			api.setMsg("存储失败");
@@ -478,7 +545,15 @@ public class Upload {
 			((Map)data.get("pmd")).put("speed", ((Map)content.get("VUEPMD")).get("speed").toString()) ;
 			((Map)data.get("pmd")).put("bkcolor", ((Map)content.get("VUEPMD")).get("bkcolor").toString()) ;
 			((Map)data.get("pmd")).put("title", ((Map)content.get("VUEPMD")).get("title")) ;
+			((Map)data.get("pmd")).put("color", ((Map)content.get("VUEPMD")).get("color")) ;
 			//((Map)data.get("pmd")).put("msg", "pos表示位置 , dir表示跑马灯方向(l向左，r向右) , size跑马灯字体大小(s小，m中，l大) , title跑马灯内容") ;
+		}
+		
+		// 解析边角
+		if(content.get("BORDER") != null){
+			data.put("border", new HashMap()) ;
+			((Map)data.get("border")).put("type", ((Map)content.get("BORDER")).get("type")) ;
+			((Map)data.get("border")).put("color", ((Map)content.get("BORDER")).get("color")) ;
 		}
 		
 		//5.解析导航栏和内容组件

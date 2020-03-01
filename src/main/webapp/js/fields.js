@@ -1,6 +1,6 @@
 //背景属性编辑
 Vue.component("v-fields0" , {
-	template:'<div><div style="width:100%;height:25px;background:#5f5f5f;line-height:25px;padding-left:10px;color:white;">背景</div><div style="width:100%;height:100px;overflow:hidden;"><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">背景：<div @click="bg_change()" class="layui-btn layui-btn-xs">选择图片</div></div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">颜色：<el-color-picker size="small" v-model="color" show-alpha></el-color-picker></div></div></div>',
+	template:'<div><div style="width:100%;height:25px;background:#5f5f5f;line-height:25px;padding-left:10px;color:white;">背景</div><div style="width:100%;height:120px;overflow:hidden;"><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">背景：<div @click="bg_change()" class="layui-btn layui-btn-xs">选择图片</div></div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">颜色：<el-color-picker size="small" v-model="color" show-alpha></el-color-picker></div></div></div>',
 	name:"v-fields0" ,
 	data:function(){
 		return{
@@ -33,6 +33,44 @@ Vue.component("v-fields0" , {
 	} 
 })
 document.querySelector(".vue-size").innerHTML = document.querySelector(".vue-size").innerHTML + '<v-fields0 v-if="fields[0]" :data="TVscreenInfo.panel" :now="editeEl" @bg_change="bg_change" ></v-fields0>' ;
+
+//边角设置
+Vue.component("v-fields8" , {
+	template:'<div><div style="width:100%;height:25px;background:#5f5f5f;line-height:25px;padding-left:10px;color:white;">边角</div><div style="width:100%;overflow:hidden;"><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">边角：<div @change="border_change()"><select v-model="type_model"><option v-for="border in borders" :value="border.value">{{border.name}}</option></select></div></div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;">颜色：<div @change="color_change()"><select v-model="color_model"><option v-for="color in colors" :value="color.value">{{color.name}}</option></select></div></div></div></div>',
+	name:"v-fields8" ,
+	data:function(){
+		return{
+			colors:[
+				{name:"无边框" , value:"none"} ,
+				{name:"白色" , value:"white"} ,
+				{name:"绿色" , value:"green"} ,
+				{name:"蓝色" , value:"blue"} ,
+				{name:"黄色" , value:"yellow"}
+			] ,
+			borders:[
+				{name:"直角" , value:"rect"} ,
+				{name:"圆角" , value:"round"}
+			] ,
+			type_model:"rect" ,
+			color_model:"none"
+		}
+	} ,
+	props:{
+		data:Object
+	} ,
+	created(){ 
+		
+	} ,
+	methods:{
+		color_change:function(){
+			this.data.BORDER.color = this.color_model
+		} ,
+		border_change:function(){
+			this.data.BORDER.type = this.type_model
+		}
+	} 
+})
+document.querySelector(".vue-size").innerHTML = document.querySelector(".vue-size").innerHTML + '<v-fields8 v-if="fields[7]" :data="TVscreenInfo.panel" ></v-fields8>'
 
 //文字属性编辑
 Vue.component("v-fields1" , {

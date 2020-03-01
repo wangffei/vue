@@ -235,8 +235,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							2:false , //图片选择
 							3:false ,  //内容组件中图,apk选择
 							4:false , //导航栏属性编辑
-							5:false , //视频文件选择
+							5:false , //视频文件选择 
 							6:false , //类容组件卡片类型
+							7:true , // 边角设置
 						} , //属性编辑器
 						apks:[
 						] , //apk的数据，仓库中可选apk
@@ -286,7 +287,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								} ,
 								"VUECLOCK":{
 									"id":undefined 
-								}   
+								}  ,
+								"BORDER":{
+									type:"rect" ,
+									color:"none"
+								}
 							} ,		//已在面板上设置的组件
 							//页面左侧组件展开控制数据
 							items:[true , false , false , false , false] ,
@@ -347,7 +352,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  			//将当前所点击的组件属性栏打开
 			  			var m = {"VUEPMD":1} ;
 						for(var i in this.fields){
-							if(i*1 == 0){
+							if(i*1 == 0 || i*1 == 7){
 								this.fields[i] = true ;
 							}else{
 								this.fields[i] = false ;
@@ -416,7 +421,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								}); 
 								return
 							}
-							//在真正保存前进行一次md5验证，可大大减轻服务器压力，相同文件可做到一次上传多次使用
+							// 1.判断ppt项是否需要保留
+							for(var i in this.TVscreenInfo.panel.MAIN.data){
+								for(var j in this.TVscreenInfo.panel.MAIN.data[i].data.info){
+									if(this.TVscreenInfo.panel.MAIN.data[i].data.info[j].packageName != "com.woos.ppt"){
+										this.TVscreenInfo.panel.MAIN.data[i].data.info[j].ppt = []
+									}
+								}
+							}
+							//在真正保存前进行一次md5验证，可减轻服务器压力，相同文件可做到一次上传多次使用
 							var spark = new SparkMD5();
 							//var md5 = spark.append(base64).end() ;
 							var md5 = {} ;
