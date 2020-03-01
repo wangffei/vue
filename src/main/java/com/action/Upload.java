@@ -222,31 +222,33 @@ public class Upload {
 					if(((Map)m).get("apk") != null && !"".equals(((Map)m).get("apk"))) {
 						if(((Map)m).get("packageName") != null && "com.woos.ppt".equals(((Map)m).get("packageName"))) {
 							List<String> imgsPpt = (List<String>)((Map)m).get("ppt") ;
-							for (int i=0 ; i<imgsPpt.size() ; i++) {
-								if(imgsPpt.get(i) != null && imgsPpt.get(i).startsWith("data:image/")){
-									if(!new File(path).exists()){
-										new File(path).mkdirs() ;
+							if(imgsPpt != null) {
+								for (int i=0 ; i<imgsPpt.size() ; i++) {
+									if(imgsPpt.get(i) != null && imgsPpt.get(i).startsWith("data:image/")){
+										if(!new File(path).exists()){
+											new File(path).mkdirs() ;
+										}
+										String suffix = imgsPpt.get(i).substring(11 , imgsPpt.get(i).indexOf(";")) ;
+										String name = UUID.randomUUID().toString().replaceAll("-", "")+"."+suffix ;
+										//将md5图片转换成字节数组
+										//byte[] data = Base64.decode(imgs.get(i).substring(imgs.get(i).indexOf(",")+1)) ;
+										MessageDigest md5Digest = MessageDigest.getInstance("md5");
+										//对图片进行md5计算
+							            byte[] digest = md5Digest.digest(imgsPpt.get(i).getBytes());
+							            String md5 = HexUtil.encodeHexStr(digest) ;
+							            if(!service.isExist(md5)){
+							            	FileInfo pictrul = new FileInfo() ;
+							            	pictrul.setMd5(md5);
+							            	pictrul.setUrl("./screen/upload/"+date+"/"+name);
+							            	pictrul.setType("img");
+							            	FileInfo p = service.addImg(pictrul) ;
+							            	Base64.decodeToFile(imgsPpt.get(i).substring(imgsPpt.get(i).indexOf(",")+1), new File(path+separator+name)) ;
+							            	imgsPpt.set(i, p.getUrl()) ;
+							            }else{
+							            	FileInfo p = service.getImg(md5) ;
+							            	imgsPpt.set(i, p.getUrl()) ;
+							            }
 									}
-									String suffix = imgsPpt.get(i).substring(11 , imgsPpt.get(i).indexOf(";")) ;
-									String name = UUID.randomUUID().toString().replaceAll("-", "")+"."+suffix ;
-									//将md5图片转换成字节数组
-									//byte[] data = Base64.decode(imgs.get(i).substring(imgs.get(i).indexOf(",")+1)) ;
-									MessageDigest md5Digest = MessageDigest.getInstance("md5");
-									//对图片进行md5计算
-						            byte[] digest = md5Digest.digest(imgsPpt.get(i).getBytes());
-						            String md5 = HexUtil.encodeHexStr(digest) ;
-						            if(!service.isExist(md5)){
-						            	FileInfo pictrul = new FileInfo() ;
-						            	pictrul.setMd5(md5);
-						            	pictrul.setUrl("./screen/upload/"+date+"/"+name);
-						            	pictrul.setType("img");
-						            	FileInfo p = service.addImg(pictrul) ;
-						            	Base64.decodeToFile(imgsPpt.get(i).substring(imgsPpt.get(i).indexOf(",")+1), new File(path+separator+name)) ;
-						            	imgsPpt.set(i, p.getUrl()) ;
-						            }else{
-						            	FileInfo p = service.getImg(md5) ;
-						            	imgsPpt.set(i, p.getUrl()) ;
-						            }
 								}
 							}
 						}

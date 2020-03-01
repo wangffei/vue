@@ -105,7 +105,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="description" content="This is my page">
 	<link rel="stylesheet" href="./js/layui/css/layui.css">
 	<!-- 引入样式 -->
-	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<link rel="stylesheet" href="./css/elementui.min.css">
     <script type="text/javascript" src="./js/jquery-1.11.0.min.js"></script>
     <script src="./js/layui/layui.js"></script>
     <!-- 引入右键菜单插件 -->
@@ -192,7 +192,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </body>
 	<script src="./js/vue.min.js"></script>
 	<script src="./js/spark-md5.min.js"></script>
-	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<script src="./js/elementui.min.js"></script>
 	<script src="./js/fields.js"></script>
  	<script>
 		/**
@@ -226,6 +226,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						file:"" , //选择的文件
 						name:"" , //视频文件名字
 						color:"" , 
+						global:global ,
 						fun:function(){console.log("未知错误")} ,  //选择文件时执行的回调函数
 						temp:"" ,
 						//右侧属性编辑的绑定数据
@@ -237,7 +238,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							4:false , //导航栏属性编辑
 							5:false , //视频文件选择 
 							6:false , //类容组件卡片类型
-							7:true , // 边角设置
+							7:false , // 边角设置
 						} , //属性编辑器
 						apks:[
 						] , //apk的数据，仓库中可选apk
@@ -755,6 +756,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			}
 			vue.$data.TVscreenInfo = code_json ;
+			vue.$data.fields[7] = true 
 			vue.$watch('TVscreenInfo.panel.MAIN.item', vue.itemListener, {
 			    deep: true
 			});

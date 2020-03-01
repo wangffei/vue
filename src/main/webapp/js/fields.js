@@ -59,7 +59,8 @@ Vue.component("v-fields8" , {
 		data:Object
 	} ,
 	created(){ 
-		
+		this.type_model = this.data.BORDER.type
+		this.color_model = this.data.BORDER.color 
 	} ,
 	methods:{
 		color_change:function(){
@@ -340,13 +341,14 @@ Vue.component("v-fields7" , {
 	name:"v-fields7" ,
 	data:function(){
 		return{
-			apkurl:"http://woosyun.com:8080/api/getapk" ,
+			
 		}
 	} ,
 	props:{
 		data:Object ,
-		now:Object ,
-		apks:[]
+		now:Object , 
+		apks:[] ,
+		apkurl:String
 	} ,
 	created(){
 		
@@ -354,7 +356,7 @@ Vue.component("v-fields7" , {
 	methods:{
 		edite_sub_page:function(){
 			layui.use('layer', function(){
-			  var layer = layui.layer;
+			  var layer = layui.layer; 
 			  
 			  layer.open({
 				  type: 2,
@@ -420,4 +422,4 @@ Vue.component("v-fields7" , {
 		} ,
 	} 
 })
-document.querySelector(".vue-size").innerHTML = document.querySelector(".vue-size").innerHTML + '<v-fields7 v-if="fields[5] && TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl[\'content_item\']].type == \'video\'" :data="TVscreenInfo.panel"  :now="editeEl" :apks="apks"></v-fields7>'
+document.querySelector(".vue-size").innerHTML = document.querySelector(".vue-size").innerHTML + '<v-fields7 v-if="fields[5] && TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl[\'content_item\']].type == \'video\'" :data="TVscreenInfo.panel"  :now="editeEl" :apks="apks" :apkurl="global.apks"></v-fields7>'

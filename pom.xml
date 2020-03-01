@@ -189,7 +189,7 @@
 	    <version>5.1.47</version>
 	</dependency>
   </dependencies>
-  <build>
+  <build> 
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
