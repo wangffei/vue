@@ -16,9 +16,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script src="./js/layui/layui.all.js"></script>
 		<script src="js/vue.min.js"></script>
 		<!-- 引入样式 -->
-		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="./css/elementui.min.css">
 		<!-- 引入组件库 -->
-		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script src="./js/elementui.min.js"></script>
 		<script type="text/javascript" src="./js/jquery-1.11.0.min.js"></script>
 		<!-- 引入右键菜单插件 -->
     	<script src="./js/mouseRightMenu/mouseRightMenu.js"></script>
