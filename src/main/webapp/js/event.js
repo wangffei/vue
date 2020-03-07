@@ -193,6 +193,12 @@ function apkSelect(index){
 	vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item == undefined ? 0 : vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apkName = vue.$data.apks[index].apkName ;
 	vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item == undefined ? 0 : vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].apk = vue.$data.apks[index].packageUrl ;
 	vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item == undefined ? 0 : vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]].packageName = vue.$data.apks[index].packageName
+	// 判断当前apk是否是默认apk
+	if(vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item == undefined ? 0 : vue.$data.TVscreenInfo.panel.MAIN.item]["def"] != undefined){
+		if(vue.$data.editeEl["content_item"] == vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item == undefined ? 0 : vue.$data.TVscreenInfo.panel.MAIN.item]["def"]){
+			vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item == undefined ? 0 : vue.$data.TVscreenInfo.panel.MAIN.item]["defaultApk"] = vue.$data.apks[index].packageName
+		}
+	}
 }
 
 //屏幕大小发生改变时

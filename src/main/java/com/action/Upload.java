@@ -574,13 +574,16 @@ public class Upload {
 			List d = (List) bar.get("data") ;
 			((Map)data.get("main")).put("data" , new ArrayList()) ;
 			for(int i=0 ; i<d.size(); i++){
-				//便利每一个导航栏
+				//遍历每一个导航栏
 				Map m = new HashMap() ;
 				//获取导航栏图标地址
 				String img = (String) ((Map)d.get(i)).get("img") ;
 				String name = (String) ((Map)d.get(i)).get("name") ;
 				m.put("icon", img) ;
 				m.put("name", name) ;
+				if(((Map)d.get(i)).get("def") != null) {
+					m.put("defaultApk", ((Map)d.get(i)).get("defaultApk")) ;
+				}
 				//内容组件
 				((Map)((Map)d.get(i)).get("data")).put("layout", service.getLayout(((Map)((Map)d.get(i)).get("data")).get("id").toString())) ;
 				m.put("content", ((Map)d.get(i)).get("data")) ;

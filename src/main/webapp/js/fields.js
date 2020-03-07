@@ -205,6 +205,7 @@ Vue.component("v-fields3" , {
 				return
 			}else if(n){
 				this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].def = this.now["content_item"] ;
+				this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].defaultApk = this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].data.info[this.now["content_item"]].packageName ;
 			}
 		}
 	} ,
@@ -376,6 +377,7 @@ Vue.component("v-fields7" , {
 				return
 			}else if(n){
 				this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].def = this.now["content_item"] ;
+				this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].defaultApk = this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].data.info[this.now["content_item"]].packageName ;
 			}
 		}
 	} ,
