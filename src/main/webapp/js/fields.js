@@ -179,21 +179,34 @@ Vue.component("v-fields2" , {
 })
 
 Vue.component("v-fields3" , {
-	template:'<div><div style="width:100%;height:25px;background:#5f5f5f;line-height:25px;padding-left:10px;color:white;">图片</div><div style="width:100%;overflow:hidden;"><div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName.length >= 4 ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName.substr(0 , 4) : data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div><div style="display:flex;margin-top:5px;flex-wrap:wrap;"><div class="content_img" @contextmenu="leftmenu(index)" @click="leftmenu(index)" style="width:40px;height:40px;margin:5px 0px 0px 5px;" v-for="(img , index) in ((data.MAIN.bar ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now.content_item] : data.MAIN.data[0].data.info[now.content_item]) == undefined || typeof((data.MAIN.bar ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now.content_item] : data.MAIN.data[0].data.info[now.content_item])) == \'undefined\') ? [] : (data.MAIN.bar ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now.content_item].imgs : data.MAIN.data[0].data.info[now.content_item].imgs)"><img :src="img" style="width:40px;height:40px;cursor:pointer;display:block;" title="修改"></div></div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="addImg" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">添加图片</button><button @click="edite_sub_page" type="button" class="layui-btn layui-btn-xs layui-btn-primary" v-if="data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now[\'content_item\']].packageName == \'com.woos.ppt\'" style="width:90%;">编辑二级页面</button></div></div></div>',
+	template:'<div><div style="width:100%;height:25px;background:#5f5f5f;line-height:25px;padding-left:10px;color:white;">图片</div><div style="width:100%;overflow:hidden;"><div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName.length >= 4 ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName.substr(0 , 4) : data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div><div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;"><div style="width:60px;height:30px;"><el-checkbox style="margin:3px 20px;color:white;" v-model="def" >设为默认</el-checkbox></div></div><div style="display:flex;margin-top:5px;flex-wrap:wrap;"><div class="content_img" @contextmenu="leftmenu(index)" @click="leftmenu(index)" style="width:40px;height:40px;margin:5px 0px 0px 5px;" v-for="(img , index) in ((data.MAIN.bar ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now.content_item] : data.MAIN.data[0].data.info[now.content_item]) == undefined || typeof((data.MAIN.bar ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now.content_item] : data.MAIN.data[0].data.info[now.content_item])) == \'undefined\') ? [] : (data.MAIN.bar ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now.content_item].imgs : data.MAIN.data[0].data.info[now.content_item].imgs)"><img :src="img" style="width:40px;height:40px;cursor:pointer;display:block;" title="修改"></div></div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="addImg" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">添加图片</button><button @click="edite_sub_page" type="button" class="layui-btn layui-btn-xs layui-btn-primary" v-if="data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now[\'content_item\']].packageName == \'com.woos.ppt\'" style="width:90%;">编辑二级页面</button></div></div></div>',
 	name:"v-fields3" ,
 	data:function(){
 		return{
-			apkurl:"http://woosyun.com:8080/api/getapk" ,
-			//show_sub:this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].data.info[this.now['content_item']].packageName == 'com.woos.ppt'
+			def:false
 		}
 	} ,
 	props:{
 		data:Object ,
 		now:Object ,
-		apks:[]
+		apks:[] ,
+		apkurl:String
 	} ,
 	created(){
-		console.log(this.show_sub)
+		if(this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].def == this.now["content_item"]){
+			this.def = true ;
+		}
+	} ,
+	watch:{
+		def:function(n , o){
+			if(n && (this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].data.info[this.now["content_item"]].apkName == undefined || this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].data.info[this.now["content_item"]].apkName == "")){
+				layui.layer.msg("请先选择apk")
+				this.def = false
+				return
+			}else if(n){
+				this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].def = this.now["content_item"] ;
+			}
+		}
 	} ,
 	methods:{
 		edite_sub_page:function(){
@@ -271,7 +284,7 @@ Vue.component("v-fields3" , {
 		}
 	} 
 })
-document.querySelector(".vue-size").innerHTML = document.querySelector(".vue-size").innerHTML + '<v-fields3 v-if="fields[3] && TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl[\'content_item\']].type == \'img\'" :fun="fun" :apks="apks" :data="TVscreenInfo.panel" @leftmenu="leftmenu" @add_img="addImg" :now="editeEl"></v-fields3>' ;
+document.querySelector(".vue-size").innerHTML = document.querySelector(".vue-size").innerHTML + '<v-fields3 v-if="fields[3] && TVscreenInfo.panel.MAIN.data[(TVscreenInfo.panel.MAIN.item == undefined ? 0 : TVscreenInfo.panel.MAIN.item)].data.info[editeEl[\'content_item\']].type == \'img\'" :fun="fun" :apks="apks" :data="TVscreenInfo.panel" @leftmenu="leftmenu" @add_img="addImg" :now="editeEl" :apkurl="global.apks"></v-fields3>' ;
 
 
 Vue.component("v-fields4" , {
@@ -337,11 +350,11 @@ Vue.component("v-fields5" , {
 document.querySelector(".vue-size").innerHTML = document.querySelector(".vue-size").innerHTML + '<v-fields5 v-if="fields[4] && TVscreenInfo.panel.MAIN.type == \'bar_icon\'" :data="TVscreenInfo.panel"  @add_img="addImg"></v-fields5>'
 
 Vue.component("v-fields7" , {
-	template:'<div><div style="width:100%;height:25px;background:#5f5f5f;line-height:25px;padding-left:10px;color:white;">视频</div><div style="width:100%;overflow:hidden;"><div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName.length >= 4 ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName.substr(0 , 4) : data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div><div style="width:80%;margin:0px aoto;height:30px;line-height:30px;text-align:center;font-size:12px;color:gray;">{{name}}</div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="$(\'#video\').click()" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">选择视频</button><button @click="edite_sub_page" type="button" class="layui-btn layui-btn-xs layui-btn-primary" v-if="data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now[\'content_item\']].packageName == \'com.woos.ppt\'" style="width:90%;">编辑二级页面</button></div></div></div>',
+	template:'<div><div style="width:100%;height:25px;background:#5f5f5f;line-height:25px;padding-left:10px;color:white;">视频</div><div style="width:100%;overflow:hidden;"><div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;">应用：<div style="width:60px;height:30px;">{{data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName.length >= 4 ? data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName.substr(0 , 4) : data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now["content_item"]].apkName}}</div><div class="layui-btn layui-btn-xs layui-btn-normal" @click="selectApk()">选择apk</div></div><div style="display:flex;width:100%;padding-left:5px;padding:8px 5px;border-bottom:0.3px solid #dbdbdb;"><div style="width:60px;height:30px;"><el-checkbox style="margin:3px 20px;color:white;" v-model="def" >设为默认</el-checkbox></div></div><div style="width:80%;margin:0px aoto;height:30px;line-height:30px;text-align:center;font-size:12px;color:gray;">{{name}}</div><div style="display:flex;width:100%;padding-left:5px;height:30px;margin-top:20px;margin-left:5px;"><button @click="$(\'#video\').click()" type="button" class="layui-btn layui-btn-xs layui-btn-primary" style="width:90%;">选择视频</button><button @click="edite_sub_page" type="button" class="layui-btn layui-btn-xs layui-btn-primary" v-if="data.MAIN.data[(data.MAIN.item == undefined ? 0 : data.MAIN.item)].data.info[now[\'content_item\']].packageName == \'com.woos.ppt\'" style="width:90%;">编辑二级页面</button></div></div></div>',
 	name:"v-fields7" ,
 	data:function(){
 		return{
-			
+			def:false
 		}
 	} ,
 	props:{
@@ -351,7 +364,20 @@ Vue.component("v-fields7" , {
 		apkurl:String
 	} ,
 	created(){
-		
+		if(this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].def == this.now["content_item"]){
+			this.def = true ;
+		}
+	} ,
+	watch:{
+		def:function(n , o){
+			if(n && (this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].data.info[this.now["content_item"]].apkName == undefined || this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].data.info[this.now["content_item"]].apkName == "")){
+				layui.layer.msg("请先选择apk")
+				this.def = false
+				return
+			}else if(n){
+				this.data.MAIN.data[(this.data.MAIN.item == undefined ? 0 : this.data.MAIN.item)].def = this.now["content_item"] ;
+			}
+		}
 	} ,
 	methods:{
 		edite_sub_page:function(){

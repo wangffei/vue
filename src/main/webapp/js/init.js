@@ -21,7 +21,8 @@ layui.use('upload', function(){
     	  if(vue.$data.TVscreenInfo.panel.MAIN.item == undefined){
     		  vue.$data.TVscreenInfo.panel.MAIN.item = 0 ;
     	  }
-    	  vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]]["video"] = res.data ;
+    	  //vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]]["video"] = res.data ;
+    	  Vue.set(vue.$data.TVscreenInfo.panel.MAIN.data[vue.$data.TVscreenInfo.panel.MAIN.item].data.info[vue.$data.editeEl["content_item"]], "video", res.data)
       }
     }
     ,error: function(){
